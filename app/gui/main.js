@@ -8,7 +8,7 @@ function create() {
 }
 
 function redirect(key) {
-	window.location.href = "index.php#" + key
+	window.location.href = "sketch.php#" + key
 }
 
 function remove(key) {

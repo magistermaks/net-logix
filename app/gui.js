@@ -4,10 +4,9 @@ class Gui {
 	static #x = 0;
 	static #y = 0;
 
-	static purge() {
-		if( confirm("Are you sure you want to clear this sketch?") ) {
-			Manager.reset();
-		}
+	static exit() {
+		Manager.save(identifier);
+		window.location.href = "menu.php"
 	}
 
 	static reset() {

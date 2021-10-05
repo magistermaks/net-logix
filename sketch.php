@@ -27,31 +27,31 @@
 
             <!-- toolbox buttons -->
             <center>
-				<div class="button" title="input">
+				<div class="button" title="Input">
                     <img class="icon" src="./assets/in.png" onclick="Gui.open(InputGate)">
                 </div>
 
-				<div class="button" title="output">
+				<div class="button" title="Output">
                     <img class="icon" src="./assets/out.png" onclick="Gui.open(OutputGate)">
                 </div>
 
-                <div class="button" title="or gate">
+                <div class="button" title="OR Gate">
                     <img class="icon" src="./assets/or.png" onclick="Gui.open(OrGate)">
                 </div>
 
-                <div class="button" title="xor gate">
+                <div class="button" title="XOR Gate">
                     <img class="icon" src="./assets/xor.png" onclick="Gui.open(XorGate)">
                 </div>
 
-                <div class="button" title="nor gate">
+                <div class="button" title="NOR Gate">
                     <img class="icon" src="./assets/nor.png" onclick="Gui.open(NorGate)">
                 </div>
 
-                <div class="button" title="and gate">
+                <div class="button" title="AND Gate">
                     <img class="icon" src="./assets/and.png" onclick="Gui.open(AndGate)">
                 </div>
 
-				<div class="button" title="not gate">
+				<div class="button" title="NOT Gate">
                     <img class="icon" src="./assets/not.png" onclick="Gui.open(NotGate)">
                 </div>
 
@@ -59,12 +59,8 @@
                      <!-- separator -->
                 </div>
 
-				<div class="button" title="clear">
-                    <img class="icon" src="./assets/purge.png" onclick="Gui.purge()">
-                </div>
-
-				<div class="button" title="save">
-                    <img class="icon" src="./assets/save.png" onclick="Gui.save()">
+				<div class="button" title="Save & Exit">
+                    <img class="icon" src="./assets/purge.png" onclick="Gui.exit()">
                 </div>
 
             </center>

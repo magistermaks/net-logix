@@ -4,6 +4,7 @@ var tick = 1;
 var dragged = null;
 
 var main;
+var identifier;
 
 function setup() {
 	main = document.querySelector("main");	
@@ -21,11 +22,16 @@ function setup() {
 	imageMode(CENTER);
 
 	// load save
-	const id = window.location.hash.slice(1);
-	if( !Manager.load(id) ) {
+	identifier = window.location.hash.slice(1);
+	if( !Manager.load(identifier) ) {
 		alert("Failed to load selected sketch!");
 		history.back();
 	}
+
+	// auto save (every 5s)
+	setInterval( function() {
+		Manager.save(identifier);
+	}, 5000 );
 }  
 
 function grid(c) {
@@ -100,7 +106,7 @@ function draw() {
 	
 	fill(100);
 	noStroke();
-	text("FPS: " + round(getFrameRate()) + "\nx: " + scx + " y: " + scy, 10, 10);
+	text(name + "\nFPS: " + round(getFrameRate()) + "\nx: " + scx.toFixed(0) + " y: " + scy.toFixed(0), 10, 10);
 
     for( var key in boxes ) boxes[key].draw();
 

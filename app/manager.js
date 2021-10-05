@@ -78,8 +78,12 @@ class Manager {
 
 				for( var point of gate.wires[j] ) {
 					
-					let parts = point.split(":");
-					gates[i].connect(j, gates[parts[1]], int(parts[0]));
+					if( point != null ) {
+
+						let parts = point.split(":");
+						gates[i].connect(j, gates[parts[1]], int(parts[0]));
+
+					}
 
 				}
 			}
