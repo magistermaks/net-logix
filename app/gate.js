@@ -16,6 +16,10 @@ class Gate extends Box {
         
         this.inputs = Array(inputs);
         this.outputs = Array(outputs);
+
+		for( var i = 0; i < outputs; i ++ ) {
+			this.outputs[i] = new OutputWirePoint(this, i);
+		}
         
         this.left = inputs;
         this.right = outputs;
@@ -31,10 +35,6 @@ class Gate extends Box {
 	}
     
     connect( output, target, input ) {
-        if( this.outputs[output] == null ) {
-            this.outputs[output] = new OutputWirePoint(this, output);
-        }
-
 		target.disconnect(input);        
 
         target.inputs[input] = new InputWirePoint(this, output);
@@ -80,6 +80,10 @@ class Gate extends Box {
 
 		for( var i = 0; i < this.inputs.length; i ++ ) {
 			this.disconnect(i);
+		}
+
+		for( var output of this.outputs ) {
+			output.removeAll();
 		}
 
 		gates.splice( gates.indexOf(this), 1 );

@@ -73,11 +73,19 @@ class OutputWirePoint {
 
 	remove(gate, index) {
 		for( var key in this.targets ) {
-			if(  this.targets[key].index == index &&  this.targets[key].gate == gate ) {
-				delete  this.targets[key];
+			if( this.targets[key].index == index && this.targets[key].gate == gate ) {
+				delete this.targets[key];
 				break;
 			}
 		}
+	}
+
+	removeAll() {
+		for( var target of this.targets ) {
+			target.gate.disconnect(target.index);
+		}
+
+		this.targets = [];
 	}
 
 	draw() {
