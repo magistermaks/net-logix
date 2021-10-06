@@ -40,10 +40,6 @@ class InputGate extends TwoStateGate {
     constructor(x, y) {
        super(x, y, "Input", 0, 1, Resource.get("on"), Resource.get("off"));
     }
-    
-    getOutputState(index) {
-        return this.state;
-    }
 
     click(mx, my, double) {
         super.click(mx, my, double);
@@ -55,6 +51,10 @@ class InputGate extends TwoStateGate {
 
             this.state = !this.state;
         }
+    }
+
+	update() {
+        this.outputs[0].state = this.state;
     }
   
 }

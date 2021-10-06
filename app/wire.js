@@ -10,6 +10,7 @@ function wire(x1, y1, x2, y2, i) {
 
     fill(i);
 
+	stroke(i);
     circle(x1, y1, 10);
     circle(x2, y2, 10);
 
@@ -31,11 +32,11 @@ class WirePoint {
 		this.index = index;
 	}
 
-	draw( target ) {
+	draw( target, state = false ) {
 		let from = this.gate.getRightPoint(this.index);
 		let to = target.gate.getLeftPoint(target.index);
       
-		wire(int(from.x), int(from.y), int(to.x), int(to.y), 0);
+		wire(int(from.x), int(from.y), int(to.x), int(to.y), state ? color(9, 98, 218) : 0);
 	}
 
 }
@@ -80,7 +81,7 @@ class OutputWirePoint {
 	}
 
 	draw() {
-		for(var key in this.targets) this.self.draw( this.targets[key] );
+		for(var key in this.targets) this.self.draw( this.targets[key], this.state );
 	}
 
 }

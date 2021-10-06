@@ -78,6 +78,10 @@ class Gate extends Box {
 	remove() {
 		super.remove();
 
+		for( var i = 0; i < this.inputs.length; i ++ ) {
+			this.disconnect(i);
+		}
+
 		gates.splice( gates.indexOf(this), 1 );
 	}
     

@@ -121,17 +121,20 @@ function draw() {
 	noStroke();
 	text(name + "\nFPS: " + round(getFrameRate()) + "\nx: " + scx.toFixed(0) + " y: " + scy.toFixed(0), 10, 10);
 
-    for( var key in boxes ) boxes[key].draw();
+    for( var box of boxes ) box.draw();
 
-    for( var key in gates ) {
-        gates[key].drawWires();
+    for( var gate of gates ) {
+        gate.drawWires();
 
 		// simulate circut
-        if( frameCount % 10 === 0 ) {
-            gates[key].tick();
-            tick ++;
-        }
+        //if( frameCount % 10 === 0 ) {
+            gate.tick();
+        //}
     }
+
+	//if( frameCount % 10 == 0 ) {
+		tick ++;
+	//}
 
     WireEditor.draw();
 }
