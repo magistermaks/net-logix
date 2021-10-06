@@ -100,6 +100,10 @@ class WireEditor {
 		WireEditor.#clicked = false;
 	}
 
+	static isClicked() {
+		return WireEditor.#from != null;
+	}
+
 	static left(gate, index) {
 		WireEditor.#clicked = true;
 

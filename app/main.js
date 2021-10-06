@@ -58,34 +58,51 @@ function fatal( error ) {
 }
 
 function mouseReleased() {
-	dragged = null;
+	if( dragged != null ) {
+		dragged = null;
+
+		mousePressed();
+	}
 }
 
 function mouseDragged() {
+	if( WireEditor.isClicked() ) {
+		dragged = {};
+
+		return;
+	}
+
 	if( dragged !== null ) {
 
 		dragged.drag(mouseX - pmouseX, mouseY - pmouseY);
 
 	}else{
 
-		for( var key in boxes ) {
-			if( boxes[key].canGrab(mouseX, mouseY) ) {
-				dragged = boxes[key];
+		let clicked = false;
+
+		for( var box of boxes ) {
+			if( box.canClick(mouseX, mouseY) ) {
+
+				if( box.canGrab(mouseX, mouseY) ) {
+					dragged = box;
+				}
+
+				clicked = true;
 			}
 		}
 
 		// grab the screen
-		if( dragged === null ) {
-			dragged = {
+		if( !clicked ) {
 
+			dragged = {
 				drag: function(mx, my) {
 					scx += mx;
 					scy += my;
 
 					Gui.reset();
 				}
-
 			};
+
 		}
 
 	}
@@ -124,17 +141,11 @@ function draw() {
     for( var box of boxes ) box.draw();
 
     for( var gate of gates ) {
-        gate.drawWires();
-
-		// simulate circut
-        //if( frameCount % 10 === 0 ) {
-            gate.tick();
-        //}
+        gate.tick();
+		gate.drawWires();
     }
 
-	//if( frameCount % 10 == 0 ) {
-		tick ++;
-	//}
+	tick ++;
 
     WireEditor.draw();
 }
