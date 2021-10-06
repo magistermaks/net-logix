@@ -74,6 +74,12 @@ class Gate extends Box {
     drawWires() {
         for( var key in this.outputs ) if(this.outputs[key] != null) this.outputs[key].draw();
     }
+
+	remove() {
+		super.remove();
+
+		gates.splice( gates.indexOf(this), 1 );
+	}
     
     tick() {
         
@@ -83,7 +89,9 @@ class Gate extends Box {
         
     }
     
-    click(mx, my) {
+    click(mx, my, double) {
+		super.click(mx, my, double);
+
         if( mx < scx + this.x + Box.wiggle ) {
             for( var i = 0; i < this.left; i ++ ) {
                 let py = this.getLeftPoint(i).y;
@@ -105,13 +113,10 @@ class Gate extends Box {
         }
     }
 
-	static deserialize(clazz, x, y, id) {
+	static deserialize(clazz, x, y) {
 
 		if( /^[a-zA-Z]+$/.test(clazz) && clazz.endsWith("Gate") ) {
-			let obj = new (eval(clazz))(x, y);
-			obj.#id = id;
-
-			return obj;
+			return new (eval(clazz))(x, y);
 		}else{
 			return null;
 		}

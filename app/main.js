@@ -5,6 +5,7 @@ var dragged = null;
 
 var main;
 var identifier;
+var last;
 
 function setup() {
 	main = document.querySelector("main");	
@@ -90,14 +91,26 @@ function mouseDragged() {
 	}
 }
 
-function mouseClicked() {
+function mousePressed() {
+	const now = Date.now();
+
+	const double = (now - last) < 200;
+
     for( var key in boxes ) {
         if( boxes[key].canClick(mouseX, mouseY) ) {
-            boxes[key].click(mouseX, mouseY);
+            boxes[key].click(mouseX, mouseY, double);
         }
     }
 
+	last = now;
+
     WireEditor.click();
+}
+
+function keyPressed() {
+	if( keyCode == DELETE || keyCode == BACKSPACE ) {
+		for( var box of boxes ) if( box.isSelected() ) box.remove();
+	}
 }
 
 function draw() {

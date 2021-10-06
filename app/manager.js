@@ -6,16 +6,11 @@ class Manager {
 	static #serialize() {
 		
 		let json = []
-		let next = 0;
 
 		for( var gate of gates ) {
 			
 			let outputs = [];
 			let id = gate.getId();
-
-			if( id > next ) {
-				next = id;
-			}
 
 			for( var output of gate.outputs ) {
  
@@ -51,7 +46,6 @@ class Manager {
 
 		return {
 			"json": json,
-			"next": next,
 			"x": scx,
 			"y": scy,
 			"name": name
@@ -61,13 +55,14 @@ class Manager {
 
 	static #deserialize(obj) {
 		
-		nextGateId = obj.next;
 		scx = obj.x;
 		scy = obj.y;
 		name = obj.name;
 
+		let named = new Map();
+
 		for( var gate of obj.json ) {
-			Gate.deserialize(gate.class, gate.x, gate.y, gate.id);
+			named.set(gate.id, Gate.deserialize(gate.class, gate.x, gate.y));
 		}
 
 		for( var i = 0; i < gates.length; i ++ ) {
@@ -81,7 +76,7 @@ class Manager {
 					if( point != null ) {
 
 						let parts = point.split(":");
-						gates[i].connect(j, gates[parts[1]], int(parts[0]));
+						gates[i].connect(j, named.get(int(parts[1])), int(parts[0]));
 
 					}
 
@@ -94,7 +89,6 @@ class Manager {
 	static reset() {
 		gates = [];
 		boxes = [];
-		nextGateId = 0;
 	}
 
 	static load(id) {

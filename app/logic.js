@@ -45,8 +45,8 @@ class InputGate extends TwoStateGate {
         return this.state;
     }
 
-    click(mx, my) {
-        super.click(mx, my);
+    click(mx, my, double) {
+        super.click(mx, my, double);
         
         if( mx > scx + this.x + Box.wiggle 
 			&& mx < scx + this.x + Box.w - Box.wiggle 

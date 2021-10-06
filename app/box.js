@@ -10,6 +10,8 @@ class Box {
 	left;
 	right;
 
+	#selected = false;
+
 	static w = 100;
 	static h = 100;
 	static top = 20;
@@ -36,6 +38,10 @@ class Box {
 		this.x += mx;
 		this.y += my;
 	} 
+
+	isSelected() {
+		return this.#selected;
+	}
 
 	canGrab(mx, my) {
 		return this.canClick(mx, my) && scy + this.y + Box.top >= my;
@@ -64,7 +70,7 @@ class Box {
       
 		// select border color
 		strokeWeight(2);
-		stroke(0);
+		stroke(this.#selected ? color(9, 98, 218) : 0);
         
 		// background
 		fill(255);
@@ -84,7 +90,7 @@ class Box {
         
 		fill(255);
 		strokeWeight(2);
-		stroke(0);
+		stroke(this.#selected ? color(9, 98, 218) : 0);
         
 		const leftSpace = float(Box.h - Box.top) / (this.left + 1); 
 		const rightSpace = float(Box.h - Box.top) / (this.right + 1); 
@@ -100,13 +106,19 @@ class Box {
 		}
         
 	}
+
+	remove() {
+		boxes.splice( gates.indexOf(this), 1 );
+	}
     
 	content(x, y) {
 		
 	}
     
-	click(mx, my) {
-		
+	click(mx, my, double) {
+		if( double && mx > this.x + scx && mx < this.x + scx + Box.w && my > this.y + scy && my < this.y + scy + Box.top ) {
+			this.#selected = !this.#selected;
+		}
 	}
 
 }
