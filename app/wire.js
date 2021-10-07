@@ -82,7 +82,9 @@ class OutputWirePoint {
 
 	removeAll() {
 		for( var target of this.targets ) {
-			target.gate.disconnect(target.index);
+			if( target != null ) {
+				target.gate.disconnect(target.index);
+			}
 		}
 
 		this.targets = [];

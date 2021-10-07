@@ -44,7 +44,7 @@ class Box {
 	}
 
 	canGrab(mx, my) {
-		return this.canClick(mx, my) && scy + this.y + Box.top >= my;
+		return this.canClick(mx, my) && scy + this.y + Box.wiggle + Box.top >= my;
 	}
 
 	canClick(mx, my) {
