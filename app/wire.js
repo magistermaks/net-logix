@@ -1,25 +1,25 @@
 
 function shaded_line(x1, y1, x2, y2, i) {
-    stroke(i);
-    strokeWeight(i == 255 ? 6 : 2);
-    line(x1, y1, x2, y2);
+	stroke(i);
+	strokeWeight(i == 255 ? 6 : 2);
+	line(x1, y1, x2, y2);
 }
 
 function wire(x1, y1, x2, y2, i) {
-    var a = (x2 - x1) / 4;
+	var a = (x2 - x1) / 4;
 
-    fill(i);
+	fill(i);
 
 	stroke(i);
-    circle(x1, y1, 10);
-    circle(x2, y2, 10);
+	circle(x1, y1, 10);
+	circle(x2, y2, 10);
 
-    shaded_line(x1, y1, x1 + a, y1, 255);
-    shaded_line(x1 + a, y1, x2 - a, y2, 255);
-    shaded_line(x2, y2, x2 - a, y2, 255);
-    shaded_line(x1, y1, x1 + a, y1, i);
-    shaded_line(x1 + a, y1, x2 - a, y2, i);
-    shaded_line(x2, y2, x2 - a, y2, i);
+	shaded_line(x1, y1, x1 + a, y1, 255);
+	shaded_line(x1 + a, y1, x2 - a, y2, 255);
+	shaded_line(x2, y2, x2 - a, y2, 255);
+	shaded_line(x1, y1, x1 + a, y1, i);
+	shaded_line(x1 + a, y1, x2 - a, y2, i);
+	shaded_line(x2, y2, x2 - a, y2, i);
 }
 
 class WirePoint {
@@ -35,7 +35,7 @@ class WirePoint {
 	draw( target, state = false ) {
 		let from = this.gate.getRightPoint(this.index);
 		let to = target.gate.getLeftPoint(target.index);
-      
+	  
 		wire(int(from.x), int(from.y), int(to.x), int(to.y), state ? color(9, 98, 218) : 0);
 	}
 
@@ -100,11 +100,11 @@ class WireEditor {
 	static #clicked;
 
 	static click() {
-      
+	  
 		if( !WireEditor.#clicked ) {
 			WireEditor.#from = null;
 		}
-      
+	  
 		WireEditor.#clicked = false;
 	}
 
@@ -137,4 +137,3 @@ class WireEditor {
 	}
 
 }
-

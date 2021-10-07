@@ -113,15 +113,15 @@ function mousePressed() {
 
 	const double = (now - last) < 200;
 
-    for( var key in boxes ) {
-        if( boxes[key].canClick(mouseX, mouseY) ) {
-            boxes[key].click(mouseX, mouseY, double);
-        }
-    }
+	for( var key in boxes ) {
+		if( boxes[key].canClick(mouseX, mouseY) ) {
+			boxes[key].click(mouseX, mouseY, double);
+		}
+	}
 
 	last = now;
 
-    WireEditor.click();
+	WireEditor.click();
 }
 
 function keyPressed() {
@@ -138,15 +138,14 @@ function draw() {
 	noStroke();
 	text(name + "\nFPS: " + round(getFrameRate()) + "\nx: " + scx.toFixed(0) + " y: " + scy.toFixed(0), 10, 10);
 
-    for( var box of boxes ) box.draw();
+	for( var box of boxes ) box.draw();
 
-    for( var gate of gates ) {
-        gate.tick();
+	for( var gate of gates ) {
+		gate.tick();
 		gate.drawWires();
-    }
+	}
 
 	tick ++;
 
-    WireEditor.draw();
+	WireEditor.draw();
 }
-

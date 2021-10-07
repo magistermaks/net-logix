@@ -1,19 +1,19 @@
 <html>
 
-    <head lang="en-US">
+	<head lang="en-US">
 
-       <!-- <script src="libs/p5.min.js"></script> -->
+		<!-- <script src="libs/p5.min.js"></script> -->
 		<script src="app/gui/main.js"></script>
 		<script src="app/gui/manager.js"></script>
 
-        <?php include "header.html" ?>
+		<?php include "header.html" ?>
 
-    </head>
+	</head>
 
 	<body>
 
 		<!-- p5.js canvas -->
-        <main></main>
+		<main></main>
 
 		<!-- main manu -->
 		<div id="menu">
