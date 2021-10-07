@@ -64,8 +64,8 @@ class Gate extends Box {
 	
 	getOutputState(index) {
 		if( this.#updated != tick ) {
-			this.update();
 			this.#updated = tick;
+			this.update();
 		}
 	  
 		return this.getOutput(index).state;
@@ -90,7 +90,14 @@ class Gate extends Box {
 	}
 	
 	tick() {
-		
+		// this is needed to keep the wire highlighting working on output-less branches
+		if( this.#updated + 4 < tick ) {
+
+			for( var i = 0; i < this.outputs.length; i ++ ) {
+				this.getOutputState(i);
+			}
+
+		}
 	}
 	
 	update() {

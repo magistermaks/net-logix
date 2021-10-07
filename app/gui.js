@@ -6,7 +6,7 @@ class Gui {
 
 	static exit() {
 		Manager.save(identifier);
-		window.location.href = "menu.php"
+		window.location.href = "index.php"
 	}
 
 	static reset() {
