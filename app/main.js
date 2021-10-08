@@ -126,7 +126,9 @@ function mousePressed() {
 
 function keyPressed() {
 	if( keyCode == DELETE || keyCode == BACKSPACE ) {
-		for( var box of boxes ) if( box.isSelected() ) box.remove();
+		for( var i = boxes.length - 1; i >= 0; i -- ) {
+			if( boxes[i].isSelected() ) boxes[i].remove();
+		}
 	}
 }
 

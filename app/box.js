@@ -108,7 +108,7 @@ class Box {
 	}
 
 	remove() {
-		boxes.splice( gates.indexOf(this), 1 );
+		boxes.splice( boxes.indexOf(this), 1 );
 	}
 	
 	content(x, y) {
