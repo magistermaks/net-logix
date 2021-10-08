@@ -18,6 +18,7 @@ main {
 	box-sizing: border-box;
 	left: 0px;
 	right: 0px;
+	user-select: none;
 }
 
 
@@ -132,11 +133,19 @@ main {
 	right: 0px;
 	width: 100%;
 	text-align: right;
+	user-select: none;
 }
 
 #menu div #new span {
 	padding: 1em;
 	cursor: pointer;
 	user-select: none;
+}
+
+#footer {
+	position: fixed;
+	bottom: 0px;
+	left: 4px;
+	color: #5e5e5e;
 }
 

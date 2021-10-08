@@ -3,8 +3,10 @@
 	<head lang="en-US">
 
 		<!-- <script src="libs/p5.min.js"></script> -->
+		<script src="libs/lz.min.js"></script>
 		<script src="app/gui/main.js"></script>
 		<script src="app/gui/manager.js"></script>
+		<script src="app/common/save.js"></script>
 
 		<?php include "header.html" ?>
 
@@ -34,6 +36,11 @@
 
 			</div>
 
+		</div>
+
+		<div id="footer">
+			Version 1.0.0 <br>
+			Source avaible at <a href="https://github.com/magistermaks/net-logix">Github</a> 
 		</div>
 
 	</body>

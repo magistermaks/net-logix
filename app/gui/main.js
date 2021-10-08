@@ -7,12 +7,15 @@ function create() {
 	}
 }
 
-function redirect(key) {
-	window.location.href = "sketch.php#" + key
+function redirect(element) {
+	window.location.href = "sketch.php#" + element.parentElement.dataset.id;
 }
 
-function remove(key) {
-	if( confirm(`Are you sure you want to delete sketch '${key}'?`) ) {
+function remove(element) {
+	const key = element.parentElement.dataset.id;
+	const name = Manager.getName(key);
+
+	if( confirm(`Are you sure you want to delete sketch '${name}'?`) ) {
 		Manager.remove(key);
 	}
 }

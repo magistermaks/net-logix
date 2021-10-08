@@ -37,8 +37,9 @@ class InputGate extends TwoStateGate {
  
 	state = false;
   
-	constructor(x, y) {
-	   super(x, y, "Input", 0, 1, Resource.get("on"), Resource.get("off"));
+	constructor(x, y, meta) {
+		super(x, y, "Input", 0, 1, Resource.get("on"), Resource.get("off"));
+		if( meta != null ) this.state = (meta == "1" ? true : false);
 	}
 
 	click(mx, my, double) {
@@ -55,6 +56,10 @@ class InputGate extends TwoStateGate {
 
 	update() {
 		this.outputs[0].state = this.state;
+	}
+
+	serialize() {
+		return this.state ? "1" : "0";
 	}
   
 }

@@ -128,14 +128,18 @@ class Gate extends Box {
 		}
 	}
 
-	static deserialize(clazz, x, y) {
+	static deserialize(type, x, y, meta) {
 
-		if( /^[a-zA-Z]+$/.test(clazz) && clazz.endsWith("Gate") ) {
-			return new (eval(clazz))(x, y);
+		if( /^[A-Z][a-z]+$/.test(type) ) {
+			return new (eval(type + "Gate"))(x, y, meta);
 		}else{
 			return null;
 		}
 
+	}
+
+	serialize() {
+		return null;
 	}
   
 }

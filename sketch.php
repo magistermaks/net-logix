@@ -2,6 +2,7 @@
 
 	<head lang="en-US">
 
+		<script src="libs/lz.min.js"></script>
 		<script src="libs/p5.min.js"></script>
 		<script src="app/main.js"></script>
 		<script src="app/image.js"></script>
@@ -12,6 +13,7 @@
 		<script src="app/logic.js"></script>
 		<script src="app/manager.js"></script>
 		<script src="app/gui.js"></script>
+		<script src="app/common/save.js"></script>
 
 		<?php include "header.html" ?>
 

@@ -6,12 +6,12 @@ class Manager {
 	static init() {
 		Manager.print();
 
-		if( localStorage.getItem("example-logix") != "true" ) {
+		if( localStorage.getItem("logix-example") != "true" ) {
 
 			fetch("data/example.json")
 				.then(response => response.text())
 				.then(response => {
-					localStorage.setItem("example-logix", "true")
+					localStorage.setItem("logix-example", "true")
 					console.log("Downloaded example sketch");
 
 					Manager.#set("example", response);
@@ -28,25 +28,30 @@ class Manager {
 
 	static #entry(list, key) {
 		const name = Manager.getName(key);
-		list.innerHTML += `<div><span onclick="redirect('${key}')" title="${key}">${name}</span><img onclick="remove('${key}')" src="assets/purge.png"></div>`;
+		list.innerHTML += `<div data-id="${key}"><span onclick="redirect(this)">${name}</span><img onclick="remove(this)" src="assets/purge.png"></div>`;
 	}
 
 	static print() {
 		const list = document.querySelector("#list");
 		list.innerHTML = "";
 
-		var count = 0;
+		var keys = [];
 
 		for( var i = 0; i < localStorage.length; i ++ ) {
 			const key = localStorage.key(i);
 
 			if( key.startsWith("logix-sketch") ) {
-				Manager.#entry(list, key);
-				count ++;
+				keys.push(key);
 			}
 		}
 
-		console.log(`Shown ${count} sketches`);
+		keys.sort();
+		
+		for( var key of keys ) {
+			Manager.#entry(list, key);
+		}
+
+		console.log(`Shown ${keys.length} sketches`);
 	}
 
 	static #set(id, json) {
@@ -56,7 +61,7 @@ class Manager {
 
 	static getName(key) {
 		try{
-			return JSON.parse( localStorage.getItem(key) ).name;
+			return Save.get(key).name;
 		}catch(err) {
 			return key;
 		}
@@ -70,7 +75,7 @@ class Manager {
 
 		var id = name.toLowerCase().replace(/\W+/g, "-");
 
-		while( localStorage.getItem(id) != null ) {
+		while( localStorage.getItem("logix-sketch-" + id) != null ) {
 			id += "-";
 		}
 

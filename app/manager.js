@@ -34,13 +34,21 @@ class Manager {
 
 			}
 
-			json.push( {
-				"class": gate.constructor.name,
+			const meta = gate.serialize();
+
+			let obj = {
+				"type": gate.constructor.name.slice(0, -4),
 				"x": gate.x,
 				"y": gate.y,
 				"id": id,
 				"wires": outputs
-			} );
+			};
+
+			if( meta != null ) {
+				obj.meta = meta;
+			}
+
+			json.push(obj);
 
 		}
 
@@ -62,7 +70,7 @@ class Manager {
 		let named = new Map();
 
 		for( var gate of obj.json ) {
-			named.set(gate.id, Gate.deserialize(gate.class, gate.x, gate.y));
+			named.set(gate.id, Gate.deserialize(gate.type, gate.x, gate.y, gate.meta));
 		}
 
 		for( var i = 0; i < gates.length; i ++ ) {
@@ -94,24 +102,20 @@ class Manager {
 	static load(id) {
 		Manager.reset();
 
-		let obj = JSON.parse(localStorage.getItem(id));
-
-		if( obj == null ) {
+		try { 
+			Manager.#deserialize( Save.get(id) );
+			return true;
+		} catch(err) {
 			return false;
 		}
-
-		Manager.#deserialize(obj);
-		return true;
 	}
 
 	static print() {
 		return JSON.stringify(Manager.#serialize());
 	}
 
-	static save(id) {
-		let json = JSON.stringify(Manager.#serialize());
-
-		localStorage.setItem(id, json);
+	static save(id) {	
+		Save.set(id, Manager.#serialize());
 	}
 
 }
