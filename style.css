@@ -44,20 +44,6 @@ main {
 	display: none;
 }
 
-/*
-.stats {
-	position: fixed;
-	bottom: 0px;
-	left: 0px;
-	padding-left: 4px;
-	opacity: 0.6;
-}
-
-.selected {
-	background-color: #81aff9 !important;
-}
-*/
-
 /* styles for the front page */
 
 #menu {
@@ -77,6 +63,9 @@ main {
 	margin-left: 1em;
 	margin-right: 1em;
 	position: relative;
+	border: solid 1px;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
 }
 
 #menu div #top {
@@ -90,8 +79,9 @@ main {
 }
 
 #menu div #list {
-	overflow: scroll;
+	overflow-y: scroll;
 	scrollbar-width: none;
+	height: calc(100% - 2em - 4px);
 }
 
 #menu div #list::-webkit-scrollbar {
@@ -117,6 +107,10 @@ main {
 	width: 1.19em;
 	height: 1.19em;
 	cursor: pointer;
+}
+
+#menu div #list div:not(:hover) img {
+	display: none;
 }
 
 #menu div #list div:hover {
