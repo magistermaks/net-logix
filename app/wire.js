@@ -136,7 +136,7 @@ class WireEditor {
 			const point = WireEditor.#from.gate.getRightPoint(WireEditor.#from.index);
 			const state = WireEditor.#from.gate.getOutputState(WireEditor.#from.index);
 
-			wire(int(point.x), int(point.y), mouseX, mouseY, state ? color(9, 98, 218) : 0);
+			wire(int(point.x), int(point.y), Mouse.x, Mouse.y, state ? color(9, 98, 218) : 0);
 		}
 	}
 
