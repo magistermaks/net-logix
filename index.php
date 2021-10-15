@@ -4,9 +4,10 @@
 
 		<!-- <script src="libs/p5.min.js"></script> -->
 		<script src="libs/lz.min.js"></script>
-		<script src="app/gui/main.js"></script>
-		<script src="app/gui/manager.js"></script>
+		<script src="app/menu/main.js"></script>
+		<script src="app/menu/manager.js"></script>
 		<script src="app/common/save.js"></script>
+		<script src="app/common/settings.js"></script>
 
 		<?php include "header.html" ?>
 
@@ -17,7 +18,7 @@
 		<!-- p5.js canvas -->
 		<main></main>
 
-		<!-- main manu -->
+		<!-- menu container -->
 		<div id="menu">
 
 			<div>
@@ -39,7 +40,7 @@
 		</div>
 
 		<div id="footer">
-			Version 1.0.0 <br>
+			Version 1.1.0 <br>
 			Source avaible at <a href="https://github.com/magistermaks/net-logix">Github</a> 
 		</div>
 

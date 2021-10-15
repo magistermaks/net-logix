@@ -14,6 +14,7 @@
 		<script src="app/manager.js"></script>
 		<script src="app/gui.js"></script>
 		<script src="app/common/save.js"></script>
+		<script src="app/common/settings.js"></script>
 
 		<?php include "header.html" ?>
 
@@ -66,6 +67,38 @@
 				</div>
 
 			</center>
+
+		</div>
+
+		<!-- button used to open settings page -->
+		<img id="system-icon" onclick="Gui.Settings.open()" src="assets/settings.png">
+
+		<!-- settings container -->
+		<div id="settings" style="display: none"> 
+		
+			<!-- background shadow -->
+			<div id="shade"></div>
+
+			<!-- menu container -->
+			<div id="menu">
+
+				<div>
+
+					<div id="top">
+						<span> Settings </span>
+					</div>
+
+					<div id="list">
+						<!-- filled with javascript -->
+					</div>
+
+					<div id="new">
+						<span onclick="Gui.Settings.exit()"> Exit </span>
+					</div>
+	
+				</div>
+
+			</div>
 
 		</div>
 

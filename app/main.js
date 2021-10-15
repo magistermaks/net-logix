@@ -4,6 +4,7 @@ var factor = 1;
 var scx = 0, scy = 0;
 var tick = 1;
 var dragged = null;
+var identifier;
 
 var main;
 var last;
@@ -32,30 +33,36 @@ function setup() {
 		resizeCanvas(main.offsetWidth, main.offsetHeight);
 	};
 
+	// notify user if app crashes
+	window.onerror = function() {
+		alert("Application error occured!");
+	};
+
 	// set some stuff
 	textAlign(LEFT, TOP);
 	textSize(15);
 	imageMode(CENTER);
 
 	// load save
-	const identifier = window.location.hash.slice(1);
+	identifier = window.location.hash.slice(1);
 	if( !Manager.load(identifier) ) {
 		alert("Failed to load selected sketch!");
 		history.back();
 	}
 
-	// auto save (every 5s)
-	setInterval( function() {
-		Manager.save(identifier);
+	// set default value immediately
+	Settings.AUTOSAVE.get(true);
+
+	// start autosave task (every 5s)
+	setInterval( () => {
+		if( Settings.AUTOSAVE.get(true) ) {
+			Manager.save(identifier);
+		}
 	}, 5000 );
 
-	if( scx == null ) {
-		scx = 0;
-	}
-
-	if( scy == null ) {
-		scy = 0;
-	}
+	// fix screen offset if it's corrupted
+	if( scx == null ) scx = 0;
+	if( scy == null ) scy = 0;
 }
 
 function matrix( callback, scaleFactor = 1 ) {
@@ -68,8 +75,6 @@ function matrix( callback, scaleFactor = 1 ) {
 function grid(c) {
 	
 	const spacing = 50;
-
-	background(200);
 	
 	stroke(c);
 	strokeWeight(1);
@@ -92,6 +97,8 @@ function mouseReleased() {
 }
 
 function mouseDragged() {
+	if(Gui.pause) return;
+
 	if( WireEditor.isClicked() ) {
 		dragged = {};
 
@@ -135,6 +142,8 @@ function mouseDragged() {
 }
 
 function mousePressed() {
+	if(Gui.pause) return;
+
 	const now = Date.now();
 
 	const double = (now - last) < 200;
@@ -151,20 +160,26 @@ function mousePressed() {
 }
 
 function keyPressed() {
+	if(Gui.pause) return;
+
 	if( keyCode == DELETE || keyCode == BACKSPACE ) {
 		for( var i = boxes.length - 1; i >= 0; i -- ) {
 			if( boxes[i].isSelected() ) boxes[i].remove();
 		}
+		return false;
 	}
 
 	if( key == " " ) {
 		factor = 1;
 		scx = 0;
 		scy = 0;
+		return false;
 	}
 }
 
 function mouseWheel(event) {
+	if(Gui.pause) return;
+
 	factor += ( event.delta < 0 ) ? 0.1 : -0.1;
 
 	if( factor < 0.1 ) factor = 0.1;
@@ -176,23 +191,43 @@ function draw() {
 	
 	matrix( () => {
 
-		grid(180);
+		background(200);
+		if( Settings.GRID.get(true) ) grid(180);
 
-		for( var box of boxes ) box.draw();
-
-		for( var gate of gates ) {
-			gate.tick();
+		boxes.forEach((box) => box.draw());
+		gates.forEach((gate) => {
+			gate.tick(); 
 			gate.drawWires();
-		}
-
-		tick ++;
+		});
 
 		WireEditor.draw();
 
 	}, factor );
 
+	tick ++;
+	overlay();
+}
+
+function overlay() {
+	let overlay = name;
+
+	if( Settings.TRANSISTORS.get(false) ) {
+		let transistors = 0;
+
+		gates.forEach( (gate) => transistors += gate.getComplexity() );
+
+		overlay += " (~" + transistors + " transistors)";
+	}
+
+	if( Settings.OVERLAY.get(true) ) {
+		overlay += 
+			"\nFPS: " + round(getFrameRate()) +
+			"\nx: " + scx.toFixed(0) + " y: " + scy.toFixed(0) +
+			"\n" + factor.toFixed(2) + "x";
+	}
+
 	fill(100);
 	noStroke();
-	text(name + "\nFPS: " + round(getFrameRate()) + "\nx: " + scx.toFixed(0) + " y: " + scy.toFixed(0) + "\n" + factor.toFixed(2) + "x", 10, 10);
+	text(overlay, 10, 10);
 }
 

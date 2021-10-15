@@ -3,8 +3,8 @@ class SingleStateGate extends IconGate {
 
 	#icon;
 	
-	constructor(x, y, title, inputs, outputs, icon) {
-		super(x, y, title, inputs, outputs);
+	constructor(x, y, title, inputs, outputs, complexity, icon) {
+		super(x, y, title, inputs, outputs, complexity);
 
 		this.#icon = icon;
 	}
@@ -20,8 +20,8 @@ class TwoStateGate extends IconGate {
 	#on;
 	#off;
 	
-	constructor(x, y, title, inputs, outputs, on, off) {
-		super(x, y, title, inputs, outputs);
+	constructor(x, y, title, inputs, outputs, complexity, on, off) {
+		super(x, y, title, inputs, outputs, complexity);
 
 		this.#on = on;
 		this.#off = off;
@@ -38,7 +38,7 @@ class InputGate extends TwoStateGate {
 	state = false;
   
 	constructor(x, y, meta) {
-		super(x, y, "Input", 0, 1, Resource.get("on"), Resource.get("off"));
+		super(x, y, "Input", 0, 1, 0, Resource.get("on"), Resource.get("off"));
 		if( meta != null ) this.state = (meta == "1" ? true : false);
 	}
 
@@ -67,7 +67,7 @@ class InputGate extends TwoStateGate {
 class AndGate extends SingleStateGate {
 	
 	constructor(x, y) {
-	   super(x, y, "And", 2, 1, Resource.get("and"));
+	   super(x, y, "And", 2, 1, 3, Resource.get("and"));
 	}
 	
 	update() {
@@ -79,7 +79,7 @@ class AndGate extends SingleStateGate {
 class XorGate extends SingleStateGate {
 	
 	constructor(x, y) {
-	   super(x, y, "Xor", 2, 1, Resource.get("xor"));
+	   super(x, y, "Xor", 2, 1, 6, Resource.get("xor"));
 	}
 	
 	update() {
@@ -91,7 +91,7 @@ class XorGate extends SingleStateGate {
 class OrGate extends SingleStateGate {
 	
 	constructor(x, y) {
-	   super(x, y, "Or", 2, 1, Resource.get("or"));
+	   super(x, y, "Or", 2, 1, 0, Resource.get("or"));
 	}
 	
 	update() {
@@ -103,7 +103,7 @@ class OrGate extends SingleStateGate {
 class NorGate extends SingleStateGate {
 	
 	constructor(x, y) {
-	   super(x, y, "Nor", 2, 1, Resource.get("nor"));
+	   super(x, y, "Nor", 2, 1, 1, Resource.get("nor"));
 	}
 	
 	update() {
@@ -115,7 +115,7 @@ class NorGate extends SingleStateGate {
 class NotGate extends SingleStateGate {
 	
 	constructor(x, y) {
-	   super(x, y, "Not", 1, 1, Resource.get("not"));
+	   super(x, y, "Not", 1, 1, 1, Resource.get("not"));
 	}
 	
 	update() {
@@ -129,7 +129,7 @@ class OutputGate extends TwoStateGate {
 	state = false;
   
 	constructor(x, y) {
-	   super(x, y, "Output", 1, 0, Resource.get("on"), Resource.get("off"));
+	   super(x, y, "Output", 1, 0, 0, Resource.get("on"), Resource.get("off"));
 	}
   
 	getOutputState(index) {

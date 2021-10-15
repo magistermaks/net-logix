@@ -1,4 +1,7 @@
 
+/* main stypes for the app */
+/* used in menu and editor */
+
 body {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	overflow: hidden;
@@ -21,13 +24,11 @@ main {
 	user-select: none;
 }
 
-
 .button {
 	display: inline-block;
 	height: 100%;
 	width: 2em;
 }
-
 
 .icon {
 	width: 2em;
@@ -44,7 +45,20 @@ main {
 	display: none;
 }
 
-/* styles for the front page */
+#system-icon {
+	width: 2em;
+	height: 2em;
+	cursor: pointer;
+	opacity: 0.2;
+	position: fixed;
+	top: 4px;
+	right: 4px;
+}
+
+
+
+
+/* styles for the front page menu and settings */
 
 #menu {
 	top: 10em;
@@ -109,6 +123,12 @@ main {
 	cursor: pointer;
 }
 
+#menu div #list div input[type="checkbox"] {
+	float: right;
+	width: 1.2em;
+	height: 1.2em;
+}
+
 #menu div #list div:not(:hover) img {
 	display: none;
 }
@@ -141,5 +161,14 @@ main {
 	bottom: 0px;
 	left: 4px;
 	color: #5e5e5e;
+}
+
+#shade {
+	position: fixed;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	background: rgba(0, 0, 0, 0.6);
 }
 

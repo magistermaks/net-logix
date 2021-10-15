@@ -6,12 +6,12 @@ class Manager {
 	static init() {
 		Manager.print();
 
-		if( localStorage.getItem("logix-example") != "true" ) {
+		if( !Settings.EXAMPLE.get(false) ) {
 
 			fetch("data/example.json")
 				.then(response => response.text())
 				.then(response => {
-					localStorage.setItem("logix-example", "true")
+					Settings.EXAMPLE.set(true);
 					console.log("Downloaded example sketch");
 
 					Manager.#set("example", response);

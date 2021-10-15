@@ -5,13 +5,14 @@ var nextGateId = 0;
 class Gate extends Box {
   
 	#updated;
+	#complexity;
 
 	inputs;
 	outputs;
 
 	#id;
  
-	constructor( x, y, title, inputs, outputs ) {
+	constructor( x, y, title, inputs, outputs, complexity = 0 ) {
 		super(x, y, title);
 		
 		this.inputs = Array(inputs);
@@ -25,6 +26,7 @@ class Gate extends Box {
 		this.right = outputs;
 		
 		this.#updated = 0;
+		this.#complexity = complexity;
 		this.#id = nextGateId ++;
 		
 		gates.push(this);
@@ -141,13 +143,17 @@ class Gate extends Box {
 	serialize() {
 		return null;
 	}
+
+	getComplexity() {
+		return this.#complexity;
+	}
   
 }
 
 class IconGate extends Gate {
   
-	constructor(x, y, title, inputs, outputs) {
-		super(x, y, title, inputs, outputs);
+	constructor(x, y, title, inputs, outputs, complexity) {
+		super(x, y, title, inputs, outputs, complexity);
 	}
 	
 	getImage() {
