@@ -43,6 +43,10 @@ class Box {
 		return this.#selected;
 	}
 
+	unSelect() {
+		this.#selected = false;
+	}
+
 	canGrab(mx, my) {
 		return this.canClick(mx, my) && scy + this.y + Box.wiggle + Box.top >= my;
 	}
@@ -69,8 +73,8 @@ class Box {
 		const radius = 4.0;
 	  
 		// select border color
-		strokeWeight(2);
-		stroke(this.#selected ? color(9, 98, 218) : 0);
+		strokeWeight(this.#selected ? 3 : 2);
+		stroke(this.#selected ? color(9, 98, 215 + 40 * sin(frameCount / 12)) : 0);
 		
 		// background
 		fill(255);

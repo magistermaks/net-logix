@@ -117,7 +117,17 @@ function mouseDragged() {
 			if( box.canClick(Mouse.x, Mouse.y) ) {
 
 				if( box.canGrab(Mouse.x, Mouse.y) ) {
-					dragged = box;
+					if( box.isSelected() ) {
+						let selected = boxes.filter(box => box.isSelected());
+
+						dragged = {
+							drag: function(mx, my) {
+								selected.forEach(box => box.drag(mx, my));
+							}
+						}
+					}else{
+						dragged = box;
+					}
 				}
 
 				clicked = true;
@@ -159,15 +169,24 @@ function mousePressed() {
 	WireEditor.click();
 }
 
-function keyPressed() {
+function keyPressed(event) {
 	if(Gui.pause) return;
 
-	if( keyCode == DELETE || keyCode == BACKSPACE ) {
+	if(keyCode == ESCAPE) {
+		dragged = null;
+		boxes.forEach(box => box.unSelect());
+	}
+
+	if(keyCode == DELETE || keyCode == BACKSPACE) {
 		for( var i = boxes.length - 1; i >= 0; i -- ) {
 			if( boxes[i].isSelected() ) boxes[i].remove();
 		}
 		return false;
 	}
+
+//	if(key == 'c' && event.ctrlKey) {
+//		// TODO
+//	}
 
 	if( key == " " ) {
 		factor = 1;
@@ -194,8 +213,8 @@ function draw() {
 		background(200);
 		if( Settings.GRID.get(true) ) grid(180);
 
-		boxes.forEach((box) => box.draw());
-		gates.forEach((gate) => {
+		boxes.forEach(box => box.draw());
+		gates.forEach(gate => {
 			gate.tick(); 
 			gate.drawWires();
 		});
@@ -212,11 +231,11 @@ function overlay() {
 	let overlay = name;
 
 	if( Settings.TRANSISTORS.get(false) ) {
-		let transistors = 0;
+		const count = gates
+			.map(gate => gate.getComplexity())
+			.reduce((a, b) => a + b);
 
-		gates.forEach( (gate) => transistors += gate.getComplexity() );
-
-		overlay += " (~" + transistors + " transistors)";
+		overlay += " (~" + count + " transistors)";
 	}
 
 	if( Settings.OVERLAY.get(true) ) {

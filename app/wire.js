@@ -6,6 +6,7 @@ function wire(x1, y1, x2, y2, state) {
 	fill(c);
 
 	stroke(c);
+	strokeWeight(2);
 	circle(x1, y1, 10);
 	circle(x2, y2, 10);
 

@@ -40,7 +40,7 @@
 		</div>
 
 		<div id="footer">
-			Version 1.1.0 <br>
+			Version 1.2.0 <br>
 			Source avaible at <a href="https://github.com/magistermaks/net-logix">Github</a> 
 		</div>
 
