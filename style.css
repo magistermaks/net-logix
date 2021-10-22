@@ -143,17 +143,30 @@ main {
 
 #menu div #new {
 	position: absolute;
-	bottom: 1em;
+	bottom: 0px;
 	right: 0px;
 	width: 100%;
 	text-align: right;
 	user-select: none;
 }
 
-#menu div #new span {
-	padding: 1em;
-	cursor: pointer;
+#menu div #new div {
+    margin: 0.5em;
+    margin-left: 0.5em;
+    width: 3em;
+    float: right;
+    text-align: center;
+    margin-left: 0px;
+    background: #eee;
+    padding: 0.5em;
+    border-radius: 5px;
+    cursor: pointer;
 	user-select: none;
+}
+
+#menu div #new div:hover {
+    background: #94cdff;
+	transition: background-color 100ms linear;
 }
 
 #footer {

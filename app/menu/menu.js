@@ -73,13 +73,18 @@ class Manager {
 			return;
 		}
 
-		var id = name.toLowerCase().replace(/\W+/g, "-");
+		let json = Manager.#empty.replace("$NAME", name);
+
+		Manager.insert(name, json);
+	}
+
+	static insert(name, json) {
+		let id = name.toLowerCase().replace(/\W+/g, "-");
 
 		while( localStorage.getItem("logix-sketch-" + id) != null ) {
 			id += "-";
 		}
 
-		var json = Manager.#empty.replace("$NAME", name);
 		Manager.#set(id, json);
 	}
 

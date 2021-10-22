@@ -35,6 +35,10 @@ class Gui {
 
 		new (clazz)(x - scx, y - scy);
 	}
+	
+	static file_save() {
+		Filesystem.download(localStorage.getItem(identifier), identifier + ".lxs");
+	}
 
 	static Settings = class {
 

@@ -7,6 +7,12 @@ function create() {
 	}
 }
 
+function load_file() {
+	Filesystem.upload((content, name) => {
+		Manager.insert(name, content);
+	});
+}
+
 function redirect(element) {
 	window.location.href = "sketch.php#" + element.parentElement.dataset.id;
 }

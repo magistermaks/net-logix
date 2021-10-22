@@ -8,6 +8,7 @@
 		<script src="app/menu/menu.js"></script>
 		<script src="app/common/save.js"></script>
 		<script src="app/common/settings.js"></script>
+		<script src="app/common/files.js"></script>
 
 		<?php include "header.html" ?>
 
@@ -32,7 +33,8 @@
 				</div>
 
 				<div id="new">
-					<span onclick="create()"> New Sketch </span>
+					<div onclick="create()"> New </div>
+					<div onclick="load_file()"> Import </div>
 				</div>
 
 			</div>

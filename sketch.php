@@ -16,6 +16,7 @@
 		<script src="app/input.js"></script>
 		<script src="app/common/save.js"></script>
 		<script src="app/common/settings.js"></script>
+		<script src="app/common/files.js"></script>
 
 		<?php include "header.html" ?>
 
@@ -67,6 +68,10 @@
 					<img class="icon" src="./assets/purge.png" onclick="Gui.exit()">
 				</div>
 
+				<div class="button" title="Export">
+					<img class="icon" src="./assets/download.png" onclick="Gui.file_save()">
+				</div>
+
 			</center>
 
 		</div>
@@ -94,7 +99,7 @@
 					</div>
 
 					<div id="new">
-						<span onclick="Gui.Settings.exit()"> Exit </span>
+						<div onclick="Gui.Settings.exit()"> Exit </div>
 					</div>
 	
 				</div>
