@@ -1,49 +1,32 @@
 
-var factor = 1;
-
 var scx = 0, scy = 0;
 var tick = 1;
-var dragged = null;
+
 var identifier;
-
 var main;
-var last;
 
-class Mouse {
-	static x = 0;
-	static y = 0;
-	static px = 0;
-	static py = 0;
-
-	static update() {
-		Mouse.px = Mouse.x;
-		Mouse.py = Mouse.y;
-		Mouse.x = mouseX / factor;
-		Mouse.y = mouseY / factor;
-	}
-}
-
+/// inititialize app
 function setup() {
 	main = document.querySelector("main");	
 
 	createCanvas(main.offsetWidth, main.offsetHeight);
 
 	// keep the size of the canvas in check
-	window.onresize = function() { 
+	window.onresize = () => { 
 		resizeCanvas(main.offsetWidth, main.offsetHeight);
 	};
 
 	// notify user if app crashes
-	window.onerror = function() {
+	window.onerror = () => {
 		alert("Application error occured!");
 	};
 
-	// set some stuff
+	// set some processing stuff
 	textAlign(LEFT, TOP);
 	textSize(15);
 	imageMode(CENTER);
 
-	// load save
+	// load sketch
 	identifier = window.location.hash.slice(1);
 	if( !Manager.load(identifier) ) {
 		alert("Failed to load selected sketch!");
@@ -51,27 +34,50 @@ function setup() {
 	}
 
 	// set default value immediately
-	Settings.AUTOSAVE.get(true);
+	Settings.AUTOSAVE.get();
 
 	// start autosave task (every 5s)
 	setInterval( () => {
-		if( Settings.AUTOSAVE.get(true) ) {
+		if( Settings.AUTOSAVE.get() ) {
 			Manager.save(identifier);
 		}
 	}, 5000 );
 
-	// fix screen offset if it's corrupted
+	// fix screen offset if it was corrupted
 	if( scx == null ) scx = 0;
 	if( scy == null ) scy = 0;
 }
 
-function matrix( callback, scaleFactor = 1 ) {
+/// main render loop
+function draw() {
+	Mouse.update();
+	
+	matrix(() => {
+
+		scale(factor);
+		background(200);
+
+		if( Settings.GRID.get() ) grid(180);
+
+		// render sketch
+		gates.forEach(gate => gate.draw());
+		gates.forEach(gate => gate.drawWires());
+		WireEditor.draw();
+
+	});
+
+	tick ++;
+	overlay();
+}
+
+/// matrix stack helper
+function matrix( callback ) {
 	push();
-	scale(scaleFactor);
 	callback();
 	pop();
 }
 
+/// draw background grid
 function grid(c) {
 	
 	const spacing = 50;
@@ -88,157 +94,16 @@ function grid(c) {
 
 }
 
-function mouseReleased() {
-	if( dragged != null ) {
-		dragged = null;
-
-		mousePressed();
-	}
-}
-
-function mouseDragged() {
-	if(Gui.pause) return;
-
-	if( WireEditor.isClicked() ) {
-		dragged = {};
-
-		return;
-	}
-
-	if( dragged !== null ) {
-
-		dragged.drag(Mouse.x - Mouse.px, Mouse.y - Mouse.py);
-
-	}else{
-
-		let clicked = false;
-
-		for( var box of boxes ) {
-			if( box.canClick(Mouse.x, Mouse.y) ) {
-
-				if( box.canGrab(Mouse.x, Mouse.y) ) {
-					if( box.isSelected() ) {
-						let selected = boxes.filter(box => box.isSelected());
-
-						dragged = {
-							drag: function(mx, my) {
-								selected.forEach(box => box.drag(mx, my));
-							}
-						}
-					}else{
-						dragged = box;
-					}
-				}
-
-				clicked = true;
-			}
-		}
-
-		// grab the screen
-		if( !clicked ) {
-
-			dragged = {
-				drag: function(mx, my) {
-					scx += mx;
-					scy += my;
-
-					Gui.reset();
-				}
-			};
-
-		}
-
-	}
-}
-
-function mousePressed() {
-	if(Gui.pause) return;
-
-	const now = Date.now();
-
-	const double = (now - last) < 200;
-
-	for( var key in boxes ) {
-		if( boxes[key].canClick(Mouse.x, Mouse.y) ) {
-			boxes[key].click(Mouse.x, Mouse.y, double);
-		}
-	}
-
-	last = now;
-
-	WireEditor.click();
-}
-
-function keyPressed(event) {
-	if(Gui.pause) return;
-
-	if(keyCode == ESCAPE) {
-		dragged = null;
-		boxes.forEach(box => box.unSelect());
-	}
-
-	if(keyCode == DELETE || keyCode == BACKSPACE) {
-		for( var i = boxes.length - 1; i >= 0; i -- ) {
-			if( boxes[i].isSelected() ) boxes[i].remove();
-		}
-		return false;
-	}
-
-//	if(key == 'c' && event.ctrlKey) {
-//		// TODO
-//	}
-
-	if( key == " " ) {
-		factor = 1;
-		scx = 0;
-		scy = 0;
-		return false;
-	}
-}
-
-function mouseWheel(event) {
-	if(Gui.pause) return;
-
-	factor += ( event.delta < 0 ) ? 0.1 : -0.1;
-
-	if( factor < 0.1 ) factor = 0.1;
-	if( factor > 2.0 ) factor = 2.0;
-}
-
-function draw() {
-	Mouse.update();
-	
-	matrix( () => {
-
-		background(200);
-		if( Settings.GRID.get(true) ) grid(180);
-
-		boxes.forEach(box => box.draw());
-		gates.forEach(gate => {
-			gate.tick(); 
-			gate.drawWires();
-		});
-
-		WireEditor.draw();
-
-	}, factor );
-
-	tick ++;
-	overlay();
-}
-
+/// draw debug overlay
 function overlay() {
 	let overlay = name;
 
-	if( Settings.TRANSISTORS.get(false) ) {
-		const count = gates
-			.map(gate => gate.getComplexity())
-			.reduce((a, b) => a + b);
-
+	if( Settings.TRANSISTORS.get() ) {
+		const count = gates.map(gate => gate.getComplexity()).reduce((a, b) => a + b);
 		overlay += " (~" + count + " transistors)";
 	}
 
-	if( Settings.OVERLAY.get(true) ) {
+	if( Settings.OVERLAY.get() ) {
 		overlay += 
 			"\nFPS: " + round(getFrameRate()) +
 			"\nx: " + scx.toFixed(0) + " y: " + scy.toFixed(0) +

@@ -51,6 +51,7 @@ class Gui {
 			Gui.Settings.#entry(list, Settings.OVERLAY, "Show debug overlay");
 			Gui.Settings.#entry(list, Settings.AUTOSAVE, "Enable sketch autosave");
 			Gui.Settings.#entry(list, Settings.TRANSISTORS, "Show estimated transistor count");
+			Gui.Settings.#entry(list, Settings.SNAP, "Snap gates to grid");
 		}
 
 		static update(elem) {

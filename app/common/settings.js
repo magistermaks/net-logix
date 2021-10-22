@@ -20,12 +20,12 @@ class Settings {
 		return value;
 	}
 
-	static access(name) {
+	static access(name, value) {
 		Settings.#load();
 		
 		return {
 			key: name,
-			get: (value) => Settings.#get(name, value),
+			get: () => Settings.#get(name, value),
 			set: (value) => Settings.#set(name, value)
 		};
 	}
@@ -35,12 +35,13 @@ class Settings {
 		Settings.#data = {};
 	}
 
-	// list of settings
-	static AUTOSAVE = Settings.access("save");
-	static GRID = Settings.access("grid");
-	static OVERLAY = Settings.access("overlay");
-	static TRANSISTORS = Settings.access("transistors");
-	static EXAMPLE = Settings.access("example");
+	// list of settings and their defaults
+	static AUTOSAVE = Settings.access("save", true);
+	static GRID = Settings.access("grid", true);
+	static OVERLAY = Settings.access("overlay", true);
+	static TRANSISTORS = Settings.access("transistors", false);
+	static EXAMPLE = Settings.access("example", false);
+	static SNAP = Settings.access("snap", false);
 
 }
 

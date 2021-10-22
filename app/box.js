@@ -1,6 +1,4 @@
 
-var boxes = []
-
 class Box {
 
 	x = 0;
@@ -10,7 +8,10 @@ class Box {
 	left;
 	right;
 
-	#selected = false;
+	bx = 0;
+	by = 0;
+
+	selected = false;
 
 	static w = 100;
 	static h = 100;
@@ -25,8 +26,6 @@ class Box {
 		this.#title = title;
 		this.left = 0;
 		this.right = 0;
-
-		boxes.push(this);
 	}
 
 	setPoints(left, right) {
@@ -35,17 +34,42 @@ class Box {
 	}
 
 	drag(mx, my) {
-		this.x += mx;
-		this.y += my;
+
+		if( Settings.SNAP.get() ) {
+
+			this.bx += mx;
+			this.by += my;
+
+			// by how many grids can we move at once
+			const mlx = max(int(abs(this.bx / 25)), 1);
+			const mly = max(int(abs(this.by / 25)), 1);
+
+			// how much offset do we need to snap to the next grid
+			let gx = mlx * (abs(this.x % 25) || 25);
+			let gy = mly * (abs(this.y % 25) || 25);
+
+			if( abs(this.bx) >= gx ) {
+				gx *= Math.sign(this.bx);
+
+				this.x += gx;
+				this.bx -= gx;
+			}
+
+			if( abs(this.by) >= gy ) {
+				gy *= Math.sign(this.by);
+
+				this.y += gy;
+				this.by -= gy;
+			}
+
+		}else{
+
+			this.x += mx;
+			this.y += my;
+
+		}
+
 	} 
-
-	isSelected() {
-		return this.#selected;
-	}
-
-	unSelect() {
-		this.#selected = false;
-	}
 
 	canGrab(mx, my) {
 		return this.canClick(mx, my) && scy + this.y + Box.wiggle + Box.top >= my;
@@ -73,8 +97,8 @@ class Box {
 		const radius = 4.0;
 	  
 		// select border color
-		strokeWeight(this.#selected ? 3 : 2);
-		stroke(this.#selected ? color(9, 98, 215 + 40 * sin(frameCount / 12)) : 0);
+		strokeWeight(this.selected ? 3 : 2);
+		stroke(this.selected ? color(9, 98, 205 + 50 * sin(frameCount / 12)) : 0);
 		
 		// background
 		fill(255);
@@ -94,7 +118,7 @@ class Box {
 		
 		fill(255);
 		strokeWeight(2);
-		stroke(this.#selected ? color(9, 98, 218) : 0);
+		stroke(this.selected ? color(9, 98, 218) : 0);
 		
 		const leftSpace = float(Box.h - Box.top) / (this.left + 1); 
 		const rightSpace = float(Box.h - Box.top) / (this.right + 1); 
@@ -110,10 +134,6 @@ class Box {
 		}
 		
 	}
-
-	remove() {
-		boxes.splice( boxes.indexOf(this), 1 );
-	}
 	
 	content(x, y) {
 		
@@ -121,8 +141,52 @@ class Box {
 	
 	click(mx, my, double) {
 		if( double && mx > this.x + scx && mx < this.x + scx + Box.w && my > this.y + scy && my < this.y + scy + Box.top ) {
-			this.#selected = !this.#selected;
+			Selected.toggle(this);
 		}
 	}
 
 }
+
+class Selected {
+
+	static #gates = [];
+	
+	static get() {
+		return Selected.#gates;
+	}
+
+	static add(gate) {
+		if( !gate.selected ) {
+			gate.selected = true;
+
+			Selected.#gates.push(gate);
+		}
+	}
+
+	static remove(gate) {
+		if( gate.selected ) {
+			gate.selected = false;
+
+			Selected.#gates.splice(Selected.#gates.indexOf(gate), 1);
+		}
+	}
+
+	static toggle(gate) {
+		if( !gate.selected ) {
+			Selected.add(gate);
+		}else{
+			Selected.remove(gate);
+		}
+	}
+
+	static addAll() {
+		gates.forEach(gate => Selected.add(gate));
+	}
+
+	static removeAll() {
+		Selected.#gates.forEach(gate => gate.selected = false);
+		Selected.#gates = [];
+	}
+
+}
+

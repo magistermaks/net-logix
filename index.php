@@ -5,7 +5,7 @@
 		<!-- <script src="libs/p5.min.js"></script> -->
 		<script src="libs/lz.min.js"></script>
 		<script src="app/menu/main.js"></script>
-		<script src="app/menu/manager.js"></script>
+		<script src="app/menu/menu.js"></script>
 		<script src="app/common/save.js"></script>
 		<script src="app/common/settings.js"></script>
 

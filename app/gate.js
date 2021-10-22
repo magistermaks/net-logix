@@ -74,12 +74,12 @@ class Gate extends Box {
 	}
 	
 	drawWires() {
-		for( var key in this.outputs ) if(this.outputs[key] != null) this.outputs[key].draw();
+		this.outputs.forEach(out => {
+			if(out != null) out.draw();
+		});
 	}
 
 	remove() {
-		super.remove();
-
 		for( var i = 0; i < this.inputs.length; i ++ ) {
 			this.disconnect(i);
 		}
@@ -90,15 +90,30 @@ class Gate extends Box {
 
 		gates.splice( gates.indexOf(this), 1 );
 	}
+
+	top() {
+		const index = gates.indexOf(this);
+
+		if( index != gates.length - 1 ) {
+			gates.splice(index, 1);
+			gates.push(this);
+		}
+	}
 	
+	draw() {
+		// update the gate
+		this.tick();
+
+		// draw the gate
+		super.draw();
+	}
+
 	tick() {
 		// this is needed to keep the wire highlighting working on output-less branches
 		if( this.#updated + 4 < tick ) {
-
 			for( var i = 0; i < this.outputs.length; i ++ ) {
 				this.getOutputState(i);
 			}
-
 		}
 	}
 	

@@ -1,4 +1,5 @@
 
+/// draws wire between two points
 function wire(x1, y1, x2, y2, state) {
 	const a = (x2 - x1) / 4;
 	const c = state ? color(9, 98, 218) : 0;

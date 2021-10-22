@@ -54,8 +54,8 @@ class Manager {
 
 		return {
 			"json": json,
-			"x": scx,
-			"y": scy,
+			"x": round(scx),
+			"y": round(scy),
 			"name": name
 		};
 
@@ -96,7 +96,6 @@ class Manager {
 
 	static reset() {
 		gates = [];
-		boxes = [];
 	}
 
 	static load(id) {

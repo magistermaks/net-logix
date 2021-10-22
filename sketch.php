@@ -13,6 +13,7 @@
 		<script src="app/logic.js"></script>
 		<script src="app/manager.js"></script>
 		<script src="app/gui.js"></script>
+		<script src="app/input.js"></script>
 		<script src="app/common/save.js"></script>
 		<script src="app/common/settings.js"></script>
 
