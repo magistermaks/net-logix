@@ -56,6 +56,7 @@ class Manager {
 			"json": json,
 			"x": round(scx),
 			"y": round(scy),
+			"z": factor.toFixed(1),
 			"name": name
 		};
 
@@ -63,8 +64,9 @@ class Manager {
 
 	static #deserialize(obj) {
 		
-		scx = obj.x;
-		scy = obj.y;
+		scx = obj.x ?? 0;
+		scy = obj.y ?? 0;
+		factor = Number(obj.z ?? 1);
 		name = obj.name;
 
 		let named = new Map();

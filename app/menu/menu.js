@@ -28,7 +28,7 @@ class Manager {
 
 	static #entry(list, key) {
 		const name = Manager.getName(key);
-		list.innerHTML += `<div data-id="${key}"><span onclick="redirect(this)">${name}</span><img onclick="remove(this)" src="assets/purge.png"></div>`;
+		list.innerHTML += `<div data-id="${key}"><span onclick="redirect(this)">${name}</span><img title="Delete this sketch" onclick="remove(this)" src="assets/purge.png"></div>`;
 	}
 
 	static print() {

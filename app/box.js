@@ -152,7 +152,7 @@ class Selected {
 	static #gates = [];
 	
 	static get() {
-		return Selected.#gates.splice(0);
+		return Selected.#gates.slice();
 	}
 
 	static add(gate) {
