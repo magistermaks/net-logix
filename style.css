@@ -24,7 +24,7 @@ main {
 	user-select: none;
 }
 
-.button {
+.toolbox div {
 	display: inline-block;
 	height: 100%;
 	width: 2em;
@@ -53,6 +53,42 @@ main {
 	position: fixed;
 	top: 4px;
 	right: 4px;
+}
+
+.tooltip {
+	position: relative;
+	display: inline-block;
+}
+
+.tooltip span {
+	opacity: 0;
+	width: 120px;
+	background-color: #00000087;
+	color: #fff;
+	text-align: center;
+	border-radius: 4px;
+	padding: 3px 0;
+	position: absolute;
+	z-index: 1;
+	width: 100px;
+	bottom: 100%;
+	left: 50%;
+	margin-left: -50px;
+}
+
+.tooltip span::after {
+	content: " ";
+	position: absolute;
+	top: 100%;
+	left: 50%;
+	margin-left: -5px;
+	border-width: 5px;
+	border-style: solid;
+	border-color: #00000087 transparent transparent transparent;
+}
+
+.tooltip:hover span {
+	opacity: 1;
 }
 
 
@@ -150,23 +186,35 @@ main {
 	user-select: none;
 }
 
-#menu div #new div {
-    margin: 0.5em;
-    margin-left: 0.5em;
-    width: 3em;
-    float: right;
-    text-align: center;
-    margin-left: 0px;
-    background: #eee;
-    padding: 0.5em;
-    border-radius: 5px;
-    cursor: pointer;
+.button {
+	margin: 0.5em;
+	margin-left: 0px;
+	width: 3.5em;
+	float: right;
+	text-align: center;
+	background: #eee;
+	padding: 0.5em;
+	border-radius: 5px;
+	cursor: pointer;
 	user-select: none;
 }
 
-#menu div #new div:hover {
-    background: #94cdff;
+.compact {
+	padding-top: 0.2em;
+	padding-bottom: 0.2em;
+}
+
+.button:hover {
+	background: #94cdff;
 	transition: background-color 100ms linear;
+}
+
+#topbar {
+	width: auto;
+	position: fixed;
+	top: 0px;
+	right: 0px;
+	user-select: none;
 }
 
 #footer {
@@ -183,5 +231,9 @@ main {
 	left: 0px;
 	right: 0px;
 	background: rgba(0, 0, 0, 0.6);
+}
+
+@media only screen and (max-width: 760px) {
+	#export-button { display: none; }
 }
 

@@ -88,6 +88,7 @@ class Gate extends Box {
 			output.removeAll();
 		}
 
+		Selected.remove(this);
 		gates.splice( gates.indexOf(this), 1 );
 	}
 

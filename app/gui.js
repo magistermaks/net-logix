@@ -36,7 +36,7 @@ class Gui {
 		new (clazz)(x - scx, y - scy);
 	}
 	
-	static file_save() {
+	static fileExport() {
 		Filesystem.download(localStorage.getItem(identifier), identifier + ".lxs");
 	}
 

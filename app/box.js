@@ -152,14 +152,16 @@ class Selected {
 	static #gates = [];
 	
 	static get() {
-		return Selected.#gates;
+		return Selected.#gates.splice(0);
 	}
 
 	static add(gate) {
 		if( !gate.selected ) {
 			gate.selected = true;
 
-			Selected.#gates.push(gate);
+			if( !Selected.#gates.includes(gate) ) {
+				Selected.#gates.push(gate);
+			}
 		}
 	}
 
@@ -167,7 +169,9 @@ class Selected {
 		if( gate.selected ) {
 			gate.selected = false;
 
-			Selected.#gates.splice(Selected.#gates.indexOf(gate), 1);
+			if( Selected.#gates.includes(gate) ) {
+				Selected.#gates.splice(Selected.#gates.indexOf(gate), 1);
+			}
 		}
 	}
 

@@ -33,8 +33,8 @@
 				</div>
 
 				<div id="new">
-					<div onclick="create()"> New </div>
-					<div onclick="load_file()"> Import </div>
+					<div class="button" onclick="create()"> New </div>
+					<div class="button" onclick="fileImport()"> Import </div>
 				</div>
 
 			</div>

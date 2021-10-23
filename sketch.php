@@ -32,55 +32,54 @@
 
 			<!-- toolbox buttons -->
 			<center>
-				<div class="button" title="Input">
+				<div class="tooltip">
 					<img class="icon" src="./assets/in.png" onclick="Gui.open(InputGate)">
+					<span>Input</span>
 				</div>
 
-				<div class="button" title="Output">
+				<div class="tooltip">
 					<img class="icon" src="./assets/out.png" onclick="Gui.open(OutputGate)">
+					<span>Output</span>
 				</div>
 
-				<div class="button" title="OR Gate">
+				<div class="tooltip">
 					<img class="icon" src="./assets/or.png" onclick="Gui.open(OrGate)">
+					<span>OR Gate</span>
 				</div>
 
-				<div class="button" title="XOR Gate">
+				<div class="tooltip">
 					<img class="icon" src="./assets/xor.png" onclick="Gui.open(XorGate)">
+					<span>XOR Gate</span>
 				</div>
 
-				<div class="button" title="NOR Gate">
+				<div class="tooltip">
 					<img class="icon" src="./assets/nor.png" onclick="Gui.open(NorGate)">
+					<span>NOR Gate</span>
 				</div>
 
-				<div class="button" title="AND Gate">
+				<div class="tooltip">
 					<img class="icon" src="./assets/and.png" onclick="Gui.open(AndGate)">
+					<span>AND Gate</span>
 				</div>
 
-				<div class="button" title="NOT Gate">
+				<div class="tooltip">
 					<img class="icon" src="./assets/not.png" onclick="Gui.open(NotGate)">
-				</div>
-
-				<div class="button">
-					 <!-- separator -->
-				</div>
-
-				<div class="button" title="Save & Exit">
-					<img class="icon" src="./assets/purge.png" onclick="Gui.exit()">
-				</div>
-
-				<div class="button" title="Export">
-					<img class="icon" src="./assets/download.png" onclick="Gui.file_save()">
+					<span>NOT Gate</span>
 				</div>
 
 			</center>
 
 		</div>
 
-		<!-- button used to open settings page -->
-		<img id="system-icon" onclick="Gui.Settings.open()" src="assets/settings.png">
+		<!-- control buttons -->
+		<div id="topbar">
+			<div class="button compact" onclick="Gui.Settings.open()">Settings</div>
+			<div class="button compact" onclick="Gui.fileExport()" id="export-button">Export</div>
+			<div class="button compact" onclick="Gui.exit()">Exit</div>
+		</div>
 
 		<!-- settings container -->
-		<div id="settings" style="display: none"> 
+		<div id="settings" style="display: none">
 		
 			<!-- background shadow -->
 			<div id="shade"></div>
@@ -99,7 +98,7 @@
 					</div>
 
 					<div id="new">
-						<div onclick="Gui.Settings.exit()"> Exit </div>
+						<div class="button" onclick="Gui.Settings.exit()"> Exit </div>
 					</div>
 	
 				</div>

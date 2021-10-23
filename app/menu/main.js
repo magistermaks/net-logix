@@ -7,7 +7,7 @@ function create() {
 	}
 }
 
-function load_file() {
+function fileImport() {
 	Filesystem.upload((content, name) => {
 		Manager.insert(name, content);
 	});
