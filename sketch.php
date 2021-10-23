@@ -33,13 +33,18 @@
 			<!-- toolbox buttons -->
 			<center>
 				<div class="tooltip">
+					<img class="icon" src="./assets/clock.png" onclick="Gui.open(ClockGate)">
+					<span>Oscillator</span>
+				</div>
+
+				<div class="tooltip">
 					<img class="icon" src="./assets/in.png" onclick="Gui.open(InputGate)">
-					<span>Input</span>
+					<span>Switch</span>
 				</div>
 
 				<div class="tooltip">
 					<img class="icon" src="./assets/out.png" onclick="Gui.open(OutputGate)">
-					<span>Output</span>
+					<span>Indicator</span>
 				</div>
 
 				<div class="tooltip">

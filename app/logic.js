@@ -64,6 +64,34 @@ class InputGate extends TwoStateGate {
   
 }
 
+class ClockGate extends SingleStateGate {
+ 
+	state = false;
+	static period = 10;
+  
+	constructor(x, y, meta) {
+		super(x, y, "Oscillator", 0, 1, 0, Resource.get("clock"));
+		//this.period = Number(meta ?? 10);
+	}
+
+	tick() {
+		super.tick();
+
+		if( tick % ClockGate.period /*this.period*/ == 0 ) {
+			this.state = !this.state;
+		}
+	}
+
+	update() {
+		this.outputs[0].state = this.state;
+	}
+
+	serialize() {
+		return null; //this.period;
+	}
+  
+}
+
 class AndGate extends SingleStateGate {
 	
 	constructor(x, y) {
