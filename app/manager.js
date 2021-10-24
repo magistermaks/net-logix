@@ -37,15 +37,15 @@ class Manager {
 			const meta = gate.serialize();
 
 			let obj = {
-				"type": gate.constructor.name.slice(0, -4),
-				"x": gate.x,
-				"y": gate.y,
-				"id": id,
-				"wires": outputs
+				"t": gate.constructor.id,
+				"x": round(gate.x),
+				"y": round(gate.y),
+				"i": id,
+				"w": outputs
 			};
 
 			if( meta != null ) {
-				obj.meta = meta;
+				obj.m = meta;
 			}
 
 			json.push(obj);
@@ -53,11 +53,11 @@ class Manager {
 		}
 
 		return {
-			"json": json,
+			"j": json,
 			"x": round(scx),
 			"y": round(scy),
 			"z": factor.toFixed(1),
-			"name": name
+			"n": name
 		};
 
 	}
@@ -67,21 +67,21 @@ class Manager {
 		scx = obj.x ?? 0;
 		scy = obj.y ?? 0;
 		factor = Number(obj.z ?? 1);
-		name = obj.name;
+		name = obj.n;
 
 		let named = new Map();
 
-		for( var gate of obj.json ) {
-			named.set(gate.id, Gate.deserialize(gate.type, gate.x, gate.y, gate.meta));
+		for( var gate of obj.j ) {
+			named.set(gate.i, Gate.deserialize(gate.t, gate.x, gate.y, gate.m));
 		}
 
 		for( var i = 0; i < gates.length; i ++ ) {
 
-			let gate = obj.json[i];
+			let gate = obj.j[i];
 
-			for( var j = 0; j < gate.wires.length; j ++ ) {
+			for( var j = 0; j < gate.w.length; j ++ ) {
 
-				for( var point of gate.wires[j] ) {
+				for( var point of gate.w[j] ) {
 					
 					if( point != null ) {
 

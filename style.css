@@ -17,7 +17,7 @@ main {
 	width: auto;
 	position: fixed;
 	bottom: 0px;
-	height: 3em;
+	height: 2.1em;
 	box-sizing: border-box;
 	left: 0px;
 	right: 0px;
@@ -35,7 +35,6 @@ main {
 	height: 2em;
 	background: rgb(200, 200, 200);
 	border-radius: 10px;
-	padding: 2px;
 	cursor: pointer;
 }
 
@@ -45,19 +44,13 @@ main {
 	display: none;
 }
 
-#system-icon {
-	width: 2em;
-	height: 2em;
-	cursor: pointer;
-	opacity: 0.2;
-	position: fixed;
-	top: 4px;
-	right: 4px;
-}
-
 .tooltip {
 	position: relative;
 	display: inline-block;
+
+	/* move to separate rule */
+	border: solid #b8b8b8 1px;
+	border-radius: 10px 10px 0px 0px;
 }
 
 .tooltip span {
@@ -71,7 +64,7 @@ main {
 	position: absolute;
 	z-index: 1;
 	width: 100px;
-	bottom: 100%;
+	bottom: 120%;
 	left: 50%;
 	margin-left: -50px;
 }
@@ -232,6 +225,49 @@ main {
 	left: 0px;
 	right: 0px;
 	background: rgba(0, 0, 0, 0.6);
+}
+
+/* picker context menu */
+
+#picker {
+	position: fixed;
+	width: 150px;
+	height: 250px;
+	background-color: white;
+	border: solid black 2px;
+	border-radius: 5px;
+	user-select: none;
+	box-sizing: border-box;
+}
+
+#picker #picker-top {
+	background: #646464;
+	border-bottom: inherit;
+	border-radius: 2px 2px 0px 0px;
+	color: white;
+	padding-left: 2px;
+}
+
+#picker #picker-list {
+	overflow-y: scroll;
+	height: 224px;
+	scrollbar-width: thin;
+}
+
+#picker #picker-list div {
+	padding-left: 2px;
+	height: 1.1em;
+	border-bottom: solid black 1px;
+	cursor: pointer;
+}
+
+#picker #picker-list div:hover {
+	background-color: #e8e8e8;
+}
+
+#picker #picker-list img {
+	height: 1.1em;
+	float: right;
 }
 
 @media only screen and (max-width: 760px) {

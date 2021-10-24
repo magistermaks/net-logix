@@ -33,11 +33,39 @@ class Gui {
 			y = step;
 		}
 
-		new (clazz)(x - scx, y - scy);
+		return new (clazz)(x - scx, y - scy);
 	}
 	
 	static fileExport() {
 		Filesystem.download(localStorage.getItem(identifier), identifier + ".lxs");
+	}
+
+	static Picker = class {
+
+		static open() {
+			picker.style.display = "";
+			picker.style.left = mouseX + 4;
+			picker.style.top = mouseY + 4;
+			picker.dataset.x = Mouse.x;
+			picker.dataset.y = Mouse.y;
+		}
+
+		static close() {
+			picker.style.display = "none";
+		}
+
+		static add(clazz) {
+			let gate = Gui.open(clazz);
+			gate.x = int(picker.dataset.x) - scx;
+			gate.y = int(picker.dataset.y) - scy;
+
+			Gui.Picker.close();
+		}
+
+		static isOpen() {
+			return picker.style.display == "";
+		}
+
 	}
 
 	static Settings = class {

@@ -35,11 +35,11 @@ class TwoStateGate extends IconGate {
 
 class InputGate extends TwoStateGate {
  
-	state = false;
+	state;
   
 	constructor(x, y, meta) {
 		super(x, y, "Input", 0, 1, 0, Resource.get("on"), Resource.get("off"));
-		if( meta != null ) this.state = (meta == "1" ? true : false);
+		this.state = Boolean(Number(meta ?? 0));
 	}
 
 	click(mx, my, double) {
@@ -59,7 +59,7 @@ class InputGate extends TwoStateGate {
 	}
 
 	serialize() {
-		return this.state ? "1" : "0";
+		return this.state ? 1 : 0;
 	}
   
 }
@@ -169,3 +169,33 @@ class OutputGate extends TwoStateGate {
 	}
   
 }
+
+class Registry {
+
+	static #reg = new Map();
+	static #id = 0;
+
+	static add(clazz) {
+		Registry.#reg.set(Registry.#id, clazz);
+		clazz.id = Registry.#id;
+
+		Registry.#id ++;
+	}
+
+	static init() {
+		Registry.add(InputGate);
+		Registry.add(ClockGate);
+		Registry.add(AndGate);
+		Registry.add(XorGate);
+		Registry.add(OrGate);
+		Registry.add(NorGate);
+		Registry.add(NotGate);
+		Registry.add(OutputGate);
+	}
+
+	static get(id) {
+		return Registry.#reg.get(id);
+	}
+
+}
+

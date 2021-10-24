@@ -83,6 +83,21 @@
 			<div class="button compact" onclick="Gui.exit()">Exit</div>
 		</div>
 
+		<!-- component picker -->
+		<div id="picker" style="display:none;top: 600px;left: 534px;">
+			<div id="picker-top"> Add Component </div>
+			<div id="picker-list">
+				<div onclick="Gui.Picker.add(ClockGate)">Oscillator<img src="./assets/clock.png"></div>
+				<div onclick="Gui.Picker.add(InputGate)">Switch<img src="./assets/in.png"></div>
+				<div onclick="Gui.Picker.add(OutputGate)">Indicator<img src="./assets/out.png"></div>
+				<div onclick="Gui.Picker.add(OrGate)">OR Gate<img src="./assets/or.png"></div>
+				<div onclick="Gui.Picker.add(XorGate)">XOR Gate<img src="./assets/xor.png"></div>
+				<div onclick="Gui.Picker.add(NorGate)">NOR Gate<img src="./assets/nor.png"></div>
+				<div onclick="Gui.Picker.add(AndGate)">AND Gate<img src="./assets/and.png"></div>
+				<div onclick="Gui.Picker.add(NotGate)">NOT Gate<img src="./assets/not.png"></div>
+			</div>
+		</div>
+
 		<!-- settings container -->
 		<div id="settings" style="display: none">
 		

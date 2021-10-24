@@ -61,7 +61,7 @@ class Manager {
 
 	static getName(key) {
 		try{
-			return Save.get(key).name;
+			return Save.get(key).n;
 		}catch(err) {
 			return key;
 		}

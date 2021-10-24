@@ -3,17 +3,24 @@ var scx = 0, scy = 0;
 var tick = 1;
 
 var identifier;
-var main;
+var main, picker;
 
 /// inititialize app
 function setup() {
-	main = document.querySelector("main");	
+	main = document.querySelector("main");
+	picker = document.getElementById("picker");
 
 	createCanvas(main.offsetWidth, main.offsetHeight);
 
 	// keep the size of the canvas in check
-	window.onresize = () => { 
+	window.onresize = () => {
 		resizeCanvas(main.offsetWidth, main.offsetHeight);
+	};
+
+	// open component picker
+	main.oncontextmenu = () => {
+		Gui.Picker.open();
+		return false;
 	};
 
 	// notify user if app crashes
@@ -25,6 +32,9 @@ function setup() {
 	textAlign(LEFT, TOP);
 	textSize(15);
 	imageMode(CENTER);
+
+	// setup gate registry
+	Registry.init();
 
 	// load sketch
 	identifier = window.location.hash.slice(1);
