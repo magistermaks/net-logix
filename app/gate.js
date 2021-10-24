@@ -147,17 +147,7 @@ class Gate extends Box {
 	}
 
 	static deserialize(type, x, y, meta) {
-
-		if( Number.isInteger(type) ) {
-			return new (Registry.get(type))(x, y, meta);
-		}else{
-			if( /^[A-Z][a-z]+$/.test(type) ) {
-				return new (eval(type + "Gate"))(x, y, meta);
-			}else{
-				return null;
-			}
-		}
-
+		return new (Number.isInteger(type) ? Registry.get(type) : Registry.getByName(type + "Gate"))(x, y, meta);
 	}
 
 	serialize() {

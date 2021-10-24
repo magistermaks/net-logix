@@ -4,6 +4,7 @@ var tick = 1;
 
 var identifier;
 var main, picker;
+var fps = 0, ms = 0;
 
 /// inititialize app
 function setup() {
@@ -61,6 +62,8 @@ function setup() {
 /// main render loop
 function draw() {
 	Mouse.update();
+
+	let t = Date.now();
 	
 	matrix(() => {
 
@@ -77,7 +80,7 @@ function draw() {
 	});
 
 	tick ++;
-	overlay();
+	overlay(Date.now() - t);
 }
 
 /// matrix stack helper
@@ -105,7 +108,7 @@ function grid(c) {
 }
 
 /// draw debug overlay
-function overlay() {
+function overlay(t) {
 	let overlay = name;
 
 	if( Settings.TRANSISTORS.get() ) {
@@ -114,8 +117,13 @@ function overlay() {
 	}
 
 	if( Settings.OVERLAY.get() ) {
+		if( frameCount % 5 == 0 ) {
+			ms = t;
+			fps = round(getFrameRate());
+		}
+
 		overlay += 
-			"\nFPS: " + round(getFrameRate()) +
+			"\nFPS: " + fps + " (" + ms + "ms)" + 
 			"\nx: " + scx.toFixed(0) + " y: " + scy.toFixed(0) +
 			"\n" + factor.toFixed(2) + "x";
 	}

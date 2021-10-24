@@ -98,7 +98,7 @@ class Box {
 	  
 		// select border color
 		strokeWeight(this.selected ? 3 : 2);
-		stroke(this.selected ? color(19, 108, 205 + 50 * sin(frameCount / 12)) : 0);
+		stroke(this.selected ? color(19, 98, 205 + 50 * sin(frameCount / 12)) : 0);
 		
 		// background
 		fill(255);

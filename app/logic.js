@@ -71,23 +71,18 @@ class ClockGate extends SingleStateGate {
   
 	constructor(x, y, meta) {
 		super(x, y, "Oscillator", 0, 1, 0, Resource.get("clock"));
-		//this.period = Number(meta ?? 10);
 	}
 
 	tick() {
 		super.tick();
 
-		if( tick % ClockGate.period /*this.period*/ == 0 ) {
+		if( tick % ClockGate.period == 0 ) {
 			this.state = !this.state;
 		}
 	}
 
 	update() {
 		this.outputs[0].state = this.state;
-	}
-
-	serialize() {
-		return null; //this.period;
 	}
   
 }
@@ -172,11 +167,13 @@ class OutputGate extends TwoStateGate {
 
 class Registry {
 
-	static #reg = new Map();
+	static #ids = new Map();
+	static #names = new Map();
 	static #id = 0;
 
 	static add(clazz) {
-		Registry.#reg.set(Registry.#id, clazz);
+		Registry.#ids.set(Registry.#id, clazz);
+		Registry.#names.set(clazz.name, clazz);
 		clazz.id = Registry.#id;
 
 		Registry.#id ++;
@@ -194,7 +191,12 @@ class Registry {
 	}
 
 	static get(id) {
-		return Registry.#reg.get(id);
+		return Registry.#ids.get(id);
+	}
+
+	/// deprected
+	static getByName(name) {
+		return Registry.#names.get(name);
 	}
 
 }

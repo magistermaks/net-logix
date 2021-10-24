@@ -8,8 +8,8 @@ function wire(x1, y1, x2, y2, state) {
 
 	stroke(c);
 	strokeWeight(2);
-	circle(x1, y1, 10);
-	circle(x2, y2, 10);
+	circle(x1 + 0.5, y1 + 0.5, 10);
+	circle(x2 + 0.5, y2 + 0.5, 10);
 
 	stroke(255);
 	strokeWeight(6);

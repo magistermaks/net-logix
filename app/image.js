@@ -18,9 +18,5 @@ class Resource {
 		}
 	}
 
-	static load(name) {
-		Resource.get(name)
-	}
-
 }
 
