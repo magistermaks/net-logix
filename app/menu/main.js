@@ -9,7 +9,7 @@ function create() {
 
 function fileImport() {
 	Filesystem.upload((content, name) => {
-		Manager.insert(name, content);
+		Manager.insert(name.split('.')[0], content);
 	});
 }
 

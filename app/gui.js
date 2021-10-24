@@ -37,7 +37,7 @@ class Gui {
 	}
 	
 	static fileExport() {
-		Filesystem.download(localStorage.getItem(identifier), identifier + ".lxs");
+		Filesystem.download(localStorage.getItem(identifier), identifier.substring("logix-sketch-".length) + ".lxs");
 	}
 
 	static Picker = class {
