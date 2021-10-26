@@ -28,7 +28,7 @@
 					<span> Select Sketch </span>
 				</div>
 
-				<div id="list">
+				<div id="menu-list">
 					<!-- filled with javascript -->
 				</div>
 
@@ -45,6 +45,14 @@
 			Version 1.3.0 <br>
 			Source avaible at <a href="https://github.com/magistermaks/net-logix">Github</a> 
 		</div>
+
+		<!-- noscript banner -->
+		<noscript>
+			<div>
+				<img src="assets/javascript.png">
+				<span> Sorry, but JavaScript is required to run this app. </span>
+			</div>
+		</noscript>
 
 	</body>
 

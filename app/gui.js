@@ -35,12 +35,40 @@ class Gui {
 
 		return new (clazz)(x - scx, y - scy);
 	}
+
+	static init() {
+		Gui.Toolbar.init();
+		Gui.Picker.init();
+		Gui.Settings.init();
+	}
 	
 	static fileExport() {
 		Filesystem.download(localStorage.getItem(identifier), identifier.substring("logix-sketch-".length) + ".lxs");
 	}
 
+	static Toolbar = class {
+		
+		static init() {
+			const list = document.querySelector("#toolbar-list");
+			list.innerHTML = "";
+
+			Registry.forEach((clazz) => {
+				list.innerHTML += `<div class="tooltip"><img class="icon" src="./assets/${clazz.icon}.png" onclick="Gui.open(${clazz.name})"><span>${clazz.title}</span></div>&nbsp;`;
+			});
+		}
+
+	}
+
 	static Picker = class {
+
+		static init() {
+			const list = document.querySelector("#picker-list");
+			list.innerHTML = "";
+
+			Registry.forEach((clazz) => {
+				list.innerHTML += `<div onclick="Gui.Picker.add(${clazz.name})">${clazz.title}<img src="./assets/${clazz.icon}.png"></div>`;
+			});
+		}
 
 		static open() {
 			picker.style.display = "";
@@ -75,8 +103,8 @@ class Gui {
 			list.innerHTML += `<div data-id="${accessor.key}"><span style="cursor: auto">${name}</span><input type="checkbox" ${checked} onclick="Gui.Settings.update(this)"></div>`;
 		}
 
-		static #init() {
-			const list = document.querySelector("#list");
+		static init() {
+			const list = document.querySelector("#menu-list");
 			list.innerHTML = "";
 		
 			Gui.Settings.#entry(list, Settings.GRID, "Show background grid");
@@ -91,7 +119,6 @@ class Gui {
 		}
 
 		static open() {
-			Gui.Settings.#init();
 			document.querySelector("#settings").style.display = "block";
 			Gui.pause = true;
 		}

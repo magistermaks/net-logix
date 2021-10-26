@@ -171,27 +171,39 @@ class Registry {
 	static #names = new Map();
 	static #id = 0;
 
-	static add(clazz) {
+	static add(clazz, title, icon) {
 		Registry.#ids.set(Registry.#id, clazz);
 		Registry.#names.set(clazz.name, clazz);
+
 		clazz.id = Registry.#id;
+		clazz.title = title;
+		clazz.icon = icon;
 
 		Registry.#id ++;
 	}
 
 	static init() {
-		Registry.add(InputGate);
-		Registry.add(ClockGate);
-		Registry.add(AndGate);
-		Registry.add(XorGate);
-		Registry.add(OrGate);
-		Registry.add(NorGate);
-		Registry.add(NotGate);
-		Registry.add(OutputGate);
+		// never change the order of this
+		// or things will explode
+
+		Registry.add(InputGate, "Switch", "in");
+		Registry.add(ClockGate, "Oscillator", "clock");
+		Registry.add(AndGate, "AND Gate", "and");
+		Registry.add(XorGate, "XOR Gate", "xor");
+		Registry.add(OrGate, "OR Gate", "or");
+		Registry.add(NorGate, "NOR Gate", "nor");
+		Registry.add(NotGate, "NOT Gate", "not");
+		Registry.add(OutputGate, "Indicator", "out");
 	}
 
 	static get(id) {
 		return Registry.#ids.get(id);
+	}
+
+	static forEach(callback) {
+		for(let clazz of this.#ids.values()) {
+			callback(clazz);
+		}
 	}
 
 	/// deprected

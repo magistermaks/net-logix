@@ -32,7 +32,7 @@ class Manager {
 	}
 
 	static print() {
-		const list = document.querySelector("#list");
+		const list = document.querySelector("#menu-list");
 		list.innerHTML = "";
 
 		var keys = [];

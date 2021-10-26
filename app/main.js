@@ -57,6 +57,9 @@ function setup() {
 	// fix screen offset if it was corrupted
 	if( scx == null ) scx = 0;
 	if( scy == null ) scy = 0;
+
+	// inititialize UI
+	Gui.init();
 }
 
 /// main render loop

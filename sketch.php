@@ -31,47 +31,8 @@
 		<div class="toolbox">
 
 			<!-- toolbox buttons -->
-			<center>
-				<div class="tooltip">
-					<img class="icon" src="./assets/clock.png" onclick="Gui.open(ClockGate)">
-					<span>Oscillator</span>
-				</div>
-
-				<div class="tooltip">
-					<img class="icon" src="./assets/in.png" onclick="Gui.open(InputGate)">
-					<span>Switch</span>
-				</div>
-
-				<div class="tooltip">
-					<img class="icon" src="./assets/out.png" onclick="Gui.open(OutputGate)">
-					<span>Indicator</span>
-				</div>
-
-				<div class="tooltip">
-					<img class="icon" src="./assets/or.png" onclick="Gui.open(OrGate)">
-					<span>OR Gate</span>
-				</div>
-
-				<div class="tooltip">
-					<img class="icon" src="./assets/xor.png" onclick="Gui.open(XorGate)">
-					<span>XOR Gate</span>
-				</div>
-
-				<div class="tooltip">
-					<img class="icon" src="./assets/nor.png" onclick="Gui.open(NorGate)">
-					<span>NOR Gate</span>
-				</div>
-
-				<div class="tooltip">
-					<img class="icon" src="./assets/and.png" onclick="Gui.open(AndGate)">
-					<span>AND Gate</span>
-				</div>
-
-				<div class="tooltip">
-					<img class="icon" src="./assets/not.png" onclick="Gui.open(NotGate)">
-					<span>NOT Gate</span>
-				</div>
-
+			<center id="toolbar-list">
+				<!-- filled with javascript -->
 			</center>
 
 		</div>
@@ -84,17 +45,10 @@
 		</div>
 
 		<!-- component picker -->
-		<div id="picker" style="display:none;top: 600px;left: 534px;">
-			<div id="picker-top"> Add Component </div>
+		<div id="picker" style="display:none;">
+			<div id="picker-top"> Add Component... </div>
 			<div id="picker-list">
-				<div onclick="Gui.Picker.add(ClockGate)">Oscillator<img src="./assets/clock.png"></div>
-				<div onclick="Gui.Picker.add(InputGate)">Switch<img src="./assets/in.png"></div>
-				<div onclick="Gui.Picker.add(OutputGate)">Indicator<img src="./assets/out.png"></div>
-				<div onclick="Gui.Picker.add(OrGate)">OR Gate<img src="./assets/or.png"></div>
-				<div onclick="Gui.Picker.add(XorGate)">XOR Gate<img src="./assets/xor.png"></div>
-				<div onclick="Gui.Picker.add(NorGate)">NOR Gate<img src="./assets/nor.png"></div>
-				<div onclick="Gui.Picker.add(AndGate)">AND Gate<img src="./assets/and.png"></div>
-				<div onclick="Gui.Picker.add(NotGate)">NOT Gate<img src="./assets/not.png"></div>
+				<!-- filled with javascript -->
 			</div>
 		</div>
 
@@ -113,7 +67,7 @@
 						<span> Settings </span>
 					</div>
 
-					<div id="list">
+					<div id="menu-list">
 						<!-- filled with javascript -->
 					</div>
 
@@ -126,6 +80,14 @@
 			</div>
 
 		</div>
+
+		<!-- noscript banner -->
+		<noscript>
+			<div>
+				<img src="assets/javascript.png">
+				<span> Sorry, but JavaScript is required to run this app. </span>
+			</div>
+		</noscript>
 
 	</body>
 
