@@ -97,14 +97,21 @@ function matrix( callback ) {
 function grid(c) {
 	
 	const spacing = 50;
+	const separation = spacing * 4;
+
+	const sepx = scx % separation;
+	const sepy = scy % separation;
 	
 	stroke(c);
 	strokeWeight(1);
 	for( var i = scx % spacing; i < main.offsetWidth / factor; i += spacing ) {
+		stroke( (i - sepx) % separation == 0 ? c - 15 : c );
 		line(i, 0, i, main.offsetHeight / factor);
 	}
 
+	stroke(c);
 	for( var i = scy % spacing; i < main.offsetHeight / factor; i += spacing ) {
+		stroke( (i - sepy) % separation == 0 ? c - 15 : c );
 		line(0, i, main.offsetWidth / factor, i);
 	}
 
