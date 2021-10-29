@@ -57,6 +57,7 @@ class Manager {
 			"x": round(scx),
 			"y": round(scy),
 			"z": factor.toFixed(1),
+			"u": Date.now(),
 			"n": name
 		};
 

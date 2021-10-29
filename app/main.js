@@ -1,5 +1,5 @@
 
-var scx = 0, scy = 0;
+var scx = 0, scy = 0, scw = 0, sch = 0;
 var tick = 1;
 
 var identifier;
@@ -66,7 +66,9 @@ function setup() {
 function draw() {
 	Mouse.update();
 
-	let t = Date.now();
+	const t = Date.now();
+	sch = height / factor;
+	scw = width / factor;
 	
 	matrix(() => {
 
@@ -102,14 +104,13 @@ function grid(c) {
 	const sepx = scx % separation;
 	const sepy = scy % separation;
 	
-	stroke(c);
 	strokeWeight(1);
+
 	for( var i = scx % spacing; i < main.offsetWidth / factor; i += spacing ) {
 		stroke( (i - sepx) % separation == 0 ? c - 15 : c );
 		line(i, 0, i, main.offsetHeight / factor);
 	}
 
-	stroke(c);
 	for( var i = scy % spacing; i < main.offsetHeight / factor; i += spacing ) {
 		stroke( (i - sepy) % separation == 0 ? c - 15 : c );
 		line(0, i, main.offsetWidth / factor, i);
@@ -136,6 +137,12 @@ function overlay(t) {
 			"\nFPS: " + fps + " (" + ms + "ms)" + 
 			"\nx: " + scx.toFixed(0) + " y: " + scy.toFixed(0) +
 			"\n" + factor.toFixed(2) + "x";
+	}
+
+	const selected = Selected.count();
+
+	if(selected > 0) {
+		overlay += "\nSelected: " + selected;
 	}
 
 	fill(100);

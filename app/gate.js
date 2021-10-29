@@ -75,7 +75,7 @@ class Gate extends Box {
 	
 	drawWires() {
 		this.outputs.forEach(out => {
-			if(out != null) out.draw();
+			out?.draw();
 		});
 	}
 

@@ -94,6 +94,9 @@ class Box {
   
 	draw() {
 	  
+		// check if the box is visible
+		if( this.x + Box.w < -scx || this.y + Box.h < -scy || this.x > -scx + scw || this.y > -scy + sch ) return;
+
 		const radius = 4.0;
 	  
 		// select border color
@@ -153,6 +156,10 @@ class Selected {
 	
 	static get() {
 		return Selected.#gates.slice();
+	}
+
+	static count() {
+		return Selected.#gates.length;
 	}
 
 	static add(gate) {

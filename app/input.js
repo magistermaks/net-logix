@@ -140,12 +140,25 @@ function keyPressed(event) {
 	}
 }
 
+// TODO make it zoom towards pointer, idk how to do this
+// mouseX, mouseY are unsacaled and relative to top left corner
+// Mouse.x, Mouse.y are scaled (divided by `factor`) and relative to top left corner
+// factor represents the zoom, all rendered geometry is scaled by this value
+// scx, scy are unscaled screen offsets relative to top left corner
 function mouseWheel(event) {
 	if(Gui.pause || Gui.Picker.isOpen()) return;
+
+	let old = factor;
 
 	factor += ( event.delta < 0 ) ? 0.1 : -0.1;
 
 	if( factor < 0.1 ) factor = 0.1;
 	if( factor > 2.0 ) factor = 2.0;
+
+	// kill me...
+	//let delta = factor - old;
+	//scx -= (Mouse.x * delta)/factor;
+	//scy -= (Mouse.y * delta)/factor;
+
 }
 

@@ -1,4 +1,8 @@
 
+Logix 1.5.0
+	- Better background grid
+	- Show number of selected gates
+
 Logix 1.4.0 <26/10/2021>
 	- Code improvements
 	- Added noscript banner

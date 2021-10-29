@@ -12,7 +12,7 @@ class Manager {
 				.then(response => response.text())
 				.then(response => {
 					Settings.EXAMPLE.set(true);
-					console.log("Downloaded example sketch");
+					console.log("Downloaded example sketch template");
 
 					Manager.#set("example", response);
 				} );
@@ -21,17 +21,20 @@ class Manager {
 		fetch("data/default.json")
 			.then(response => response.text())
 			.then(response => {
-				console.log("Downloaded empty sketch");
+				console.log("Downloaded empty sketch template");
 				Manager.#empty = response;
 			} );
 	}
 
 	static #entry(list, key) {
 		const name = Manager.getName(key);
-		list.innerHTML += `<div data-id="${key}"><span onclick="redirect(this)">${name}</span><img title="Delete this sketch" onclick="remove(this)" src="assets/purge.png"></div>`;
+		const time = Manager.getDate(key);
+		list.innerHTML += `<div title="${time}" data-id="${key}"><span onclick="redirect(this)">${name}</span><img title="Delete this sketch" onclick="remove(this)" src="assets/purge.png"></div>`;
 	}
 
 	static print() {
+		let start = Date.now();
+
 		const list = document.querySelector("#menu-list");
 		list.innerHTML = "";
 
@@ -51,7 +54,7 @@ class Manager {
 			Manager.#entry(list, key);
 		}
 
-		console.log(`Shown ${keys.length} sketches`);
+		console.log(`Reloaded ${keys.length} sketches in ${Date.now() - start}ms`);
 	}
 
 	static #set(id, json) {
@@ -65,6 +68,21 @@ class Manager {
 		}catch(err) {
 			return key;
 		}
+	}
+
+	static getDate(key) {
+		try{
+			let timestamp = Save.get(key).u;
+
+			if( timestamp != null ) {
+				const d = new Date( Save.get(key).u );
+				return "Last edited on: " + d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
+			}
+		}catch(err) {
+			return "";
+		}
+
+		return "";
 	}
 
 	static add(name) {
