@@ -28,6 +28,7 @@ function mouseReleased() {
 	if( dragger != null ) {
 		dragger = null;
 
+		Selected.dragEnd();
 		mousePressed();
 	}
 }
@@ -71,12 +72,18 @@ function mouseDragged() {
 		// grab the screen if nothing else was clicked
 		if( !clicked ) {
 
-			dragger = (mx, my) => {
-				scx += mx;
-				scy += my;
+			// select area if shift is pressed
+			if( keyCode == SHIFT && keyIsPressed ) {
+				Selected.dragBegin(Mouse.x, Mouse.y);
+				dragger = (mx, my) => {};
+			}else{
+				dragger = (mx, my) => {
+					scx += mx;
+					scy += my;
 
-				Gui.reset();
-			};
+					Gui.reset();
+				};
+			}
 
 		}
 

@@ -14,6 +14,7 @@
 		<script src="app/manager.js"></script>
 		<script src="app/gui.js"></script>
 		<script src="app/input.js"></script>
+		<script src="app/select.js"></script>
 		<script src="app/common/save.js"></script>
 		<script src="app/common/settings.js"></script>
 		<script src="app/common/files.js"></script>

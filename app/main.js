@@ -81,6 +81,7 @@ function draw() {
 		gates.forEach(gate => gate.draw());
 		gates.forEach(gate => gate.drawWires());
 		WireEditor.draw();
+		Selected.draw();
 
 	});
 

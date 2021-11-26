@@ -38,7 +38,7 @@ class Settings {
 	// list of settings and their defaults
 	static AUTOSAVE = Settings.access("save", true);
 	static GRID = Settings.access("grid", true);
-	static OVERLAY = Settings.access("overlay", true);
+	static OVERLAY = Settings.access("overlay", false);
 	static TRANSISTORS = Settings.access("transistors", false);
 	static EXAMPLE = Settings.access("example", false);
 	static SNAP = Settings.access("snap", false);
