@@ -200,10 +200,12 @@ class UpdateQueue {
 	}
 
 	static execute() {
-		const queue = UpdateQueue.#updates;
-		UpdateQueue.#updates = new Set();
+		while( UpdateQueue.#updates.size > 0 ) {
+			const queue = UpdateQueue.#updates;
+			UpdateQueue.#updates = new Set();
 
-		queue.forEach(gate => gate.notify());
+			queue.forEach(gate => gate.notify());
+		}
 	}
 
 }

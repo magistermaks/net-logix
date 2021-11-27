@@ -33,11 +33,14 @@ function mouseReleased() {
 	}
 }
 
-function mouseDragged() {
+function mouseDragged(e) {
 	if(Gui.pause) return;
 
 	Mouse.dragged();
-	Gui.Picker.close();
+
+	if(e?.target?.parentElement?.parentElement != picker) {
+		Gui.Picker.close();
+	}else return;
 
 	if( WireEditor.isClicked() ) {
 		dragger = () => {};

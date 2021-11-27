@@ -6,7 +6,7 @@ var identifier;
 var main, picker;
 var fps = 0, ms = 0;
 
-var dgb_show_updates = true;
+var dbg_show_updates = true;
 
 /// inititialize app
 function setup() {
@@ -86,7 +86,7 @@ function draw() {
 		// render sketch
 		gates.forEach(gate => gate.draw());
 		gates.forEach(gate => gate.drawWires());
-		if(dgb_show_updates) gates.forEach(gate => gate.showUpdates());
+		if(dbg_show_updates) gates.forEach(gate => gate.showUpdates());
 
 		WireEditor.draw();
 		Selected.draw();
