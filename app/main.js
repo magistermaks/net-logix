@@ -10,6 +10,7 @@ var dbg_show_updates = false;
 
 /// inititialize app
 function setup() {
+	const start = Date.now();
 	main = document.querySelector("main");
 	picker = document.getElementById("picker");
 
@@ -62,6 +63,11 @@ function setup() {
 
 	// inititialize UI
 	Gui.init();
+
+	// update all gates in a sketch
+	UpdateQueue.init();
+
+	console.log(`System ready! Took: ${Date.now() - start}ms`);
 }
 
 /// main render loop
@@ -143,9 +149,8 @@ function overlay(t) {
 		}
 
 		overlay += 
-			"\nFPS: " + fps + " (" + ms + "ms)" + 
-			"\nx: " + scx.toFixed(0) + " y: " + scy.toFixed(0) +
-			"\n" + factor.toFixed(2) + "x";
+			"\nFPS: " + fps + " (" + ms + "ms) q: " + UpdateQueue.size() + 
+			"\nx: " + scx.toFixed(0) + " y: " + scy.toFixed(0) + " (" + factor.toFixed(2) + "x)";
 	}
 
 	const selected = Selected.count();

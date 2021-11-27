@@ -43,6 +43,7 @@ class Gate extends Box {
 
 		target.inputs[input] = new InputWirePoint(this, output);
 		this.outputs[output].add(target, input);
+		this.notify();
 	}
 	
 	disconnect( input ) {
@@ -51,6 +52,7 @@ class Gate extends Box {
 
 			point.gate.outputs[point.index].remove(this, input);
 			this.inputs[input] = null;
+			this.notify();
 		}
 	}
 	
@@ -199,13 +201,21 @@ class UpdateQueue {
 		UpdateQueue.#updates.add(gate);
 	}
 
+	static init() {
+		gates.forEach(gate => UpdateQueue.add(gate));
+	}
+
 	static execute() {
-		while( UpdateQueue.#updates.size > 0 ) {
+		//while( UpdateQueue.#updates.size > 0 ) {
 			const queue = UpdateQueue.#updates;
 			UpdateQueue.#updates = new Set();
 
 			queue.forEach(gate => gate.notify());
-		}
+		//}
+	}
+
+	static size() { 
+		return UpdateQueue.#updates.size; 
 	}
 
 }
