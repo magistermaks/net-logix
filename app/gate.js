@@ -5,6 +5,7 @@ var nextGateId = 0;
 class Gate extends Box {
   
 	#updated;
+	#modified;
 	#complexity;
 
 	inputs;
@@ -26,6 +27,7 @@ class Gate extends Box {
 		this.right = outputs;
 		
 		this.#updated = 0;
+		this.#modified = false;
 		this.#complexity = complexity;
 		this.#id = nextGateId ++;
 		
@@ -65,34 +67,29 @@ class Gate extends Box {
 	}
 	
 	getOutputState(index) {
-//		if( this.#updated != tick ) {
-//			this.#updated = tick;
-//			this.update();
-//
-//			this.outputs.forEach(out => {
-//				out?.notify();
-//			});
-//		}
-	  
 		return this.getOutput(index).state;
 	}
 
+	setOutputState(index, value) {
+		const out = this.outputs[index];
+
+		if( out.state != value ) {
+			out.state = value;
+			this.#modified = true;
+		}
+	}
+
 	notify() {
-
-		const old = this.outputs.length == 1 ? this.getOutput(0).state : null;
-
 		this.#updated = tick;
 		this.update();
 
-		if( this.outputs.length == 1 ) {
-			if( this.getOutput(0).state != old ) {
-				this.outputs.forEach(out => {
-					out?.notify();
-				});
-			}
-		}
+		if( this.#modified ) {
+			this.#modified = false;
 
-		
+			this.outputs.forEach(out => {
+				out?.notify();
+			});
+		}
 	}
 	
 	drawWires() {
@@ -111,6 +108,7 @@ class Gate extends Box {
 		}
 
 		Selected.remove(this);
+		Scheduler.remove(this);
 		gates.splice( gates.indexOf(this), 1 );
 	}
 
@@ -122,30 +120,17 @@ class Gate extends Box {
 			gates.push(this);
 		}
 	}
-	
-	draw() {
-		// update the gate
-		this.tick();
 
-		// draw the gate
-		super.draw();
-	}
-
-	overlay() {
+	showUpdates() {
 		if( this.#updated >= tick ) {
-			fill(0, 200, 0, 80);
+			fill(0, 200, 0, 100);
 			stroke(0, 200, 0, 0);
 			rect(scx + this.x, scy + this.y, Box.w, Box.h);
 		}
 	}
 
 	tick() {
-		// this is needed to keep the wire highlighting working on output-less branches
-//		if( this.#updated + 4 < tick ) {
-//			for( var i = 0; i < this.outputs.length; i ++ ) {
-//				this.getOutputState(i);
-//			}
-//		}
+
 	}
 	
 	update() {
@@ -201,20 +186,30 @@ class IconGate extends Gate {
 	}
 	
 	content(x, y) {
-		let img = this.getImage();
-
-		if( img == null || img.modified !== true /* check if the image is loaded */ ) {
-
-			const angle = PI + frameCount * 0.1;
-			const space = PI;
-  
-			noFill();
-			stroke(0);
-			arc(x + Box.w / 2, y + (Box.h - Box.top) / 2, Box.h / 2.5, Box.h / 2.5, angle, angle + space);
-
-		}else{
-			image(this.getImage(), x + Box.w / 2, y + (Box.h - Box.top) / 2, Box.h / 2, Box.h / 2);
-		}
+		image(this.getImage(), x + Box.w / 2, y + (Box.h - Box.top) / 2, Box.h / 2, Box.h / 2);
 	}
   
 }
+
+class Scheduler {
+
+	static #registry = [];
+
+	static add(gate) {
+		Scheduler.#registry.push(gate);
+	}
+
+	static remove(gate) {
+		if( Scheduler.#registry.includes(gate) ) {
+			Scheduler.#registry.splice(Scheduler.#registry.indexOf(gate), 1);
+		}
+	}
+
+	static tick() {
+		Scheduler.#registry.forEach(gate => {
+			gate.tick();
+		});
+	}
+
+}
+

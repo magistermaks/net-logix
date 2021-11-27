@@ -56,7 +56,7 @@ class InputGate extends TwoStateGate {
 	}
 
 	update() {
-		this.outputs[0].state = this.state;
+		this.setOutputState(0, this.state);
 	}
 
 	serialize() {
@@ -72,6 +72,7 @@ class ClockGate extends SingleStateGate {
   
 	constructor(x, y, meta) {
 		super(x, y, "Oscillator", 0, 1, 0, Resource.get("clock"));
+		Scheduler.add(this);
 	}
 
 	tick() {
@@ -84,7 +85,7 @@ class ClockGate extends SingleStateGate {
 	}
 
 	update() {
-		this.outputs[0].state = this.state;
+		this.setOutputState(0, this.state);
 	}
   
 }
@@ -96,7 +97,7 @@ class AndGate extends SingleStateGate {
 	}
 	
 	update() {
-		this.outputs[0].state = this.getInputState(0) && this.getInputState(1);
+		this.setOutputState(0, this.getInputState(0) && this.getInputState(1));
 	}
   
 }
@@ -108,7 +109,7 @@ class XorGate extends SingleStateGate {
 	}
 	
 	update() {
-		this.outputs[0].state = this.getInputState(0) != this.getInputState(1);
+		this.setOutputState(0, this.getInputState(0) != this.getInputState(1));
 	}
   
 }
@@ -120,7 +121,7 @@ class OrGate extends SingleStateGate {
 	}
 	
 	update() {
-		this.outputs[0].state = this.getInputState(0) || this.getInputState(1);
+		this.setOutputState(0, this.getInputState(0) || this.getInputState(1));
 	}
   
 }
@@ -132,7 +133,7 @@ class NorGate extends SingleStateGate {
 	}
 	
 	update() {
-		this.outputs[0].state = !(this.getInputState(0) || this.getInputState(1));
+		this.setOutputState(0, !(this.getInputState(0) || this.getInputState(1)));
 	}
   
 }
@@ -144,7 +145,7 @@ class NotGate extends SingleStateGate {
 	}
 	
 	update() {
-		this.outputs[0].state = !this.getInputState(0);
+		this.setOutputState(0, !this.getInputState(0));
 	}
   
 }
@@ -161,7 +162,7 @@ class OutputGate extends TwoStateGate {
 		return this.state;
 	}
 
-	tick() {
+	notify() {
 		this.state = this.getInputState(0);
 	}
   
