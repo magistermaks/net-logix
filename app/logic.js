@@ -163,6 +163,7 @@ class OutputGate extends TwoStateGate {
 	}
 
 	notify() {
+		super.notify();
 		this.state = this.getInputState(0);
 	}
   

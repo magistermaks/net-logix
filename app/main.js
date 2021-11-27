@@ -81,6 +81,7 @@ function draw() {
 
 		// update ticking components
 		Scheduler.tick();
+		UpdateQueue.execute();
 
 		// render sketch
 		gates.forEach(gate => gate.draw());

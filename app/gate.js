@@ -87,7 +87,7 @@ class Gate extends Box {
 			this.#modified = false;
 
 			this.outputs.forEach(out => {
-				out?.notify();
+				if(out != null) UpdateQueue.add(out);
 			});
 		}
 	}
@@ -191,22 +191,39 @@ class IconGate extends Gate {
   
 }
 
-class Scheduler {
-
-	static #registry = [];
+class UpdateQueue {
+	
+	static #updates = new Set();
 
 	static add(gate) {
-		Scheduler.#registry.push(gate);
+		UpdateQueue.#updates.add(gate);
+	}
+
+	static execute() {
+		const queue = UpdateQueue.#updates;
+		UpdateQueue.#updates = new Set();
+
+		queue.forEach(gate => gate.notify());
+	}
+
+}
+
+class Scheduler {
+
+	static #ticking = [];
+
+	static add(gate) {
+		Scheduler.#ticking.push(gate);
 	}
 
 	static remove(gate) {
-		if( Scheduler.#registry.includes(gate) ) {
-			Scheduler.#registry.splice(Scheduler.#registry.indexOf(gate), 1);
+		if( Scheduler.#ticking.includes(gate) ) {
+			Scheduler.#ticking.splice(Scheduler.#ticking.indexOf(gate), 1);
 		}
 	}
 
 	static tick() {
-		Scheduler.#registry.forEach(gate => {
+		Scheduler.#ticking.forEach(gate => {
 			gate.tick();
 		});
 	}
