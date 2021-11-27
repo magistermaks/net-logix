@@ -2,6 +2,11 @@
 Logix 1.5.0
 	- Better background grid
 	- Show number of selected gates
+	- Show sketch last edit date
+	- Added area selection (left click drag + shift)
+	- Debug overlay is now hidden by default
+	- Optimized circut solver
+	- Fixed one component picker bug
 
 Logix 1.4.0 <26/10/2021>
 	- Code improvements

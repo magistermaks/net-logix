@@ -6,7 +6,7 @@ var identifier;
 var main, picker;
 var fps = 0, ms = 0;
 
-var dbg_show_updates = true;
+var dbg_show_updates = false;
 
 /// inititialize app
 function setup() {
@@ -42,7 +42,7 @@ function setup() {
 	// load sketch
 	identifier = window.location.hash.slice(1);
 	if( !Manager.load(identifier) ) {
-		alert("Failed to load selected sketch!");
+		alert("Failed to load selected sketch, the data is corrupted!");
 		history.back();
 	}
 
