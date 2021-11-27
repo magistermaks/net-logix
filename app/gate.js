@@ -65,12 +65,34 @@ class Gate extends Box {
 	}
 	
 	getOutputState(index) {
-		if( this.#updated != tick ) {
-			this.#updated = tick;
-			this.update();
-		}
+//		if( this.#updated != tick ) {
+//			this.#updated = tick;
+//			this.update();
+//
+//			this.outputs.forEach(out => {
+//				out?.notify();
+//			});
+//		}
 	  
 		return this.getOutput(index).state;
+	}
+
+	notify() {
+
+		const old = this.outputs.length == 1 ? this.getOutput(0).state : null;
+
+		this.#updated = tick;
+		this.update();
+
+		if( this.outputs.length == 1 ) {
+			if( this.getOutput(0).state != old ) {
+				this.outputs.forEach(out => {
+					out?.notify();
+				});
+			}
+		}
+
+		
 	}
 	
 	drawWires() {
@@ -109,13 +131,21 @@ class Gate extends Box {
 		super.draw();
 	}
 
+	overlay() {
+		if( this.#updated >= tick ) {
+			fill(0, 200, 0, 80);
+			stroke(0, 200, 0, 0);
+			rect(scx + this.x, scy + this.y, Box.w, Box.h);
+		}
+	}
+
 	tick() {
 		// this is needed to keep the wire highlighting working on output-less branches
-		if( this.#updated + 4 < tick ) {
-			for( var i = 0; i < this.outputs.length; i ++ ) {
-				this.getOutputState(i);
-			}
-		}
+//		if( this.#updated + 4 < tick ) {
+//			for( var i = 0; i < this.outputs.length; i ++ ) {
+//				this.getOutputState(i);
+//			}
+//		}
 	}
 	
 	update() {

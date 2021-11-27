@@ -80,6 +80,7 @@ function draw() {
 		// render sketch
 		gates.forEach(gate => gate.draw());
 		gates.forEach(gate => gate.drawWires());
+		gates.forEach(gate => gate.overlay());
 		WireEditor.draw();
 		Selected.draw();
 

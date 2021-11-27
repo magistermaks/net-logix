@@ -96,6 +96,12 @@ class OutputWirePoint {
 		for(var key in this.targets) this.self.draw( this.targets[key], this.state );
 	}
 
+	notify() {
+		for(let point of this.targets) {
+			point?.gate.notify();
+		}
+	}
+
 }
 
 class WireEditor {

@@ -145,6 +145,18 @@ function keyPressed(event) {
 		scy = 0;
 		return false;
 	}
+
+	if( key == "p" ) {
+		console.log(`Printing data about ${Selected.count()} selected gate(s):`);
+		let index = 1;
+
+		Selected.get().forEach(gate => {
+			console.log(` * Gate #${index} (${gate.constructor.name})`);
+			console.log(gate);
+			index += 1;
+		});
+	}
+
 }
 
 // TODO make it zoom towards pointer, idk how to do this

@@ -51,6 +51,7 @@ class InputGate extends TwoStateGate {
 			&& my < scy + this.y + Box.h - Box.wiggle ) {
 
 			this.state = !this.state;
+			this.notify();
 		}
 	}
 
@@ -78,6 +79,7 @@ class ClockGate extends SingleStateGate {
 
 		if( tick % ClockGate.period == 0 ) {
 			this.state = !this.state;
+			this.notify();
 		}
 	}
 
