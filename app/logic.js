@@ -173,31 +173,27 @@ class Registry {
 
 	static #ids = new Map();
 	static #names = new Map();
-	static #id = 0;
 
-	static add(clazz, title, icon) {
-		Registry.#ids.set(Registry.#id, clazz);
+	static add(id, clazz, title, icon) {
+		Registry.#ids.set(id, clazz);
 		Registry.#names.set(clazz.name, clazz);
 
-		clazz.id = Registry.#id;
+		clazz.id = id;
 		clazz.title = title;
 		clazz.icon = icon;
-
-		Registry.#id ++;
 	}
 
 	static init() {
-		// never change the order of this
-		// or things will explode
+		// never change the ids or it will explode
 
-		Registry.add(InputGate, "Switch", "in");
-		Registry.add(ClockGate, "Oscillator", "clock");
-		Registry.add(AndGate, "AND Gate", "and");
-		Registry.add(XorGate, "XOR Gate", "xor");
-		Registry.add(OrGate, "OR Gate", "or");
-		Registry.add(NorGate, "NOR Gate", "nor");
-		Registry.add(NotGate, "NOT Gate", "not");
-		Registry.add(OutputGate, "Indicator", "out");
+		Registry.add(0, InputGate, "Switch", "in");
+		Registry.add(1, ClockGate, "Oscillator", "clock");
+		Registry.add(2, AndGate, "AND Gate", "and");
+		Registry.add(3, XorGate, "XOR Gate", "xor");
+		Registry.add(4, OrGate, "OR Gate", "or");
+		Registry.add(5, NorGate, "NOR Gate", "nor");
+		Registry.add(6, NotGate, "NOT Gate", "not");
+		Registry.add(7, OutputGate, "Indicator", "out");
 	}
 
 	static get(id) {

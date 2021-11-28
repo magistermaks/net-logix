@@ -30,3 +30,13 @@ window.onload = function() {
 	Manager.init();
 };
 
+function setup() {
+	canvasOpen();
+	noLoop();
+}
+
+function draw() {
+	background(200);
+	grid(180, 0, 0, 1);
+}
+

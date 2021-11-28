@@ -3,7 +3,7 @@ var scx = 0, scy = 0, scw = 0, sch = 0;
 var tick = 1;
 
 var identifier;
-var main, picker;
+var picker;
 var fps = 0, ms = 0;
 
 var dbg_show_updates = false;
@@ -11,15 +11,10 @@ var dbg_show_updates = false;
 /// inititialize app
 function setup() {
 	const start = Date.now();
-	main = document.querySelector("main");
 	picker = document.getElementById("picker");
 
-	createCanvas(main.offsetWidth, main.offsetHeight);
-
-	// keep the size of the canvas in check
-	window.onresize = () => {
-		resizeCanvas(main.offsetWidth, main.offsetHeight);
-	};
+	// prepare canvas
+	canvasOpen();
 
 	// open component picker
 	main.oncontextmenu = () => {
@@ -83,7 +78,7 @@ function draw() {
 		scale(factor);
 		background(200);
 
-		if( Settings.GRID.get() ) grid(180);
+		if( Settings.GRID.get() ) grid(180, scx, scy, factor);
 
 		// update ticking components
 		Scheduler.tick();
@@ -108,29 +103,6 @@ function matrix( callback ) {
 	push();
 	callback();
 	pop();
-}
-
-/// draw background grid
-function grid(c) {
-	
-	const spacing = 50;
-	const separation = spacing * 4;
-
-	const sepx = scx % separation;
-	const sepy = scy % separation;
-	
-	strokeWeight(1);
-
-	for( var i = scx % spacing; i < main.offsetWidth / factor; i += spacing ) {
-		stroke( (i - sepx) % separation == 0 ? c - 15 : c );
-		line(i, 0, i, main.offsetHeight / factor);
-	}
-
-	for( var i = scy % spacing; i < main.offsetHeight / factor; i += spacing ) {
-		stroke( (i - sepy) % separation == 0 ? c - 15 : c );
-		line(0, i, main.offsetWidth / factor, i);
-	}
-
 }
 
 /// draw debug overlay

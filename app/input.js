@@ -56,7 +56,7 @@ function mouseDragged(e) {
 		for(let gate of gates) {
 			if( !gate.canClick(Mouse.x, Mouse.y) ) continue;
 
-			if( gate.canGrab(Mouse.x, Mouse.y) ) {
+			if( gate.canGrab(Mouse.x, Mouse.y) || (keyCode == SHIFT && keyIsPressed) ) {
 
 				if( gate.selected ) {
 					dragger = (mx, my) => {
@@ -107,11 +107,13 @@ function mousePressed(e) {
 	}
 
 	// iterate backwards to click only the gate "on top"
-	for( let i = gates.length - 1; i >= 0; i -- ) {
-		if( gates[i].canClick(Mouse.x, Mouse.y) ) {
-			gates[i].click(Mouse.x, Mouse.y, double);
-			WireEditor.click();
-			return;
+	if( keyCode != SHIFT || !keyIsPressed ) {
+		for( let i = gates.length - 1; i >= 0; i -- ) {
+			if( gates[i].canClick(Mouse.x, Mouse.y) ) {
+				gates[i].click(Mouse.x, Mouse.y, double);
+				WireEditor.click();
+				return;
+			}
 		}
 	}
 

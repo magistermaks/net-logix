@@ -43,7 +43,7 @@ class Gate extends Box {
 
 		target.inputs[input] = new InputWirePoint(this, output);
 		this.outputs[output].add(target, input);
-		this.notify();
+		target.notify();
 	}
 	
 	disconnect( input ) {
