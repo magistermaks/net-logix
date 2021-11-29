@@ -7,6 +7,7 @@ Logix 1.5.0
 	- Debug overlay is now hidden by default
 	- Optimized circut solver
 	- Better main menu
+	- Better zoom
 	- Fixed one component picker bug
 	- Fixed transistor count crash on empty sketches
 

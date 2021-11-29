@@ -62,6 +62,9 @@ function setup() {
 	// update all gates in a sketch
 	UpdateQueue.init();
 
+	// invoke dark magic
+	zoomInit();
+
 	console.log(`System ready! Took: ${Date.now() - start}ms`);
 }
 

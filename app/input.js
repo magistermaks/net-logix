@@ -2,6 +2,7 @@
 var last = 0;
 var factor = 1;
 var dragger = null;
+var zox = 0, zoy = 0;
 
 class Mouse {
 	static x = 0;
@@ -83,6 +84,8 @@ function mouseDragged(e) {
 				dragger = (mx, my) => {
 					scx += mx;
 					scy += my;
+					zox += mx;
+					zoy += my;
 
 					Gui.reset();
 				};
@@ -148,6 +151,7 @@ function keyPressed(event) {
 		factor = 1;
 		scx = 0;
 		scy = 0;
+		zoomInit();
 		return false;
 	}
 
@@ -164,15 +168,9 @@ function keyPressed(event) {
 
 }
 
-// TODO make it zoom towards pointer or at least screen center idk how to do this
-// mouseX, mouseY are unsacaled and relative to top left corner
-// Mouse.x, Mouse.y are scaled (divided by `factor`) and relative to top left corner
-// factor represents the zoom, all rendered geometry is scaled by this value
-// scx, scy are unscaled screen offsets relative to top left corner
-// notes: http://darktree.net/projects/page/board.php#7908
 // 
-// time_wasted_while_trying_to_fucking_make_this_work = 12h
-// 
+// time_wasted_while_trying_to_fucking_make_this_work = 14h
+//
 function mouseWheel(event) {
 	if(Gui.pause || Gui.Picker.isOpen()) return;
 
@@ -183,21 +181,16 @@ function mouseWheel(event) {
 	if( factor < 0.1 ) factor = 0.1;
 	if( factor > 2.0 ) factor = 2.0;
 
+	// TODO make it point to mouse
 
-//	//close but still not correct
-//	const m = (factor - old)/-2 / factor;
-//	console.log(m);
-//
-//	scx += main.offsetWidth * m;
-//	scy += main.offsetHeight * m;
+	// by mug12, the smart one
+	const s = 0.5 / factor;
+	scx = zox + main.offsetWidth * s;
+	scy = zoy + main.offsetHeight * s;
+}
 
-	// WARN: scx and scy are unscaled but when used during redering
-	// WARN: the scale(factor) scales them to the scaled world space 
-
-	// kill me...
-	//let delta = factor - old;
-	//scx -= (Mouse.x * delta)/factor;
-	//scy -= (Mouse.y * delta)/factor;
-
+function zoomInit() {
+	zox = scx - main.offsetWidth / 2;
+	zoy = scy - main.offsetHeight / 2;
 }
 
