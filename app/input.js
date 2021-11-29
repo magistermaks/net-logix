@@ -164,11 +164,15 @@ function keyPressed(event) {
 
 }
 
-// TODO make it zoom towards pointer, idk how to do this
+// TODO make it zoom towards pointer or at least screen center idk how to do this
 // mouseX, mouseY are unsacaled and relative to top left corner
 // Mouse.x, Mouse.y are scaled (divided by `factor`) and relative to top left corner
 // factor represents the zoom, all rendered geometry is scaled by this value
 // scx, scy are unscaled screen offsets relative to top left corner
+// notes: http://darktree.net/projects/page/board.php#7908
+// 
+// time_wasted_while_trying_to_fucking_make_this_work = 12h
+// 
 function mouseWheel(event) {
 	if(Gui.pause || Gui.Picker.isOpen()) return;
 
@@ -178,6 +182,17 @@ function mouseWheel(event) {
 
 	if( factor < 0.1 ) factor = 0.1;
 	if( factor > 2.0 ) factor = 2.0;
+
+
+//	//close but still not correct
+//	const m = (factor - old)/-2 / factor;
+//	console.log(m);
+//
+//	scx += main.offsetWidth * m;
+//	scy += main.offsetHeight * m;
+
+	// WARN: scx and scy are unscaled but when used during redering
+	// WARN: the scale(factor) scales them to the scaled world space 
 
 	// kill me...
 	//let delta = factor - old;
