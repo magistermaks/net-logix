@@ -110,7 +110,7 @@ function overlay(t) {
 	let overlay = name;
 
 	if( Settings.TRANSISTORS.get() ) {
-		const count = gates.map(gate => gate.getComplexity()).reduce((a, b) => a + b);
+		const count = gates.length == 0 ? 0 : gates.map(gate => gate.getComplexity()).reduce((a, b) => a + b);
 		overlay += " (~" + count + " transistors)";
 	}
 

@@ -40,6 +40,12 @@
 
 		</div>
 
+		<!-- branding -->
+		<div id="brand">
+			<div>Logix</div>
+			<div>Logic Circuit Simulator</div>
+		</div>
+
 		<div id="footer">
 			Version 1.4.0 <br>
 			Source avaible at <a href="https://github.com/magistermaks/net-logix">Github</a> 

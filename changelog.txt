@@ -6,8 +6,9 @@ Logix 1.5.0
 	- Added area selection (left click drag + shift)
 	- Debug overlay is now hidden by default
 	- Optimized circut solver
+	- Better main menu
 	- Fixed one component picker bug
-	- Better menu background
+	- Fixed transistor count crash on empty sketches
 
 Logix 1.4.0 <26/10/2021>
 	- Code improvements
