@@ -5,7 +5,7 @@ Logix 1.5.0
 	- Show sketch last edit date
 	- Added area selection (left click drag + shift)
 	- Debug overlay is now hidden by default
-	- Optimized circut solver
+	- Optimized circuit solver
 	- Better main menu
 	- Better zoom
 	- Fixed one component picker bug
