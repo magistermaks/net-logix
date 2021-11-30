@@ -6,17 +6,20 @@ function wire(x1, y1, x2, y2, state) {
 
 	fill(c);
 
+	// start and end
 	stroke(c);
 	strokeWeight(2);
 	circle(x1 + 0.5, y1 + 0.5, 10);
 	circle(x2 + 0.5, y2 + 0.5, 10);
 
+	// background
 	stroke(255);
 	strokeWeight(6);
 	line(x1, y1, x1 + a, y1);
 	line(x1 + a, y1, x2 - a, y2);
 	line(x2, y2, x2 - a, y2);
 
+	// actual wire
 	stroke(c);
 	strokeWeight(2);
 	line(x1, y1, x1 + a, y1);
@@ -94,6 +97,12 @@ class OutputWirePoint {
 
 	draw() {
 		for(var key in this.targets) this.self.draw( this.targets[key], this.state );
+	}
+
+	notify() {
+		for(let point of this.targets) {
+			point?.gate.notify();
+		}
 	}
 
 }

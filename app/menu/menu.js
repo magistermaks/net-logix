@@ -54,7 +54,7 @@ class Manager {
 			Manager.#entry(list, key);
 		}
 
-		console.log(`Reloaded ${keys.length} sketches in ${Date.now() - start}ms`);
+		console.log(`Reloaded ${keys.length} sketch(es) in ${Date.now() - start}ms`);
 	}
 
 	static #set(id, json) {

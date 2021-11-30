@@ -3,20 +3,18 @@ var scx = 0, scy = 0, scw = 0, sch = 0;
 var tick = 1;
 
 var identifier;
-var main, picker;
+var picker;
 var fps = 0, ms = 0;
+
+var dbg_show_updates = false;
 
 /// inititialize app
 function setup() {
-	main = document.querySelector("main");
+	const start = Date.now();
 	picker = document.getElementById("picker");
 
-	createCanvas(main.offsetWidth, main.offsetHeight);
-
-	// keep the size of the canvas in check
-	window.onresize = () => {
-		resizeCanvas(main.offsetWidth, main.offsetHeight);
-	};
+	// prepare canvas
+	canvasOpen();
 
 	// open component picker
 	main.oncontextmenu = () => {
@@ -40,7 +38,7 @@ function setup() {
 	// load sketch
 	identifier = window.location.hash.slice(1);
 	if( !Manager.load(identifier) ) {
-		alert("Failed to load selected sketch!");
+		alert("Failed to load selected sketch, the data is corrupted!");
 		history.back();
 	}
 
@@ -60,6 +58,14 @@ function setup() {
 
 	// inititialize UI
 	Gui.init();
+
+	// update all gates in a sketch
+	UpdateQueue.init();
+
+	// invoke dark magic
+	zoomInit();
+
+	console.log(`System ready! Took: ${Date.now() - start}ms`);
 }
 
 /// main render loop
@@ -75,11 +81,17 @@ function draw() {
 		scale(factor);
 		background(200);
 
-		if( Settings.GRID.get() ) grid(180);
+		if( Settings.GRID.get() ) grid(180, scx, scy, factor);
+
+		// update ticking components
+		Scheduler.tick();
+		UpdateQueue.execute();
 
 		// render sketch
 		gates.forEach(gate => gate.draw());
 		gates.forEach(gate => gate.drawWires());
+		if(dbg_show_updates) gates.forEach(gate => gate.showUpdates());
+
 		WireEditor.draw();
 		Selected.draw();
 
@@ -96,35 +108,12 @@ function matrix( callback ) {
 	pop();
 }
 
-/// draw background grid
-function grid(c) {
-	
-	const spacing = 50;
-	const separation = spacing * 4;
-
-	const sepx = scx % separation;
-	const sepy = scy % separation;
-	
-	strokeWeight(1);
-
-	for( var i = scx % spacing; i < main.offsetWidth / factor; i += spacing ) {
-		stroke( (i - sepx) % separation == 0 ? c - 15 : c );
-		line(i, 0, i, main.offsetHeight / factor);
-	}
-
-	for( var i = scy % spacing; i < main.offsetHeight / factor; i += spacing ) {
-		stroke( (i - sepy) % separation == 0 ? c - 15 : c );
-		line(0, i, main.offsetWidth / factor, i);
-	}
-
-}
-
 /// draw debug overlay
 function overlay(t) {
 	let overlay = name;
 
 	if( Settings.TRANSISTORS.get() ) {
-		const count = gates.map(gate => gate.getComplexity()).reduce((a, b) => a + b);
+		const count = gates.length == 0 ? 0 : gates.map(gate => gate.getComplexity()).reduce((a, b) => a + b);
 		overlay += " (~" + count + " transistors)";
 	}
 
@@ -135,9 +124,8 @@ function overlay(t) {
 		}
 
 		overlay += 
-			"\nFPS: " + fps + " (" + ms + "ms)" + 
-			"\nx: " + scx.toFixed(0) + " y: " + scy.toFixed(0) +
-			"\n" + factor.toFixed(2) + "x";
+			"\nFPS: " + fps + " (" + ms + "ms) q: " + UpdateQueue.size() + 
+			"\nx: " + scx.toFixed(0) + " y: " + scy.toFixed(0) + " (" + factor.toFixed(2) + "x)";
 	}
 
 	const selected = Selected.count();

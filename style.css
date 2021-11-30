@@ -98,6 +98,7 @@ main {
 	margin: auto;
 	max-width: 500px;
 	min-height: 10em;
+	z-index: 1;
 }
 
 #menu > div {
@@ -226,6 +227,22 @@ main {
 	right: 0px;
 	background: rgba(0, 0, 0, 0.6);
 }
+
+#brand {
+	top: 2em;
+	left: 0px;
+	right: 0px;
+	position: fixed;
+	margin: auto;
+	text-align: center;
+}
+
+#brand div:first-child {
+	font-size: 4em;
+}
+
+
+
 
 /* picker context menu */
 

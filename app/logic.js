@@ -51,11 +51,12 @@ class InputGate extends TwoStateGate {
 			&& my < scy + this.y + Box.h - Box.wiggle ) {
 
 			this.state = !this.state;
+			this.notify();
 		}
 	}
 
 	update() {
-		this.outputs[0].state = this.state;
+		this.setOutputState(0, this.state);
 	}
 
 	serialize() {
@@ -71,6 +72,7 @@ class ClockGate extends SingleStateGate {
   
 	constructor(x, y, meta) {
 		super(x, y, "Oscillator", 0, 1, 0, Resource.get("clock"));
+		Scheduler.add(this);
 	}
 
 	tick() {
@@ -78,11 +80,12 @@ class ClockGate extends SingleStateGate {
 
 		if( tick % ClockGate.period == 0 ) {
 			this.state = !this.state;
+			this.notify();
 		}
 	}
 
 	update() {
-		this.outputs[0].state = this.state;
+		this.setOutputState(0, this.state);
 	}
   
 }
@@ -94,7 +97,7 @@ class AndGate extends SingleStateGate {
 	}
 	
 	update() {
-		this.outputs[0].state = this.getInputState(0) && this.getInputState(1);
+		this.setOutputState(0, this.getInputState(0) && this.getInputState(1));
 	}
   
 }
@@ -106,7 +109,7 @@ class XorGate extends SingleStateGate {
 	}
 	
 	update() {
-		this.outputs[0].state = this.getInputState(0) != this.getInputState(1);
+		this.setOutputState(0, this.getInputState(0) != this.getInputState(1));
 	}
   
 }
@@ -118,7 +121,7 @@ class OrGate extends SingleStateGate {
 	}
 	
 	update() {
-		this.outputs[0].state = this.getInputState(0) || this.getInputState(1);
+		this.setOutputState(0, this.getInputState(0) || this.getInputState(1));
 	}
   
 }
@@ -130,7 +133,7 @@ class NorGate extends SingleStateGate {
 	}
 	
 	update() {
-		this.outputs[0].state = !(this.getInputState(0) || this.getInputState(1));
+		this.setOutputState(0, !(this.getInputState(0) || this.getInputState(1)));
 	}
   
 }
@@ -142,7 +145,7 @@ class NotGate extends SingleStateGate {
 	}
 	
 	update() {
-		this.outputs[0].state = !this.getInputState(0);
+		this.setOutputState(0, !this.getInputState(0));
 	}
   
 }
@@ -159,7 +162,8 @@ class OutputGate extends TwoStateGate {
 		return this.state;
 	}
 
-	tick() {
+	notify() {
+		super.notify();
 		this.state = this.getInputState(0);
 	}
   
@@ -169,31 +173,27 @@ class Registry {
 
 	static #ids = new Map();
 	static #names = new Map();
-	static #id = 0;
 
-	static add(clazz, title, icon) {
-		Registry.#ids.set(Registry.#id, clazz);
+	static add(id, clazz, title, icon) {
+		Registry.#ids.set(id, clazz);
 		Registry.#names.set(clazz.name, clazz);
 
-		clazz.id = Registry.#id;
+		clazz.id = id;
 		clazz.title = title;
 		clazz.icon = icon;
-
-		Registry.#id ++;
 	}
 
 	static init() {
-		// never change the order of this
-		// or things will explode
+		// never change the ids or it will explode
 
-		Registry.add(InputGate, "Switch", "in");
-		Registry.add(ClockGate, "Oscillator", "clock");
-		Registry.add(AndGate, "AND Gate", "and");
-		Registry.add(XorGate, "XOR Gate", "xor");
-		Registry.add(OrGate, "OR Gate", "or");
-		Registry.add(NorGate, "NOR Gate", "nor");
-		Registry.add(NotGate, "NOT Gate", "not");
-		Registry.add(OutputGate, "Indicator", "out");
+		Registry.add(0, InputGate, "Switch", "in");
+		Registry.add(1, ClockGate, "Oscillator", "clock");
+		Registry.add(2, AndGate, "AND Gate", "and");
+		Registry.add(3, XorGate, "XOR Gate", "xor");
+		Registry.add(4, OrGate, "OR Gate", "or");
+		Registry.add(5, NorGate, "NOR Gate", "nor");
+		Registry.add(6, NotGate, "NOT Gate", "not");
+		Registry.add(7, OutputGate, "Indicator", "out");
 	}
 
 	static get(id) {

@@ -2,6 +2,7 @@
 var last = 0;
 var factor = 1;
 var dragger = null;
+var zox = 0, zoy = 0;
 
 class Mouse {
 	static x = 0;
@@ -33,11 +34,14 @@ function mouseReleased() {
 	}
 }
 
-function mouseDragged() {
+function mouseDragged(e) {
 	if(Gui.pause) return;
 
 	Mouse.dragged();
-	Gui.Picker.close();
+
+	if(e?.target?.parentElement?.parentElement != picker) {
+		Gui.Picker.close();
+	}else return;
 
 	if( WireEditor.isClicked() ) {
 		dragger = () => {};
@@ -53,7 +57,7 @@ function mouseDragged() {
 		for(let gate of gates) {
 			if( !gate.canClick(Mouse.x, Mouse.y) ) continue;
 
-			if( gate.canGrab(Mouse.x, Mouse.y) ) {
+			if( gate.canGrab(Mouse.x, Mouse.y) || (keyCode == SHIFT && keyIsPressed) ) {
 
 				if( gate.selected ) {
 					dragger = (mx, my) => {
@@ -80,6 +84,8 @@ function mouseDragged() {
 				dragger = (mx, my) => {
 					scx += mx;
 					scy += my;
+					zox += mx;
+					zoy += my;
 
 					Gui.reset();
 				};
@@ -104,11 +110,13 @@ function mousePressed(e) {
 	}
 
 	// iterate backwards to click only the gate "on top"
-	for( let i = gates.length - 1; i >= 0; i -- ) {
-		if( gates[i].canClick(Mouse.x, Mouse.y) ) {
-			gates[i].click(Mouse.x, Mouse.y, double);
-			WireEditor.click();
-			return;
+	if( keyCode != SHIFT || !keyIsPressed ) {
+		for( let i = gates.length - 1; i >= 0; i -- ) {
+			if( gates[i].canClick(Mouse.x, Mouse.y) ) {
+				gates[i].click(Mouse.x, Mouse.y, double);
+				WireEditor.click();
+				return;
+			}
 		}
 	}
 
@@ -143,15 +151,26 @@ function keyPressed(event) {
 		factor = 1;
 		scx = 0;
 		scy = 0;
+		zoomInit();
 		return false;
 	}
+
+	if( key == "p" ) {
+		console.log(`Printing data about ${Selected.count()} selected gate(s):`);
+		let index = 1;
+
+		Selected.get().forEach(gate => {
+			console.log(` * Gate #${index} (${gate.constructor.name})`);
+			console.log(gate);
+			index += 1;
+		});
+	}
+
 }
 
-// TODO make it zoom towards pointer, idk how to do this
-// mouseX, mouseY are unsacaled and relative to top left corner
-// Mouse.x, Mouse.y are scaled (divided by `factor`) and relative to top left corner
-// factor represents the zoom, all rendered geometry is scaled by this value
-// scx, scy are unscaled screen offsets relative to top left corner
+// 
+// time_wasted_while_trying_to_fucking_make_this_work = 15h
+//
 function mouseWheel(event) {
 	if(Gui.pause || Gui.Picker.isOpen()) return;
 
@@ -162,10 +181,16 @@ function mouseWheel(event) {
 	if( factor < 0.1 ) factor = 0.1;
 	if( factor > 2.0 ) factor = 2.0;
 
-	// kill me...
-	//let delta = factor - old;
-	//scx -= (Mouse.x * delta)/factor;
-	//scy -= (Mouse.y * delta)/factor;
+	// TODO make it point to mouse
 
+	// by mug12, the smart one
+	const s = 0.5 / factor;
+	scx = zox + main.offsetWidth * s;
+	scy = zoy + main.offsetHeight * s;
+}
+
+function zoomInit() {
+	zox = scx - main.offsetWidth / 2;
+	zoy = scy - main.offsetHeight / 2;
 }
 
