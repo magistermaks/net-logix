@@ -169,7 +169,7 @@ function keyPressed(event) {
 }
 
 // 
-// time_wasted_while_trying_to_fucking_make_this_work = 14h
+// time_wasted_while_trying_to_fucking_make_this_work = 15h
 //
 function mouseWheel(event) {
 	if(Gui.pause || Gui.Picker.isOpen()) return;
