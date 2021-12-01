@@ -155,16 +155,21 @@ function keyPressed(event) {
 		return false;
 	}
 
-	if( key == "p" ) {
-		console.log(`Printing data about ${Selected.count()} selected gate(s):`);
-		let index = 1;
-
-		Selected.get().forEach(gate => {
-			console.log(` * Gate #${index} (${gate.constructor.name})`);
-			console.log(gate);
-			index += 1;
-		});
+	if( key == 's' && event.ctrlKey ) {
+		Manager.save(identifier);
+		return false;
 	}
+
+//	if( key == "p" ) {
+//		console.log(`Printing data about ${Selected.count()} selected gate(s):`);
+//		let index = 1;
+//
+//		Selected.get().forEach(gate => {
+//			console.log(` * Gate #${index} (${gate.constructor.name})`);
+//			console.log(gate);
+//			index += 1;
+//		});
+//	}
 
 }
 
