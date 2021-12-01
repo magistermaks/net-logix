@@ -42,6 +42,7 @@ class Settings {
 	static TRANSISTORS = Settings.access("transistors", false);
 	static EXAMPLE = Settings.access("example", false);
 	static SNAP = Settings.access("snap", false);
+	static SMOOTH_WIRES = Settings.access("swire", false);
 
 }
 

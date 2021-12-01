@@ -1,4 +1,9 @@
 
+Logix 1.6.0
+	- Better wire dragging
+	- Added Ctrl+S keybind
+	- Smooth wires (toggleable in settings)
+
 Logix 1.5.0 <30/11/2021>
 	- Better background grid
 	- Show number of selected gates

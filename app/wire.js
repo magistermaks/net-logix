@@ -1,36 +1,42 @@
 
 /// draws wire between two points
 function wire(x1, y1, x2, y2, state) {
-	const a = (x2 - x1) / 4;
 	const c = state ? color(9, 98, 218) : 0;
-
+	const a = (x2 - x1) / 4;
+	
 	fill(c);
 
-	// start and end
+	// start & end
 	stroke(c);
 	strokeWeight(2);
 	circle(x1 + 0.5, y1 + 0.5, 10);
 	circle(x2 + 0.5, y2 + 0.5, 10);
 
+	noFill();
+
 	// background
 	stroke(255);
 	strokeWeight(6);
-	line(x1, y1, x1 + a, y1);
-	line(x1 + a, y1, x2 - a, y2);
-	line(x2, y2, x2 - a, y2);
-	
-//	noFill();
-//	bezier(x1, y1, x1+a, y1, x2-a, y2, x2, y2);
 
-	// actual wire
+	if( Settings.SMOOTH_WIRES.get() ) {
+		bezier(x1, y1, x1 + a, y1, x2-a, y2, x2, y2);
+	}else{
+		line(x1, y1, x1 + a, y1);
+		line(x1 + a, y1, x2 - a, y2);
+		line(x2, y2, x2 - a, y2);
+	}
+
+	// foreground
 	stroke(c);
 	strokeWeight(2);
-	line(x1, y1, x1 + a, y1);
-	line(x1 + a, y1, x2 - a, y2);
-	line(x2, y2, x2 - a, y2);
 
-//	noFill();
-//	bezier(x1, y1, x1+a, y1, x2-a, y2, x2, y2);
+	if( Settings.SMOOTH_WIRES.get() ) {
+		bezier(x1, y1, x1 + a, y1, x2-a, y2, x2, y2);
+	}else{
+		line(x1, y1, x1 + a, y1);
+		line(x1 + a, y1, x2 - a, y2);
+		line(x2, y2, x2 - a, y2);
+	}
 
 }
 
@@ -198,7 +204,7 @@ class WireEditor {
 			for( let target of WireEditor.#targets ) {
 				const point = WireEditor.#input ? target.gate.getLeftPoint(target.index) : target.gate.getRightPoint(target.index);
 
-				wire(int(point.x), int(point.y), Mouse.x, Mouse.y, state ? color(9, 98, 218) : 0);
+				wire(int(point.x), int(point.y), Mouse.x, Mouse.y, state);
 			}
 		}
 	}

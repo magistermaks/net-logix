@@ -112,6 +112,7 @@ class Gui {
 			Gui.Settings.#entry(list, Settings.AUTOSAVE, "Enable sketch autosave");
 			Gui.Settings.#entry(list, Settings.TRANSISTORS, "Show transistor count");
 			Gui.Settings.#entry(list, Settings.SNAP, "Snap gates to grid");
+			Gui.Settings.#entry(list, Settings.SMOOTH_WIRES, "Use smooth wires");
 		}
 
 		static update(elem) {
