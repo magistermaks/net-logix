@@ -18,6 +18,9 @@ function wire(x1, y1, x2, y2, state) {
 	line(x1, y1, x1 + a, y1);
 	line(x1 + a, y1, x2 - a, y2);
 	line(x2, y2, x2 - a, y2);
+	
+//	noFill();
+//	bezier(x1, y1, x1+a, y1, x2-a, y2, x2, y2);
 
 	// actual wire
 	stroke(c);
@@ -25,6 +28,10 @@ function wire(x1, y1, x2, y2, state) {
 	line(x1, y1, x1 + a, y1);
 	line(x1 + a, y1, x2 - a, y2);
 	line(x2, y2, x2 - a, y2);
+
+//	noFill();
+//	bezier(x1, y1, x1+a, y1, x2-a, y2, x2, y2);
+
 }
 
 class WirePoint {
@@ -109,45 +116,90 @@ class OutputWirePoint {
 
 class WireEditor {
 
-	static #from;
-	static #clicked;
+	static #targets = [];
+	static #clicked = false;
+	static #input = false;
 
 	static click() {
-	  
 		if( !WireEditor.#clicked ) {
-			WireEditor.#from = null;
+			WireEditor.#targets = null;
 		}
 	  
 		WireEditor.#clicked = false;
-	}
-
+	}	
+	
 	static isClicked() {
-		return WireEditor.#from != null;
+		return WireEditor.#targets != null;
 	}
 
 	static left(gate, index) {
-		WireEditor.#clicked = true;
 
-		if( WireEditor.#from != null ) {
-			WireEditor.#from.gate.connect(WireEditor.#from.index, gate, index);
-			WireEditor.#from = null;
-		}else{
-			WireEditor.#from = gate.getInput(index);
+		if( WireEditor.isClicked() && !WireEditor.#input ) {
+
+			if( WireEditor.#targets != null ) {
+				WireEditor.#targets[0].gate.connect(WireEditor.#targets[0].index, gate, index);
+				WireEditor.#targets = null;
+			}else{
+//				WireEditor.#targets = [gate.getInput(index)];
+//				gate.disconnect(index);
+			}
+			return;
+
+		}
+
+		// TODO: this was a little confusing to use (input => output drawing)
+		// but i'm not ruling out the option of adding it in some form in the future
+
+		// if( keyCode == CONTROL && isKeyPressed ) {	
+		// 	WireEditor.#targets = [new WirePoint(gate, index)];
+		// 	WireEditor.#input = true;
+		// } else
+
+		if( gate.getInput(index) != null ) {
+			WireEditor.#targets = [gate.getInput(index)];
 			gate.disconnect(index);
+			WireEditor.#clicked = true;
+			WireEditor.#input = false;
 		}
 	}
 
 	static right(gate, index) {
+
+		if( WireEditor.isClicked() && WireEditor.#input ) {
+
+			// use control to replace, not merge connections
+			if( keyCode == CONTROL && isKeyPressed ) gate.getOutput(index).removeAll();
+
+			for( let target of WireEditor.#targets ) {
+				gate.connect(index, target.gate, target.index);
+			}
+
+			WireEditor.#targets = null;
+			return;
+		}
+
 		WireEditor.#clicked = true;
-		WireEditor.#from = new WirePoint(gate, index);
+
+		if( keyCode == CONTROL && isKeyPressed ) {
+			WireEditor.#targets = gate.getOutput(index).targets.filter(() => true); // copy array without <empty slots> ehh
+			gate.getOutput(index).removeAll();
+			WireEditor.#input = true;
+		}else{
+			WireEditor.#targets = [new WirePoint(gate, index)];
+			WireEditor.#input = false;
+		}
+		console.log(WireEditor.#targets);
 	}
 
 	static draw() {
-		if( WireEditor.#from != null ) {
-			const point = WireEditor.#from.gate.getRightPoint(WireEditor.#from.index);
-			const state = WireEditor.#from.gate.getOutputState(WireEditor.#from.index);
+		if( WireEditor.#targets != null && WireEditor.#targets.length > 0 ) {
+			const state = !WireEditor.#input ? WireEditor.#targets[0].gate.getOutputState(WireEditor.#targets[0].index) : 0;
 
-			wire(int(point.x), int(point.y), Mouse.x, Mouse.y, state ? color(9, 98, 218) : 0);
+			for( let target of WireEditor.#targets ) {
+				const point = WireEditor.#input ? target.gate.getLeftPoint(target.index) : target.gate.getRightPoint(target.index);
+
+				wire(int(point.x), int(point.y), Mouse.x, Mouse.y, state ? color(9, 98, 218) : 0);
+			}
 		}
 	}
 

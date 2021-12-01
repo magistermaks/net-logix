@@ -1,5 +1,5 @@
 
-Logix 1.5.0
+Logix 1.5.0 <30/11/2021>
 	- Better background grid
 	- Show number of selected gates
 	- Show sketch last edit date
