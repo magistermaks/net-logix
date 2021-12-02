@@ -30,14 +30,25 @@ class Gate extends Box {
 		this.#modified = false;
 		this.#complexity = complexity;
 		this.#id = nextGateId ++;
-		
+
 		gates.push(this);
+	}
+
+	static create(gid, x, y, uid = -1) {
+		let gate = new (Registry.get(gid))(x, y);
+		if( uid != -1 ) gate.#id = uid;
+		return gate;
 	}
 
 	getId() {
 		return this.#id;
 	}
-	
+
+	drag(mx, my) {
+		super.drag(mx, my);
+		Action.execute("mov", {uid: this.#id, x: this.x, y: this.y});
+	}
+		
 	connect( output, target, input ) {
 		target.disconnect(input);        
 

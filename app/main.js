@@ -65,6 +65,9 @@ function setup() {
 	// invoke dark magic
 	zoomInit();
 
+	// init networking and event system
+	Action.init();
+
 	console.log(`System ready! Took: ${Date.now() - start}ms`);
 }
 

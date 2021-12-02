@@ -143,7 +143,12 @@ class WireEditor {
 		if( WireEditor.isClicked() && !WireEditor.#input ) {
 
 			if( WireEditor.#targets != null ) {
-				WireEditor.#targets[0].gate.connect(WireEditor.#targets[0].index, gate, index);
+				Action.execute("cwire", {
+					uid: WireEditor.#targets[0].gate.getId(), 
+					output: WireEditor.#targets[0].index, 
+					target: gate.getId(), 
+					index: index
+				});
 				WireEditor.#targets = null;
 			}else{
 //				WireEditor.#targets = [gate.getInput(index)];
@@ -163,7 +168,7 @@ class WireEditor {
 
 		if( gate.getInput(index) != null ) {
 			WireEditor.#targets = [gate.getInput(index)];
-			gate.disconnect(index);
+			Action.execute("dwire", {uid: gate.getId(), index: index});
 			WireEditor.#clicked = true;
 			WireEditor.#input = false;
 		}
@@ -177,7 +182,12 @@ class WireEditor {
 			if( keyCode == CONTROL && isKeyPressed ) gate.getOutput(index).removeAll();
 
 			for( let target of WireEditor.#targets ) {
-				gate.connect(index, target.gate, target.index);
+				Action.execute("cwire", {
+					uid: gate.getId(), 
+					output: index, 
+					target: target.gate.getId(), 
+					index: target.index
+				});
 			}
 
 			WireEditor.#targets = null;

@@ -42,6 +42,11 @@ class InputGate extends TwoStateGate {
 		this.state = Boolean(Number(meta ?? 0));
 	}
 
+	setState(state) {
+		this.state = state;
+		this.notify();
+	}
+
 	click(mx, my, double) {
 		super.click(mx, my, double);
 		
@@ -50,8 +55,7 @@ class InputGate extends TwoStateGate {
 			&& my > scy + this.y + Box.top + Box.wiggle 
 			&& my < scy + this.y + Box.h - Box.wiggle ) {
 
-			this.state = !this.state;
-			this.notify();
+			Action.execute("switch", {uid: this.getId(), state: !this.state});
 		}
 	}
 

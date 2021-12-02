@@ -138,7 +138,9 @@ function keyPressed(event) {
 	}
 
 	if( keyCode == DELETE || keyCode == BACKSPACE ) {
-		Selected.get().forEach(gate => gate.remove());
+		Selected.get().forEach(gate => {
+			Action.execute("rem", {uid: gate.getId()});
+		});
 		return false;
 	}
 
@@ -159,17 +161,6 @@ function keyPressed(event) {
 		Manager.save(identifier);
 		return false;
 	}
-
-//	if( key == "p" ) {
-//		console.log(`Printing data about ${Selected.count()} selected gate(s):`);
-//		let index = 1;
-//
-//		Selected.get().forEach(gate => {
-//			console.log(` * Gate #${index} (${gate.constructor.name})`);
-//			console.log(gate);
-//			index += 1;
-//		});
-//	}
 
 }
 
