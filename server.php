@@ -5,13 +5,43 @@ require_once('libs/websockets.php');
 $sketches = [];
 $groups = [];
 
+class Group {
+
+	public $host;
+	public $clients = [];
+
+	function __construct($host) {
+		$this->host = $host;
+	}
+
+	public function add($user) {
+		array_push($this->clients, $user);
+	}
+
+	public function remove($user) {
+		$index = array_search($user, $this->clients);
+
+		if( $index !== false ) {
+			unset($this->clients[$index]);
+		}
+	}
+
+}
+
 class User extends WebSocketUser {
 
 	public $sketch = 0;
+	public $group = null;
 	public $host = false;
 
 	function __construct($id, $socket) {
 		parent::__construct($id, $socket);
+	}
+
+	public function reset() {
+		$this->sketch = 0;
+		$this->group = null;
+		$this->host = false;
 	}
 
 }
@@ -36,7 +66,7 @@ class LogixServer extends WebSocketServer {
 		echo "This software is licensed under GNU GPL 2.0, Copyright (c) magistermaks\n";
 		echo "Powered by PHP WebSockets library by Adam Alexander\n\n";
 		echo "Logix WebSocket server started!\n";
-		echo "Listening on: $addr:$port (using socket: " . $this->master . ")\n";
+		echo "Listening on: $addr:$port (using socket: " . $this->master . ")\n\n";
 	}
 
 	protected function process($user, $message) {
@@ -47,19 +77,20 @@ class LogixServer extends WebSocketServer {
 		if( $command === "MAKE" ) {
 			
 			if( $user->sketch != 0 ) {
-				$this->send($user, "ERROR User already in group!");
+				$this->send($user, "ERROR user already in group");
 				return;
-			}else{
-				if( count($sketches) > 1000 ) {
-					$this->send($user, "ERROR Too many groupes in use!");
-					return;
-				}
+			}
+
+			if( count($sketches) > 1000 ) {
+				$this->send($user, "ERROR too many groupes in use");
+				return;
 			}
 
 			$sketch = getNewSketch();
-			$groups[$sketch] = ["host" => $user, "clients" => []];
+			$groups[$sketch] = new Group($user);
 
 			$user->sketch = $sketch;
+			$user->group = $groups[$sketch];
 			$user->host = true;
 
 			$this->send($user, "MAKE $sketch");
@@ -70,46 +101,51 @@ class LogixServer extends WebSocketServer {
 		} elseif($command == "JOIN") {
 
 			if( $user->sketch != 0 ) {
-				$this->send($user, "ERROR User already in group!");
+				$this->send($user, "ERROR user already in group");
 				return;
 			}
 
 			$sketch = (int) $args;
 
 			if( !in_array($sketch, $sketches) ) {
-				$this->send($user, "ERROR No such group!");
+				$this->send($user, "ERROR no such group");
 				return;
 			}
 
-			array_push($groups[$sketch]["clients"], $user);
+			$group = $groups[$sketch];
+			$group->add($user);
+
 			$user->sketch = $sketch;
+			$user->group = $group;
 			$user->host = false;
 
-			$this->send($groups[$sketch]["host"], "JOIN");
+			$this->send($user, "JOIN");
+			$this->send($group->host, "JOIN " . $user->id);
 
 			echo "Client " . $user->id . " joind group $sketch\n";
 			return;
 
 		} elseif($command == "SEND") {
 
-			$host = $groups[$user->sketch]["host"];
-			$this->send($host, "TEXT ". $args);
+			if( $user->group == null ) {
+				$this->send($user, "ERROR unable to transmit outside of group");
+			}
 
+			$this->send($user->group->host, "TEXT ". $args);
 			return;
 
 		} elseif($command == "BROADCAST") {
 
-			$group = $groups[$user->sketch];
+			if( $user->group == null ) {
+				$this->send($user, "ERROR unable to transmit outside of group");
+			}
 
-			$clients = $group["clients"];
-
-			foreach($clients as &$client) {
-				if( $client != $user ) $this->send($client, "TEXT ". $args);
+			foreach( $user->group->clients as &$client ) {
+				if($client != $user) $this->send($client, "TEXT $args");
 			}
 	
 			if( !$user->host ) {
-				$host = $group["host"];
-				$this->send($host, "TEXT ". $args);
+				$this->send($user->group->host, "TEXT $args");
 			}
 
 			return;
@@ -121,7 +157,7 @@ class LogixServer extends WebSocketServer {
 
 		}
 
-		$this->send($user, "ERROR Invalid command!");
+		$this->send($user, "ERROR invalid command");
 	}
   
 	protected function connected($user) {
@@ -139,37 +175,27 @@ class LogixServer extends WebSocketServer {
 		$group = $user->sketch;
 
 		if( $user->sketch != 0 ) {
-			if( $user->host ) {
-	
-				$clients = $groups[$user->sketch]["clients"];
 
-				foreach($clients as &$client) {
+			if( $user->host ) {
+
+				foreach( $user->group->clients as &$client ) {
 					$this->disassociate($client);
 				}
 
 				unset($sketches[$user->sketch]);
 				unset($groups[$user->sketch]);
+				$user->reset();
 
-				$user->sketch = 0;
-				$user->host = false;
 			}else{
-				unset($sketches[$user->sketch]);
-			
-				if (($key = array_search($user, $groups[$user->sketch]["clients"])) !== false) {
-					unset($groups[$user->sketch]["clients"][$key]);
-				}
-
-				$host = $groups[$user->sketch]["host"];
-				$this->send($host, "LEFT $key");
-
-				$user->sketch = 0;
+				$user->group->remove($user);
+				$this->send($user->group->host, "LEFT " . $user->id);
+				$user->reset();
 			}
 
 			echo "Client " . $user->id . " left group $group\n";
 		}
 
 		$this->send($user, "CLOSE");
-
 	}
 
 }
@@ -178,8 +204,7 @@ $server = new LogixServer("0.0.0.0", "9000", 2048);
 
 try {
 	$server->run();
-}
-catch (Exception $e) {
+} catch (Exception $e) {
 	echo $e->getMessage() + "\n";
 }
 

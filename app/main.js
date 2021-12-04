@@ -37,22 +37,23 @@ function setup() {
 
 	// load sketch
 	identifier = window.location.hash.slice(1);
-	if( !Manager.load(identifier) ) {
-		alert("Failed to load selected sketch, the data is corrupted!");
-		history.back();
-	}
+	if( identifier.startsWith("logix-sketch") ) {
 
-	// set default value immediately
-	Settings.AUTOSAVE.get();
-
-	// start autosave task (every 5s)
-	setInterval( () => {
-		if( Settings.AUTOSAVE.get() ) {
-			Manager.save(identifier);
+		if( !Manager.load(identifier) ) {
+			alert("Failed to load selected sketch, the data is corrupted!");
+			history.back();
 		}
-	}, 5000 );
 
-	// fix screen offset if it was corrupted
+		// start autosave task (every 5s)
+		setInterval( () => {
+			if( Settings.AUTOSAVE.get() ) {
+				Manager.save(identifier);
+			}
+		}, 5000 );
+
+	}else alert("Invalid sketch identifier! Try again!");
+
+	// fix screen offset if it got corrupted
 	if( scx == null ) scx = 0;
 	if( scy == null ) scy = 0;
 
@@ -61,13 +62,15 @@ function setup() {
 
 	// update all gates in a sketch
 	UpdateQueue.init();
-	MoveQueue.init();
 
-	// invoke dark magic
-	zoomInit();
+	// start watching for dragged gates
+	MoveQueue.init();
 
 	// init networking and event system
 	Event.init();
+
+	// invoke dark magic
+	zoomInit();
 
 	console.log(`System ready! Took: ${Date.now() - start}ms`);
 }

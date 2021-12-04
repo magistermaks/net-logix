@@ -40,6 +40,10 @@ class Gate extends Box {
 		return gate;
 	}
 
+	static get(uid) {
+		return gates.find(gate => gate.#id == uid);
+	}
+
 	getId() {
 		return this.#id;
 	}
@@ -203,20 +207,22 @@ class MoveQueue {
 	
 	static #updates = new Set();
 
-	static init(flag) {
-		//if(flag) {
-			MoveQueue.add = gate => MoveQueue.#updates.add(gate);
-			
-			setInterval(() => {
-				MoveQueue.#updates.forEach(gate => {
-					Event.execute("mov", {uid: gate.getId(), x: gate.x, y: gate.y});
-				});
+	static init() {
+		MoveQueue.add = gate => MoveQueue.#updates.add(gate);
 
-				MoveQueue.#updates.clear();
-			}, 400);
-		//}else{
-		//	MoveQueue.add = gate => {};
-		//}
+		setInterval(() => {
+			let updates = [];
+
+			MoveQueue.#updates.forEach(gate => updates.push({
+				uid: gate.getId(), x: round(gate.x), y: round(gate.y)
+			}));
+
+			if( updates.length > 0 ) {
+				Event.execute("mov", updates);
+			}
+
+			MoveQueue.#updates.clear();
+		}, 250);
 	}
 
 }
@@ -234,12 +240,10 @@ class UpdateQueue {
 	}
 
 	static execute() {
-		//while( UpdateQueue.#updates.size > 0 ) {
-			const queue = UpdateQueue.#updates;
-			UpdateQueue.#updates = new Set();
+		const queue = UpdateQueue.#updates;
+		UpdateQueue.#updates = new Set();
 
-			queue.forEach(gate => gate.notify());
-		//}
+		queue.forEach(gate => gate.notify());
 	}
 
 	static size() { 

@@ -204,7 +204,6 @@ class WireEditor {
 			WireEditor.#targets = [new WirePoint(gate, index)];
 			WireEditor.#input = false;
 		}
-		console.log(WireEditor.#targets);
 	}
 
 	static draw() {

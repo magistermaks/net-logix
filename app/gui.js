@@ -83,7 +83,7 @@ class Gui {
 		}
 
 		static add(clazz) {
-			Event.execute("add", {type: clazz.id, x: int(picker.dataset.x) - scx, y: int(picker.dataset.y) - scy});
+			Event.execute("add", {type: clazz.id, x: round(picker.dataset.x) - scx, y: round(picker.dataset.y) - scy});
 			Gui.Picker.close();
 		}
 

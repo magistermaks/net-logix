@@ -71,7 +71,12 @@ class Box {
 
 		MoveQueue.add(this);
 
-	} 
+	}
+
+	move(x, y) {
+		this.x = x;
+		this.y = y;
+	}
 
 	canGrab(mx, my) {
 		return this.canClick(mx, my) && (scy + this.y + Box.wiggle + Box.top >= my);
