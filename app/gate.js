@@ -43,11 +43,6 @@ class Gate extends Box {
 	getId() {
 		return this.#id;
 	}
-
-	drag(mx, my) {
-		super.drag(mx, my);
-		Action.execute("mov", {uid: this.#id, x: this.x, y: this.y});
-	}
 		
 	connect( output, target, input ) {
 		target.disconnect(input);        
@@ -201,7 +196,29 @@ class IconGate extends Gate {
 	content(x, y) {
 		image(this.getImage(), x + Box.w / 2, y + (Box.h - Box.top) / 2, Box.h / 2, Box.h / 2);
 	}
-  
+
+}
+
+class MoveQueue {
+	
+	static #updates = new Set();
+
+	static init(flag) {
+		//if(flag) {
+			MoveQueue.add = gate => MoveQueue.#updates.add(gate);
+			
+			setInterval(() => {
+				MoveQueue.#updates.forEach(gate => {
+					Event.execute("mov", {uid: gate.getId(), x: gate.x, y: gate.y});
+				});
+
+				MoveQueue.#updates.clear();
+			}, 400);
+		//}else{
+		//	MoveQueue.add = gate => {};
+		//}
+	}
+
 }
 
 class UpdateQueue {

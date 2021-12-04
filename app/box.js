@@ -69,6 +69,8 @@ class Box {
 
 		}
 
+		MoveQueue.add(this);
+
 	} 
 
 	canGrab(mx, my) {

@@ -55,7 +55,7 @@ class InputGate extends TwoStateGate {
 			&& my > scy + this.y + Box.top + Box.wiggle 
 			&& my < scy + this.y + Box.h - Box.wiggle ) {
 
-			Action.execute("switch", {uid: this.getId(), state: !this.state});
+			Event.execute("switch", {uid: this.getId(), state: !this.state});
 		}
 	}
 

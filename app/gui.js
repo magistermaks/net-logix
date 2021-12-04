@@ -33,7 +33,7 @@ class Gui {
 			y = step;
 		}
 
-		Action.execute("add", {type: clazz.id, x: x - scx, y: y - scy});
+		Event.execute("add", {type: clazz.id, x: x - scx, y: y - scy});
 	}
 
 	static init() {
@@ -83,7 +83,7 @@ class Gui {
 		}
 
 		static add(clazz) {
-			Action.execute("add", {type: clazz.id, x: int(picker.dataset.x) - scx, y: int(picker.dataset.y) - scy});
+			Event.execute("add", {type: clazz.id, x: int(picker.dataset.x) - scx, y: int(picker.dataset.y) - scy});
 			Gui.Picker.close();
 		}
 

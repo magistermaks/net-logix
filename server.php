@@ -86,46 +86,32 @@ class LogixServer extends WebSocketServer {
 			$user->host = false;
 
 			$this->send($groups[$sketch]["host"], "JOIN");
-			$this->send($user, "OK");
 
 			echo "Client " . $user->id . " joind group $sketch\n";
 			return;
 
 		} elseif($command == "SEND") {
 
-			if( $user->host ) {
-				
-				list($arg, $msg) = explode(' ', $args, 2);
-				$uid = (int) $arg;
-
-				$client = $groups[$user->sketch]["clients"][$uid];
-				$this->send($client, "TEXT ". $msg);
-
-			}else{
-				
-				$host = $groups[$user->sketch]["host"];
-				$this->send($host, "TEXT ". $args);
-
-			}
-
-			$this->send($user, "OK");
+			$host = $groups[$user->sketch]["host"];
+			$this->send($host, "TEXT ". $args);
 
 			return;
 
 		} elseif($command == "BROADCAST") {
 
-			if( !$user->host ) {
-				$this->send($user, "ERROR Clients can't broadcast!");
-				return;
-			}
+			$group = $groups[$user->sketch];
 
-			$clients = $groups[$user->sketch]["clients"];
+			$clients = $group["clients"];
 
 			foreach($clients as &$client) {
-				$this->send($client, "TEXT ". $args);
+				if( $client != $user ) $this->send($client, "TEXT ". $args);
+			}
+	
+			if( !$user->host ) {
+				$host = $group["host"];
+				$this->send($host, "TEXT ". $args);
 			}
 
-			$this->send($user, "OK");
 			return;
 
 		} elseif($command == "CLOSE") {

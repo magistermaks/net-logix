@@ -61,12 +61,13 @@ function setup() {
 
 	// update all gates in a sketch
 	UpdateQueue.init();
+	MoveQueue.init();
 
 	// invoke dark magic
 	zoomInit();
 
 	// init networking and event system
-	Action.init();
+	Event.init();
 
 	console.log(`System ready! Took: ${Date.now() - start}ms`);
 }
