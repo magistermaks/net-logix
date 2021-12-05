@@ -79,7 +79,5 @@ class Event {
 		Event.#registry[id].trigger(args, external);
 	}
 
-	static init() {}
-
 }
 

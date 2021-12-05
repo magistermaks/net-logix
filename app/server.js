@@ -85,7 +85,6 @@ class RemoteServer {
 	
 		if( command == "MAKE" ) return;
 		if( command == "CLOSE" ) this.#state = ServerState.Connected;
-
 		if( command == "READY" ) this.#state = ServerState.Ready
 
 		if( command == "JOIN" ) {

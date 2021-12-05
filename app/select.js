@@ -55,7 +55,7 @@ class Selected {
 		if( Selected.#area ) {
 			fill(33, 150, 243, 100);
 			stroke(33, 150, 243, 255);
-			rect(Selected.#x, Selected.#y, Mouse.x - Selected.#x, Mouse.y - Selected.#y);
+			rect(Selected.#x, Selected.#y, Mouse.x - Selected.#x, Mouse.y - Selected.#y, 1);
 		}
 	}
 
@@ -78,7 +78,7 @@ class Selected {
 				const x = gate.x + scx;
 				const y = gate.y + scy;
 
-				if( x > minx && y > miny && x < maxx && y < maxy ) {
+				if( x > minx && y > miny && x + Box.w < maxx && y + Box.h < maxy ) {
 					Selected.add(gate);
 				}
 			});

@@ -66,9 +66,6 @@ function setup() {
 	// start watching for dragged gates
 	MoveQueue.init();
 
-	// init networking and event system
-	Event.init();
-
 	// invoke dark magic
 	zoomInit();
 
