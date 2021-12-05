@@ -143,7 +143,7 @@ class WireEditor {
 		if( WireEditor.isClicked() && !WireEditor.#input ) {
 
 			if( WireEditor.#targets != null ) {
-				Event.execute("cwire", {
+				Event.Cwire.trigger({
 					uid: WireEditor.#targets[0].gate.getId(), 
 					output: WireEditor.#targets[0].index, 
 					target: gate.getId(), 
@@ -168,7 +168,7 @@ class WireEditor {
 
 		if( gate.getInput(index) != null ) {
 			WireEditor.#targets = [gate.getInput(index)];
-			Event.execute("dwire", {uid: gate.getId(), index: index});
+			Event.Dwire.trigger({uid: gate.getId(), index: index});
 			WireEditor.#clicked = true;
 			WireEditor.#input = false;
 		}
@@ -182,7 +182,7 @@ class WireEditor {
 			if( keyCode == CONTROL && isKeyPressed ) gate.getOutput(index).removeAll();
 
 			for( let target of WireEditor.#targets ) {
-				Event.execute("cwire", {
+				Event.Cwire.trigger({
 					uid: gate.getId(), 
 					output: index, 
 					target: target.gate.getId(), 

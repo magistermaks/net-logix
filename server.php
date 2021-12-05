@@ -44,6 +44,10 @@ class User extends WebSocketUser {
 		$this->host = false;
 	}
 
+	public function write($msg) {
+		echo "Client " . $this->id . " $msg\n";
+	}
+
 }
 
 function getNewSketch() {
@@ -94,8 +98,9 @@ class LogixServer extends WebSocketServer {
 			$user->host = true;
 
 			$this->send($user, "MAKE $sketch");
-
-			echo "Client " . $user->id . " added new group $sketch\n";
+			$this->send($user, "READY");
+	
+			$user->write("created group $sketch");
 			return;
 
 		} elseif($command == "JOIN") {
@@ -119,10 +124,10 @@ class LogixServer extends WebSocketServer {
 			$user->group = $group;
 			$user->host = false;
 
-			$this->send($user, "JOIN");
+			$this->send($user, "READY");
 			$this->send($group->host, "JOIN " . $user->id);
 
-			echo "Client " . $user->id . " joind group $sketch\n";
+			$user->write("joind group $sketch");
 			return;
 
 		} elseif($command == "SEND") {
@@ -161,11 +166,11 @@ class LogixServer extends WebSocketServer {
 	}
   
 	protected function connected($user) {
-		echo "Client " . $user->id . " connected\n";
+		$user->write("connected");
 	}
   
 	protected function closed($user) {
-		echo "Client " . $user->id . " disconnected\n";
+		$user->write("disconnected");
 		$this->disassociate($user);
 	}
 
@@ -192,7 +197,8 @@ class LogixServer extends WebSocketServer {
 				$user->reset();
 			}
 
-			echo "Client " . $user->id . " left group $group\n";
+			$user->write("left group $group");
+
 		}
 
 		$this->send($user, "CLOSE");

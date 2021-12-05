@@ -139,7 +139,7 @@ function keyPressed(event) {
 
 	if( keyCode == DELETE || keyCode == BACKSPACE ) {
 		Selected.get().forEach(gate => {
-			Event.execute("rem", {uid: gate.getId()});
+			Event.Rem.trigger({uid: gate.getId()});
 		});
 		return false;
 	}

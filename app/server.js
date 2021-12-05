@@ -69,7 +69,7 @@ class RemoteServer {
 	}
 
 	event(object, handle) {
-		this.#send((handle.direct ? "SEND " : "BROADCAST ") + JSON.stringify(object));
+		this.#send((handle.direct ? "SEND " : "BROADCAST ") + LZString.compressToUTF16(JSON.stringify(object)));
 	}
 
 	#process(msg) {
@@ -83,19 +83,32 @@ class RemoteServer {
 			alert( "Network error: " + args[0].toUpperCase() + args.slice(1) + "!" );
 		}
 	
-		if( command == "MAKE" ) this.#state = ServerState.Ready;
-		if( command == "JOIN" ) this.#state = ServerState.Ready;
+		if( command == "MAKE" ) return;
 		if( command == "CLOSE" ) this.#state = ServerState.Connected;
 
+		if( command == "READY" ) this.#state = ServerState.Ready
+
+		if( command == "JOIN" ) {
+			// user joined group, send to host
+		}
+
+		if( command == "LEFT" ) {
+			// user left group, send to host
+		}
+
 		if( command == "TEXT" ) {
-			const object = JSON.parse(args);
-			Event.execute(object.type, object.args, true);
+			const object = JSON.parse(LZString.decompressFromUTF16(args));
+			Event.execute(object.id, object.args, true);
 		}
 		
 	}
 
 	ready() {
 		return this.#state == ServerState.Ready;
+	}
+
+	close() {
+		this.#send("CLOSE");
 	}
 
 }

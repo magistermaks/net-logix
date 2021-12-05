@@ -147,7 +147,7 @@ abstract class WebSocketServer {
               case 121: // EREMOTEIO    -- Rempte I/O error -- Their hard drive just blew up.
               case 125: // ECANCELED    -- Operation canceled
                 
-                $this->stderr("Unusual disconnect on socket " . $socket);
+                $this->stderr("Unusual disconnect on socket: " . $socket);
                 $this->disconnect($socket, true, $sockErrNo); // disconnect before clearing error, in case someone with their own implementation wants to check for error conditions on the socket.
                 break;
               default:
@@ -158,7 +158,7 @@ abstract class WebSocketServer {
           }
           elseif ($numBytes == 0) {
             $this->disconnect($socket);
-            $this->stderr("Client disconnected. TCP connection lost: " . $socket);
+            $this->stderr("TCP connection lost on socket: " . $socket);
           } 
           else {
             $user = $this->getUserBySocket($socket);

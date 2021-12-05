@@ -218,7 +218,7 @@ class MoveQueue {
 			}));
 
 			if( updates.length > 0 ) {
-				Event.execute("mov", updates);
+				Event.Mov.trigger(updates);
 			}
 
 			MoveQueue.#updates.clear();
