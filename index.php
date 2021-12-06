@@ -4,6 +4,7 @@
 
 		<script src="app/menu/main.js"></script>
 		<script src="app/menu/menu.js"></script>
+		<script src="app/common/gui.js"></script>
 		<script src="app/common/save.js"></script>
 		<script src="app/common/settings.js"></script>
 		<script src="app/common/files.js"></script>
@@ -34,6 +35,7 @@
 				<div id="new">
 					<div class="button" onclick="create()"> New </div>
 					<div class="button" onclick="fileImport()"> Import </div>
+					<div class="button" onclick="joinShared()"> Join </div>
 				</div>
 
 			</div>
@@ -44,6 +46,18 @@
 		<div id="brand">
 			<div>Logix</div>
 			<div>Logic Circuit Simulator</div>
+		</div>
+
+		<!-- generic popup -->
+		<div style="display: none" id="popup">
+			<div id="shade"></div>
+
+			<!-- content -->
+			<div id="popup-body">
+    			<div></div>
+    			<div></div>
+    			<div></div>
+			</div>
 		</div>
 
 		<div id="footer">

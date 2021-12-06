@@ -37,15 +37,18 @@ class RemoteServer {
 
 	#socket;
 	#state = ServerState.Disconnected;
+	#callback;
 
-	constructor(address) {
+	constructor(address, callbackOpen, callbackReady, callbackClosed) {
 		this.#socket = new WebSocket(address);
 
 		// manage server state
-		this.#socket.onopen = () => this.#state = this.#state.connect();
-		this.#socket.onclose = () => this.#state = ServerState.Disconnected;
+		this.#socket.onopen = () => {this.#state = this.#state.connect(); callbackOpen();}
+		this.#socket.onclose = () => {this.#state = ServerState.Disconnected; callbackClosed();};
 		this.#socket.onerror = (error) => console.error(error);
 		this.#socket.onmessage = (msg) => this.#process(msg.data);
+
+		this.#callback = callbackReady;
 	}
 
 	join(group) {
@@ -80,12 +83,20 @@ class RemoteServer {
 		const args = index == -1 ? "" : msg.substring(index + 1);
 
 		if( command == "ERROR" ) {
-			alert( "Network error: " + args[0].toUpperCase() + args.slice(1) + "!" );
+			GUI.openPopup("Network Error!", "Server reported an error: " + args[0].toUpperCase() + args.slice(1) + "!",
+				{text: "Ok", event: "GUI.openMenu()"}
+			);
 		}
 	
-		if( command == "MAKE" ) return;
+		if( command == "MAKE" ) {
+			this.#callback(args);
+		}
+
 		if( command == "CLOSE" ) this.#state = ServerState.Connected;
-		if( command == "READY" ) this.#state = ServerState.Ready
+
+		if( command == "READY" ) {
+			this.#state = ServerState.Ready;
+		}
 
 		if( command == "JOIN" ) {
 			// user joined group, send to host

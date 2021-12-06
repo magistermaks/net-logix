@@ -51,7 +51,22 @@ function setup() {
 			}
 		}, 5000 );
 
-	}else alert("Invalid sketch identifier! Try again!");
+	}else{
+		
+		let code = Number.parseInt(identifier);
+
+		if( isNaN(code) ) {
+			alert("The given access code is invalid!");
+			history.back();
+		}
+
+		Event.server = new RemoteServer("ws://0:9000", () => {Event.server.join(code)}, (id) => {
+			console.log("Connected!");
+		}, () => { 
+			GUI.openPopup("Network Error!", "Connection with server lost!", {text:"Ok", event:"GUI.openMenu()"});
+		});
+
+	}
 
 	// fix screen offset if it got corrupted
 	if( scx == null ) scx = 0;

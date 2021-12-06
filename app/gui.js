@@ -1,4 +1,5 @@
 
+// TODO: rewrite
 class Gui {
 
 	static pause;
@@ -44,6 +45,24 @@ class Gui {
 	
 	static fileExport() {
 		Filesystem.download(localStorage.getItem(identifier), identifier.substring("logix-sketch-".length) + ".lxs");
+	}
+
+	static share() {
+		GUI.openPopup(
+			"Sketch Sharing", 
+			"Are you sure you want to share this sketch? Anyone with an access code will be able to modify and copy it!",
+			{text: "Share", event: "Gui.shareBegin()"}, {text: "Cancel", event: "GUI.closePopup()"}
+		);
+	}
+
+	static shareBegin() {
+		Event.server = new RemoteServer("ws://0:9000", () => {Event.server.host()}, (id) => {
+			GUI.openPopup(
+				"Sketch Sharing", 
+				`Sketch access code: <b>${id}</b>, share it so that others can join!`,
+				{text: "Ok", event: "GUI.closePopup()"}
+			);
+		}, () => { GUI.openPopup("Network Error!", "Connection with server lost!", {text:"Ok", event:"GUI.openMenu()"}); });
 	}
 
 	static Toolbar = class {

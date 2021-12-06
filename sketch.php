@@ -15,6 +15,7 @@
 		<script src="app/select.js"></script>
 		<script src="app/server.js"></script>
 		<script src="app/event.js"></script>
+		<script src="app/common/gui.js"></script>
 		<script src="app/common/save.js"></script>
 		<script src="app/common/settings.js"></script>
 		<script src="app/common/files.js"></script>
@@ -43,6 +44,7 @@
 		<div id="topbar">
 			<div class="button compact" onclick="Gui.Settings.open()">Settings</div>
 			<div class="button compact" onclick="Gui.fileExport()" id="export-button">Export</div>
+			<div class="button compact" onclick="Gui.share()">Share</div>
 			<div class="button compact" onclick="Gui.exit()">Exit</div>
 		</div>
 
@@ -56,7 +58,7 @@
 
 		<!-- settings container -->
 		<div id="settings" style="display: none">
-		
+
 			<!-- background shadow -->
 			<div id="shade"></div>
 
@@ -81,6 +83,18 @@
 
 			</div>
 
+		</div>
+
+		<!-- generic popup -->
+		<div style="display: none" id="popup">
+			<div id="shade"></div>
+
+			<!-- content -->
+			<div id="popup-body">
+    			<div></div>
+    			<div></div>
+    			<div></div>
+			</div>
 		</div>
 
 		<!-- noscript banner -->

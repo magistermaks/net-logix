@@ -29,7 +29,7 @@ class Manager {
 	static #entry(list, key) {
 		const name = Manager.getName(key);
 		const time = Manager.getDate(key);
-		list.innerHTML += `<div title="${time}" data-id="${key}"><span onclick="redirect(this)">${name}</span><img title="Delete this sketch" onclick="remove(this)" src="assets/purge.png"></div>`;
+		list.innerHTML += `<div title="${time}" data-id="${key}"><span onclick="redirect(this)">${name}</span><img title="Delete this sketch" onclick="removeSketch(this)" src="assets/purge.png"></div>`;
 	}
 
 	static print() {

@@ -1,6 +1,5 @@
 
-/* main stypes for the app */
-/* used in menu and editor */
+/* logix stylesheet */
 
 body {
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -84,9 +83,6 @@ main {
 	opacity: 1;
 }
 
-
-
-
 /* styles for the front page menu and settings */
 
 #menu {
@@ -98,7 +94,6 @@ main {
 	margin: auto;
 	max-width: 500px;
 	min-height: 10em;
-	z-index: 1;
 }
 
 #menu > div {
@@ -225,8 +220,51 @@ main {
 	bottom: 0px;
 	left: 0px;
 	right: 0px;
-	background: rgba(0, 0, 0, 0.6);
+	background: rgba(0, 0, 0, 0.4);
 }
+
+/* popup */
+
+#popup-body {
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	position: fixed;
+	margin: auto;
+	width: min(90%, 350px);
+	height: min(90%, 150px);
+	background: #ffffffe8;
+	border-radius: 4px;
+	border: solid black 2px;
+	backdrop-filter: blur(2px);
+}
+
+#popup-body > div:nth-child(1) {
+	border-bottom: solid black 2px;
+	color: white;
+	font-size: 1.1em;
+	padding: 2px;
+	background-color: #646464;
+}
+
+#popup-body > div:nth-child(2) {
+	color: black;
+	padding: 4px;
+}
+
+#popup-body > div:nth-child(3) {
+	position: absolute;
+	bottom: 0px;
+	right: 0px;
+}
+
+.popup-button {
+	border-radius: 0px;
+	border: solid black 1px;
+}
+
+/* brading abouve main menu */
 
 #brand {
 	top: 2em;
@@ -240,9 +278,6 @@ main {
 #brand div:first-child {
 	font-size: 4em;
 }
-
-
-
 
 /* picker context menu */
 

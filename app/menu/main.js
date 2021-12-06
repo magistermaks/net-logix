@@ -13,17 +13,27 @@ function fileImport() {
 	});
 }
 
+function joinShared() {
+	GUI.openPopup("Join Shared Sketch", "To join a shared sketch please provide the access code: <input id='group' maxlength='5' size='5'>",
+		{text: "Join", event: "openShared()"}, {text: "Cancel", event: "GUI.closePopup()"}	
+	)
+}
+
+function openShared() {
+	window.location.href = "sketch.php#" + document.getElementById("group").value;
+}
+
 function redirect(element) {
 	window.location.href = "sketch.php#" + element.parentElement.dataset.id;
 }
 
-function remove(element) {
+function removeSketch(element) {
 	const key = element.parentElement.dataset.id;
 	const name = Manager.getName(key);
 
-	if( confirm(`Are you sure you want to delete sketch '${name}'?`) ) {
-		Manager.remove(key);
-	}
+	GUI.openPopup("Delete Sketch?", `Are you sure you want to delete sketch '${name}'?`,
+		{text: "Delete", event: `Manager.remove('${key}');GUI.closePopup()`}, {text: "Cancel", event: "GUI.closePopup()"}	
+	)
 }
 
 window.onload = function() { 
