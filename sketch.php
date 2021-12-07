@@ -45,7 +45,6 @@
 		<div id="topbar">
 			<div class="button compact" onclick="GUI.settings.open()">Settings</div>
 			<div class="button compact" onclick="Gui.fileExport()" id="export-button">Export</div>
-			<div class="button compact" onclick="Gui.share()">Share</div>
 			<div class="button compact" onclick="Gui.exit()">Exit</div>
 		</div>
 
