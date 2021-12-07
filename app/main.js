@@ -38,45 +38,18 @@ function setup() {
 
 	// load sketch
 	identifier = window.location.hash.slice(1);
-	if( identifier.startsWith("logix-sketch") ) {
 
-		if( !Manager.load(identifier) ) {
-			alert("Failed to load selected sketch, the data is corrupted!");
-			history.back();
-		}
-
-		// start autosave task (every 5s)
-		setInterval( () => {
-			if( Settings.AUTOSAVE.get() ) {
-				Manager.save(identifier);
-			}
-		}, 5000 );
-
-	}else{
-		
-		let code = Number.parseInt(identifier);
-
-		if( isNaN(code) ) {
-			alert("The given access code is invalid!");
-			history.back();
-		}
-
-		// wake up sheepver!
-		fetch("./server.php").catch(x=>null);
-
-		setTimeout(() => {
-
-			Event.server = new RemoteServer("ws://" + window.location.hostname + ":9000", () => {Event.server.join(code)}, (id) => {
-				console.log("Connected!");
-			}, () => { 
-				popup.open("Network Error!", "Connection with server lost!", {text:"Ok", event:"GUI.openMenu()"});
-			});
-
-		}, 500);
-
-		online = true;
-
+	if( !Manager.load(identifier) ) {
+		alert("Failed to load selected sketch, the data is corrupted!");
+		GUI.openMenu();
 	}
+
+	// start autosave task (every 5s)
+	setInterval( () => {
+		if( Settings.AUTOSAVE.get() ) {
+			Manager.save(identifier);
+		}
+	}, 5000 );
 
 	// fix screen offset if it got corrupted
 	if( scx == null ) scx = 0;

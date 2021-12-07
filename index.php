@@ -35,7 +35,6 @@
 				<div id="new">
 					<div class="button" onclick="create()"> New </div>
 					<div class="button" onclick="fileImport()"> Import </div>
-					<div class="button" onclick="joinShared()"> Join </div>
 				</div>
 
 			</div>

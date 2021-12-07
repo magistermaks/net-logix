@@ -13,16 +13,6 @@ function fileImport() {
 	});
 }
 
-function joinShared() {
-	popup.open("Join Shared Sketch", "To join a shared sketch please provide the access code: <input id='group' maxlength='5' size='5'>",
-		{text: "Join", event: "openShared()"}, {text: "Cancel", event: "popup.close()"}	
-	)
-}
-
-function openShared() {
-	window.location.href = "sketch.php#" + document.getElementById("group").value;
-}
-
 function redirect(element) {
 	window.location.href = "sketch.php#" + element.parentElement.dataset.id;
 }
