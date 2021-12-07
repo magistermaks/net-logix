@@ -60,7 +60,7 @@
 		</div>
 
 		<div id="footer">
-			Version 1.5.0 <br>
+			Version 1.6.0 <br>
 			Source avaible at <a href="https://github.com/magistermaks/net-logix">Github</a> 
 		</div>
 
