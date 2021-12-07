@@ -1,0 +1,6 @@
+This software is licensed under GNU GPL 2.0, Copyright (c) magistermaks
+Powered by PHP WebSockets library by Adam Alexander
+
+Logix WebSocket server started!
+Listening on: 0.0.0.0:9000 (using socket: Resource id #5)
+

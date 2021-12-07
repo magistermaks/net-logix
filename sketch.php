@@ -15,6 +15,7 @@
 		<script src="app/select.js"></script>
 		<script src="app/server.js"></script>
 		<script src="app/event.js"></script>
+		<script src="app/common/popup.js"></script>
 		<script src="app/common/gui.js"></script>
 		<script src="app/common/save.js"></script>
 		<script src="app/common/settings.js"></script>
@@ -31,7 +32,7 @@
 		<main></main>
 
 		<!-- toolbox container -->
-		<div class="toolbox">
+		<div id="toolbar">
 
 			<!-- toolbox buttons -->
 			<center id="toolbar-list">
@@ -42,7 +43,7 @@
 
 		<!-- control buttons -->
 		<div id="topbar">
-			<div class="button compact" onclick="Gui.Settings.open()">Settings</div>
+			<div class="button compact" onclick="GUI.settings.open()">Settings</div>
 			<div class="button compact" onclick="Gui.fileExport()" id="export-button">Export</div>
 			<div class="button compact" onclick="Gui.share()">Share</div>
 			<div class="button compact" onclick="Gui.exit()">Exit</div>
@@ -76,7 +77,7 @@
 					</div>
 
 					<div id="new">
-						<div class="button" onclick="Gui.Settings.exit()"> Exit </div>
+						<div class="button" onclick="GUI.settings.close()"> Exit </div>
 					</div>
 	
 				</div>

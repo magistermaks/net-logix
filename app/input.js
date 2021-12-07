@@ -39,8 +39,8 @@ function mouseDragged(e) {
 
 	Mouse.dragged();
 
-	if(e?.target?.parentElement?.parentElement != picker) {
-		Gui.Picker.close();
+	if( GUI.picker.shouldClose(e) ) {
+		GUI.picker.close();
 	}else return;
 
 	if( WireEditor.isClicked() ) {
@@ -87,7 +87,7 @@ function mouseDragged(e) {
 					zox += mx;
 					zoy += my;
 
-					Gui.reset();
+					GUI.moved();
 				};
 			}
 
@@ -104,9 +104,8 @@ function mousePressed(e) {
 
 	last = now;
 
-	// ugly but works
-	if(e?.target?.parentElement?.parentElement != picker) {
-		Gui.Picker.close();
+	if( GUI.picker.shouldClose(e) ) {
+		GUI.picker.close();
 	}
 
 	// iterate backwards to click only the gate "on top"
@@ -168,7 +167,7 @@ function keyPressed(event) {
 // time_wasted_while_trying_to_fucking_make_this_work = 15h
 //
 function mouseWheel(event) {
-	if(Gui.pause || GUI.focused() || Gui.Picker.isOpen()) return;
+	if(Gui.pause || GUI.focused()) return;
 
 	let old = factor;
 

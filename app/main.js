@@ -3,6 +3,7 @@ var scx = 0, scy = 0, scw = 0, sch = 0;
 var tick = 1;
 
 var identifier;
+var online = false;
 var picker;
 var fps = 0, ms = 0;
 
@@ -18,7 +19,7 @@ function setup() {
 
 	// open component picker
 	main.oncontextmenu = () => {
-		Gui.Picker.open();
+		GUI.picker.open();
 		return false;
 	};
 
@@ -60,11 +61,20 @@ function setup() {
 			history.back();
 		}
 
-		Event.server = new RemoteServer("ws://0:9000", () => {Event.server.join(code)}, (id) => {
-			console.log("Connected!");
-		}, () => { 
-			GUI.openPopup("Network Error!", "Connection with server lost!", {text:"Ok", event:"GUI.openMenu()"});
-		});
+		// wake up sheepver!
+		fetch("./server.php").catch(x=>null);
+
+		setTimeout(() => {
+
+			Event.server = new RemoteServer("ws://" + window.location.hostname + ":9000", () => {Event.server.join(code)}, (id) => {
+				console.log("Connected!");
+			}, () => { 
+				popup.open("Network Error!", "Connection with server lost!", {text:"Ok", event:"GUI.openMenu()"});
+			});
+
+		}, 500);
+
+		online = true;
 
 	}
 
@@ -73,7 +83,7 @@ function setup() {
 	if( scy == null ) scy = 0;
 
 	// inititialize UI
-	Gui.init();
+	GUI.init();
 
 	// update all gates in a sketch
 	UpdateQueue.init();

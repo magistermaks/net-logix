@@ -4,7 +4,7 @@
 
 		<script src="app/menu/main.js"></script>
 		<script src="app/menu/menu.js"></script>
-		<script src="app/common/gui.js"></script>
+		<script src="app/common/popup.js"></script>
 		<script src="app/common/save.js"></script>
 		<script src="app/common/settings.js"></script>
 		<script src="app/common/files.js"></script>

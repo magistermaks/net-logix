@@ -83,7 +83,7 @@ class RemoteServer {
 		const args = index == -1 ? "" : msg.substring(index + 1);
 
 		if( command == "ERROR" ) {
-			GUI.openPopup("Network Error!", "Server reported an error: " + args[0].toUpperCase() + args.slice(1) + "!",
+			popup.open("Network Error!", "Server reported an error: " + args[0].toUpperCase() + args.slice(1) + "!",
 				{text: "Ok", event: "GUI.openMenu()"}
 			);
 		}

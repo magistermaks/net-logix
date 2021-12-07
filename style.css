@@ -12,7 +12,7 @@ main {
 	height: 100%;
 }
 
-.toolbox {
+#toolbar {
 	width: auto;
 	position: fixed;
 	bottom: 0px;
@@ -23,7 +23,7 @@ main {
 	user-select: none;
 }
 
-.toolbox div {
+#toolbar div {
 	display: inline-block;
 	height: 100%;
 	width: 2em;
