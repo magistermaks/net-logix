@@ -1,5 +1,5 @@
 
-	var access_code = null;
+var access_code = null;
 
 // TODO: rewrite
 class Gui {
@@ -40,11 +40,8 @@ class Gui {
 	}
 
 	static shareBegin() {
-		// wake up sheepver!
-		fetch("./server.php").catch(x=>null);
-
 		setTimeout(() => {
-			Event.server = new RemoteServer("ws://" + window.location.hostname + ":9000", () => {Event.server.host(); online = true;}, (id) => {
+			Event.server = new RemoteServer(cfg_server, () => {Event.server.host(); online = true;}, (id) => {
 				popup.open(
 					"Sketch Sharing", 
 					`Sketch access code: <b>${id}</b>, share it so that others can join!`,

@@ -87,19 +87,20 @@ class LogixServer extends WebSocketServer {
 		$this->last = date_timestamp_get(date_create());
 	}
 
-	protected function tick() {
-		global $sketches, $groups;
-		$now = date_timestamp_get(date_create());
-
-		if( $now - $this->last > 10 ) {
-			$this->last = $now;
-			$c = count($sketches);
-
-			if( $c == 0 ) {
-				safeExit("The server is empty, shuting down...");
-			}
-		}
-	}
+//	protected function tick() {
+//		global $sketches, $groups;
+//		$now = date_timestamp_get(date_create());
+//
+//		if( $now - $this->last > 10 ) {
+//			$this->last = $now;
+//			$c = count($sketches);
+//
+//			if( $c == 0 ) {
+//				echo "The server is empty, shuting down...\n";
+//				die();
+//			}
+//		}
+//	}
 
 	protected function process($user, $message) {
 		global $sketches, $groups;
@@ -235,11 +236,20 @@ class LogixServer extends WebSocketServer {
 
 }
 
-$server = new LogixServer("0.0.0.0", "9000", 2048);
+$config = parse_ini_file("../logix.ini");
 
-try {
-	$server->run();
-} catch (Exception $e) {
-	echo $e->getMessage() + "\n";
+if( $config['online'] ) {
+
+	$server = new LogixServer("0.0.0.0", $config['port'], 2048);
+
+	try {
+		$server->run();
+	} catch( Exception $e ) {
+		echo $e->getMessage() + "\n";
+	}
+
+}else{
+	echo "Online mode disabled in logix.ini, start aborted...\n";
+	die(); 
 }
 

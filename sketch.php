@@ -24,6 +24,14 @@
 
 		<?php include "header.html" ?>
 
+		<script id="config">
+		<?php
+			$config = parse_ini_file("logix.ini");
+			echo "const cfg_online = " . $config['online'] . ";\n";
+			echo "const cfg_server = '" . $config['address'] . ":" . $config['port'] . "'.replace('\$HOSTNAME', location.hostname);\n";
+		?>
+		</script>
+
 	</head>
 
 	<body>
@@ -45,7 +53,7 @@
 		<div id="topbar">
 			<div class="button compact" onclick="GUI.settings.open()">Settings</div>
 			<div class="button compact" onclick="Gui.fileExport()" id="export-button">Export</div>
-			<div class="button compact" onclick="Gui.share()">Share</div>
+			<?php if($config['online']): ?><div class="button compact" onclick="Gui.share()">Share</div><?php endif; ?>
 			<div class="button compact" onclick="Gui.exit()">Exit</div>
 		</div>
 

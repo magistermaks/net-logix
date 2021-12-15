@@ -12,6 +12,10 @@
 
 		<?php include "header.html" ?>
 
+		<?php
+			$config = parse_ini_file("logix.ini");
+		?>
+
 	</head>
 
 	<body>
@@ -35,7 +39,7 @@
 				<div id="new">
 					<div class="button" onclick="create()"> New </div>
 					<div class="button" onclick="fileImport()"> Import </div>
-					<div class="button" onclick="joinShared()"> Join </div>
+					<?php if($config['online']): ?><div class="button" onclick="joinShared()"> Join </div><?php endif; ?>
 				</div>
 
 			</div>

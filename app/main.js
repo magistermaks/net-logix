@@ -42,7 +42,7 @@ function setup() {
 
 		if( !Manager.load(identifier) ) {
 			alert("Failed to load selected sketch, the data is corrupted!");
-			history.back();
+			GUI.openMenu();
 		}
 
 		// start autosave task (every 5s)
@@ -58,15 +58,12 @@ function setup() {
 
 		if( isNaN(code) ) {
 			alert("The given access code is invalid!");
-			history.back();
+			GUI.openMenu();
 		}
-
-		// wake up sheepver!
-		fetch("./server.php").catch(x=>null);
 
 		setTimeout(() => {
 
-			Event.server = new RemoteServer("ws://" + window.location.hostname + ":9000", () => {Event.server.join(code)}, (id) => {
+			Event.server = new RemoteServer(cfg_server, () => {Event.server.join(code)}, (id) => {
 				console.log("Connected!");
 			}, () => { 
 				popup.open("Network Error!", "Connection with server lost!", {text:"Ok", event:"GUI.openMenu()"});
