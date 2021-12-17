@@ -1,5 +1,8 @@
 
-Logix 1.6.0
+Logix 1.7.0
+	
+
+Logix 1.6.0 <07/12/2021>
 	- Better wire dragging
 	- Added Ctrl+S keybind
 	- Smooth wires (toggleable in settings)
