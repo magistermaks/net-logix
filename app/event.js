@@ -57,6 +57,12 @@ class Event {
 		Gate.get(obj.uid).setState(obj.state);
 	});
 
+	// sync gate array, this can never be invoked by client
+	static Sync = new Event(true, false, (obj) => {
+		Manager.reset();
+		Manager.deserialize(obj);
+	});
+
 	trigger(args, external = false) {
 		if( !Event.server.ready() ) {
 			console.warn("Unable to process event! Event server not inititialized!"); 

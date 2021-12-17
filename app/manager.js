@@ -3,7 +3,7 @@ name = "";
 
 class Manager {
 
-	static #serialize() {
+	static serialize() {
 		
 		let json = []
 
@@ -63,7 +63,7 @@ class Manager {
 
 	}
 
-	static #deserialize(obj) {
+	static deserialize(obj) {
 		
 		scx = obj.x ?? 0;
 		scy = obj.y ?? 0;
@@ -105,7 +105,7 @@ class Manager {
 		Manager.reset();
 
 		try { 
-			Manager.#deserialize( Save.get(id) );
+			Manager.deserialize( Save.get(id) );
 			return true;
 		} catch(err) {
 			return false;
@@ -113,11 +113,11 @@ class Manager {
 	}
 
 	static print() {
-		return JSON.stringify(Manager.#serialize());
+		return JSON.stringify(Manager.serialize());
 	}
 
 	static save(id) {	
-		Save.set(id, Manager.#serialize());
+		Save.set(id, Manager.serialize());
 	}
 
 }

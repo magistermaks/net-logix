@@ -35,13 +35,13 @@ function mouseReleased() {
 }
 
 function mouseDragged(e) {
-	if(Gui.pause || GUI.focused()) return;
-
-	Mouse.dragged();
-
 	if( GUI.picker.shouldClose(e) ) {
 		GUI.picker.close();
 	}else return;
+
+	if(GUI.focused()) return;
+
+	Mouse.dragged();
 
 	if( WireEditor.isClicked() ) {
 		dragger = () => {};
@@ -97,16 +97,16 @@ function mouseDragged(e) {
 }
 
 function mousePressed(e) {
-	if(Gui.pause || GUI.focused()) return;
+	if( GUI.picker.shouldClose(e) ) {
+		GUI.picker.close();
+	}
+
+	if(GUI.focused()) return;
 
 	const now = Date.now();
 	const double = (now - last) < 200;
 
 	last = now;
-
-	if( GUI.picker.shouldClose(e) ) {
-		GUI.picker.close();
-	}
 
 	// iterate backwards to click only the gate "on top"
 	if( keyCode != SHIFT || !keyIsPressed ) {
@@ -129,7 +129,7 @@ function mousePressed(e) {
 }
 
 function keyPressed(event) {
-	if(Gui.pause || GUI.focused()) return;
+	if(GUI.focused()) return;
 
 	if( keyCode == ESCAPE ) {
 		Selected.removeAll();
@@ -167,7 +167,7 @@ function keyPressed(event) {
 // time_wasted_while_trying_to_fucking_make_this_work = 15h
 //
 function mouseWheel(event) {
-	if(Gui.pause || GUI.focused()) return;
+	if(GUI.focused()) return;
 
 	let old = factor;
 

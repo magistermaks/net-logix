@@ -1,6 +1,7 @@
 
 Logix 1.7.0
-	
+	- Added online mode
+	- Fixed issue #5 'Component picker doesn't close'
 
 Logix 1.6.0 <07/12/2021>
 	- Better wire dragging

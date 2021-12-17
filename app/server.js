@@ -99,11 +99,17 @@ class RemoteServer {
 		}
 
 		if( command == "JOIN" ) {
-			// user joined group, send to host
+			// send sync event, kinda ugly but i will live with this
+			let data = LZString.compressToUTF16(`{"id":${Event.Sync.id},"args":${JSON.stringify(Manager.serialize())}}`);
+			this.#send(`TRANSMIT ${args} ${data}`);
+
+			GUI.notifications.push("User joined!");
 		}
 
 		if( command == "LEFT" ) {
 			// user left group, send to host
+
+			GUI.notifications.push("User left!");
 		}
 
 		if( command == "TEXT" ) {

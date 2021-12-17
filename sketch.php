@@ -16,7 +16,6 @@
 		<script src="app/server.js"></script>
 		<script src="app/event.js"></script>
 		<script src="app/common/popup.js"></script>
-		<script src="app/common/gui.js"></script>
 		<script src="app/common/save.js"></script>
 		<script src="app/common/settings.js"></script>
 		<script src="app/common/files.js"></script>
@@ -104,6 +103,11 @@
     			<div></div>
     			<div></div>
 			</div>
+		</div>
+
+
+		<!-- notifications container -->
+		<div id="notifications">
 		</div>
 
 		<!-- noscript banner -->
