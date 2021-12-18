@@ -180,7 +180,7 @@ abstract class WebSocketServer {
   }
 
   protected function connect($socket) {
-    $user = new $this->userClass(uniqid('u'), $socket);
+    $user = new $this->userClass(uniqid(), $socket);
     $this->users[$user->id] = $user;
     $this->sockets[$user->id] = $socket;
     $this->connecting($user);

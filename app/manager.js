@@ -3,6 +3,8 @@ name = "";
 
 class Manager {
 
+	static #valid = false;
+
 	static serialize() {
 		
 		let json = []
@@ -54,8 +56,8 @@ class Manager {
 
 		return {
 			"j": json,
-			"x": round(scx),
-			"y": round(scy),
+			"x": round(zox),
+			"y": round(zoy),
 			"z": factor.toFixed(1),
 			"u": Date.now(),
 			"n": name
@@ -63,17 +65,17 @@ class Manager {
 
 	}
 
-	static deserialize(obj) {
+	static deserialize(obj, normalize = true) {
 		
-		scx = obj.x ?? 0;
-		scy = obj.y ?? 0;
+		zox = obj.x ?? 0;
+		zoy = obj.y ?? 0;
 		factor = Number(obj.z ?? 1);
 		name = obj.n;
 
 		let named = new Map();
 
 		for( var gate of obj.j ) {
-			named.set(gate.i, Gate.deserialize(gate.t, gate.x, gate.y, gate.m));
+			named.set(gate.i, Gate.create(gate.t, gate.x, gate.y, normalize ? -1 : gate.i, gate.m));
 		}
 
 		for( var i = 0; i < gates.length; i ++ ) {
@@ -94,6 +96,10 @@ class Manager {
 				}
 			}
 		}
+
+		// update all gates in a sketch
+		UpdateQueue.all();
+		Manager.#valid = true;
 
 	}
 
@@ -116,8 +122,12 @@ class Manager {
 		return JSON.stringify(Manager.serialize());
 	}
 
-	static save(id) {	
-		Save.set(id, Manager.serialize());
+	static save(id) {
+		// we shouldn't be saving in online mode nor
+		// when the data in `gates` is bogus
+		if( !online && Manager.#valid ) {
+			Save.set(id, Manager.serialize());
+		}
 	}
 
 }

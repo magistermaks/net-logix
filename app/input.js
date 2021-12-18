@@ -164,7 +164,7 @@ function keyPressed(event) {
 }
 
 // 
-// time_wasted_while_trying_to_fucking_make_this_work = 15h
+// time_wasted_while_trying_to_fucking_make_this_work = 15.5h
 //
 function mouseWheel(event) {
 	if(GUI.focused()) return;
@@ -178,14 +178,13 @@ function mouseWheel(event) {
 
 	// TODO make it point to mouse
 
-	// by mug12, the smart one
+	screenOffsetUpdate();
+}
+
+// by mug12, the smart one
+function screenOffsetUpdate() {
 	const s = 0.5 / factor;
 	scx = zox + main.offsetWidth * s;
 	scy = zoy + main.offsetHeight * s;
-}
-
-function zoomInit() {
-	zox = scx - main.offsetWidth / 2;
-	zoy = scy - main.offsetHeight / 2;
 }
 

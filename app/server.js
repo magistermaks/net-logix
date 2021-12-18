@@ -1,4 +1,6 @@
 
+var user;
+
 class LocalServer {
 
 	constructor() {
@@ -110,6 +112,11 @@ class RemoteServer {
 			// user left group, send to host
 
 			GUI.notifications.push("User left!");
+			Pointers.remove(args);
+		}
+
+		if( command == "HELLO" ) {
+			user = args;
 		}
 
 		if( command == "TEXT" ) {

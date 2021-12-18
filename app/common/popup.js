@@ -8,16 +8,21 @@ var popup = new class {
 	}
 
 	open(head, message, ...options) {
-		let body = document.getElementById("popup-body");
-		let html = "";
-
-		for( let option of options.reverse() ) {
-			html += `<div onclick="${option.event}" class="button compact popup-button">${option.text}</div>`;
-		}
+		const body = document.getElementById("popup-body");
 
 		body.children[0].innerHTML = head;
 		body.children[1].innerHTML = message;
-		body.children[2].innerHTML = html;
+		body.children[2].innerHTML = "";
+
+		for( let option of options.reverse() ) {
+
+			const button = document.createElement("div");
+			button.classList.add("button", "compact", "popup-button");
+			button.innerText = option.text;
+			button.addEventListener("click", option.event);
+
+			body.children[2].appendChild(button);
+		}
 
 		document.getElementById("popup").style.display = "block";
 		this.#open = true;
@@ -26,6 +31,10 @@ var popup = new class {
 	close() {
 		document.getElementById("popup").style.display = "none";
 		this.#open = false;
+	}
+
+	button(text, event) {
+		return {text: text, event: event};
 	}
 
 }

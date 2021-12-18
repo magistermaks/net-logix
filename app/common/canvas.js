@@ -1,13 +1,17 @@
 
 var main;
 
-function canvasOpen() {
+function canvasOpen(callback = null) {
 	main = document.querySelector("main");
 	createCanvas(main.offsetWidth, main.offsetHeight);
 
 	// keep the size of the canvas in check
 	window.onresize = () => {
 		resizeCanvas(main.offsetWidth, main.offsetHeight);
+		
+		if(callback != null) {
+			callback();
+		}
 	};
 }
 

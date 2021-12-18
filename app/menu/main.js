@@ -1,10 +1,19 @@
 
 function create() {
-	const name = prompt( "Enter sketch name or click cancel" );
+	popup.open(
+		"Create New Sketch", 
+		"Enter sketch name or click cancel: <input id='name'>",
+		popup.button("Create", () => {
+			let name = document.getElementById("name").value;
 
-	if( name != null ) {
-		Manager.add(name);
-	}
+			if( name != null && name.length > 0 ) {
+				Manager.add(name);
+			}
+
+			popup.close();
+		}), 
+		popup.button("Cancel", () => popup.close())
+	);
 }
 
 function fileImport() {
@@ -14,8 +23,10 @@ function fileImport() {
 }
 
 function joinShared() {
-	popup.open("Join Shared Sketch", "To join a shared sketch please provide the access code: <input id='group' maxlength='5' size='5'>",
-		{text: "Join", event: "openShared()"}, {text: "Cancel", event: "popup.close()"}	
+	popup.open(
+		"Join Shared Sketch", 
+		"To join a shared sketch please provide the access code: <input id='group' maxlength='5' size='5'>",
+		popup.button("Join", openShared), popup.button("Cancel", () => popup.close())
 	)
 }
 
@@ -31,9 +42,11 @@ function removeSketch(element) {
 	const key = element.parentElement.dataset.id;
 	const name = Manager.getName(key);
 
-	popup.open("Delete Sketch?", `Are you sure you want to delete sketch '${name}'?`,
-		{text: "Delete", event: `Manager.remove('${key}');popup.close()`}, {text: "Cancel", event: "popup.close()"}	
-	)
+	popup.open(
+		"Delete Sketch?", 
+		`Are you sure you want to delete sketch '${name}'?`,
+		popup.button("Delete", () => { Manager.remove(key); popup.close(); }), popup.button("Cancel", () => popup.close())
+	);
 }
 
 window.onload = function() { 

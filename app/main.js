@@ -4,6 +4,7 @@ var tick = 1;
 
 var identifier;
 var online = false;
+var group; // used in online mode
 var picker;
 var fps = 0, ms = 0;
 
@@ -15,7 +16,7 @@ function setup() {
 	picker = document.getElementById("picker");
 
 	// prepare canvas
-	canvasOpen();
+	canvasOpen(() => screenOffsetUpdate());
 
 	// open component picker
 	main.oncontextmenu = () => {
@@ -42,7 +43,7 @@ function setup() {
 
 		if( !Manager.load(identifier) ) {
 			alert("Failed to load selected sketch, the data is corrupted!");
-			GUI.openMenu();
+			GUI.exit();
 		}
 
 		// start autosave task (every 5s)
@@ -54,42 +55,38 @@ function setup() {
 
 	}else{
 		
-		let code = Number.parseInt(identifier);
+		group = Number.parseInt(identifier);
 
-		if( isNaN(code) ) {
+		if( isNaN(group) ) {
 			alert("The given access code is invalid!");
-			GUI.openMenu();
+			GUI.exit();
 		}
 
-		setTimeout(() => {
-
-			Event.server = new RemoteServer(cfg_server, () => {Event.server.join(code)}, (id) => {
-				console.log("Connected!");
-			}, () => { 
-				popup.open("Network Error!", "Connection with server lost!", {text:"Ok", event:"GUI.openMenu()"});
-			});
-
-		}, 500);
+		Event.server = new RemoteServer(cfg_server, () => {Event.server.join(group)}, (id) => {
+			console.log("Connected!");
+		}, () => { 
+			popup.open(
+				"Network Error!", 
+				"Connection with server lost!", 
+				popup.button("Ok", () => GUI.exit())
+			);
+		});
 
 		online = true;
 
 	}
 
-	// fix screen offset if it got corrupted
-	if( scx == null ) scx = 0;
-	if( scy == null ) scy = 0;
-
 	// inititialize UI
 	GUI.init();
-
-	// update all gates in a sketch
-	UpdateQueue.init();
 
 	// start watching for dragged gates
 	MoveQueue.init();
 
 	// invoke dark magic
-	zoomInit();
+	screenOffsetUpdate();
+
+	// manage and render mouse pointers
+	Pointers.init();
 
 	console.log(`System ready! Took: ${Date.now() - start}ms`);
 }
@@ -112,6 +109,7 @@ function draw() {
 		// update ticking components
 		Scheduler.tick();
 		UpdateQueue.execute();
+		MoveQueue.interpolate();
 
 		// render sketch
 		gates.forEach(gate => gate.draw());
@@ -120,6 +118,7 @@ function draw() {
 
 		WireEditor.draw();
 		Selected.draw();
+		Pointers.draw();
 
 	});
 

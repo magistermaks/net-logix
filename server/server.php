@@ -211,6 +211,7 @@ class LogixServer extends WebSocketServer {
   
 	protected function connected($user) {
 		$user->write("connected");
+		$this->send($user, "HELLO " . $user->id);
 	}
   
 	protected function closed($user) {

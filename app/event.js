@@ -39,7 +39,7 @@ class Event {
 
 	// move gate
 	static Mov = new Event(false, false, (obj) => {
-		for(let entry of obj) Gate.get(entry.uid).move(entry.x, entry.y);
+		for(let entry of obj) MoveQueue.apply(Gate.get(entry.uid), entry.x, entry.y);
 	});
 	
 	// disconnect wire
@@ -60,7 +60,12 @@ class Event {
 	// sync gate array, this can never be invoked by client
 	static Sync = new Event(true, false, (obj) => {
 		Manager.reset();
-		Manager.deserialize(obj);
+		Manager.deserialize(obj, false);
+	});
+
+	// broadcast cursor position
+	static Mouse = new Event(false, false, (obj) => {
+		Pointers.update(obj.u, obj.x, obj.y);
 	});
 
 	trigger(args, external = false) {

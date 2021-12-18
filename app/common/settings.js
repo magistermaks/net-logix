@@ -43,6 +43,7 @@ class Settings {
 	static EXAMPLE = Settings.access("example", false);
 	static SNAP = Settings.access("snap", false);
 	static SMOOTH_WIRES = Settings.access("swire", false);
+	static SHOW_POINTERS = Settings.access("pointrs", true);
 
 }
 

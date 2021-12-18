@@ -34,8 +34,8 @@ class Gate extends Box {
 		gates.push(this);
 	}
 
-	static create(gid, x, y, uid = -1) {
-		let gate = new (Registry.get(gid))(x, y);
+	static create(type, x, y, uid = -1, meta = "") {
+		let gate = new (Number.isInteger(type) ? Registry.get(type) : Registry.getByName(type + "Gate"))(x, y, meta);
 		if( uid != -1 ) gate.#id = uid;
 		return gate;
 	}
@@ -173,10 +173,6 @@ class Gate extends Box {
 		}
 	}
 
-	static deserialize(type, x, y, meta) {
-		return new (Number.isInteger(type) ? Registry.get(type) : Registry.getByName(type + "Gate"))(x, y, meta);
-	}
-
 	serialize() {
 		return null;
 	}
@@ -205,11 +201,28 @@ class IconGate extends Gate {
 
 class MoveQueue {
 	
+	static #interval = 250;
 	static #updates = new Set();
 
-	static init() {
-		MoveQueue.add = gate => MoveQueue.#updates.add(gate);
+	// incoming updates to interpolate
+	static #inbound = new Map();
 
+	static add(gate) {
+		// we don't realy need them in offline mode
+		if(online) MoveQueue.#updates.add(gate);
+	}
+
+	static apply(gate, x, y) {
+		const old = MoveQueue.#inbound.get(gate);
+
+		MoveQueue.#inbound.set(gate, {
+			px: old?.x ?? x, 
+			py: old?.y ?? y, 
+			x: x, y: y, t: Date.now()
+		});
+	}
+
+	static init() {
 		setInterval(() => {
 			let updates = [];
 
@@ -222,8 +235,26 @@ class MoveQueue {
 			}
 
 			MoveQueue.#updates.clear();
-		}, 250);
+		}, MoveQueue.#interval);
 	}
+
+	static interpolate() {
+		const now = Date.now();
+
+		MoveQueue.#inbound.forEach((update, gate) => {
+			let f = (now - update.t) / MoveQueue.#interval;
+			if( f > 1 ) {
+				MoveQueue.#inbound.delete(gate);
+				gate.move(update.px, update.py);
+				return;
+			}
+
+			const x = update.px + (update.x - update.px) * f;
+			const y = update.py + (update.y - update.py) * f;
+
+			gate.move(x, y);
+		});
+	}	
 
 }
 
@@ -235,7 +266,7 @@ class UpdateQueue {
 		UpdateQueue.#updates.add(gate);
 	}
 
-	static init() {
+	static all() {
 		gates.forEach(gate => UpdateQueue.add(gate));
 	}
 
