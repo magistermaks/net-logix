@@ -149,9 +149,9 @@ function keyPressed(event) {
 
 	if( key == " " ) {
 		factor = 1;
-		scx = 0;
-		scy = 0;
-		zoomInit();
+		zox = 0;
+		zoy = 0;
+		screenOffsetUpdate()
 		return false;
 	}
 

@@ -5,7 +5,6 @@
 		<script src="app/main.js"></script>
 		<script src="app/image.js"></script>
 		<script src="app/box.js"></script>
-		<script src="app/vec2f.js"></script>
 		<script src="app/gate.js"></script>
 		<script src="app/wire.js"></script>
 		<script src="app/logic.js"></script>

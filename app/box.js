@@ -91,12 +91,12 @@ class Box {
 	
 	getLeftPoint(index) {
 		let space = float(Box.h - Box.top) / (this.left + 1);
-		return new Vec2f( scx + this.x, scy + this.y + Box.top + space * (index + 1) );
+		return {x: scx + this.x, y: scy + this.y + Box.top + space * (index + 1) };
 	}
 	
 	getRightPoint(index) {
 		let space = float(Box.h - Box.top) / (this.right + 1); 
-		return new Vec2f( scx + this.x + Box.w, scy + this.y + Box.top + space * (index + 1) );
+		return {x: scx + this.x + Box.w, y: scy + this.y + Box.top + space * (index + 1) };
 	}
   
 	draw() {

@@ -16,7 +16,7 @@ class Gui {
 						"Sketch Sharing",
 						"Are you sure you want to stop sharing this sketch? All users will be disconnected!",
 						popup.button("Yes", () => {
-							Event.server.disconnect();
+							Event.server.close();
 							Event.server = new LocalServer();
 							mode = LOCAL;
 							GUI.notifications.push("Ended sketch sharing!");
@@ -33,24 +33,7 @@ class Gui {
 				"Are you sure you want to share this sketch? Anyone with an access code will be able to modify and copy it!",
 				popup.button("Share", () => {
 					popup.close();
-					
-					Event.server = new RemoteServer(cfg_server, () => {Event.server.host();}, (id) => {
-							popup.open(
-								"Sketch Sharing", 
-								`Sketch access code: <b>${id}</b>, share it so that others can join!`,
-								popup.button("Ok", () => popup.close())
-							);
-							group = id;
-							mode = HOST;
-							GUI.notifications.push("Began sketch sharing!");
-						}, () => { 
-							popup.open(
-								"Network Error!", 
-								"Connection with server lost!", 
-								popup.button("Ok", () => popup.close())
-							); 
-						}
-					);
+					ServerManager.remote(null);
 				}),
 				popup.button("Cancel", () => popup.close())
 			);

@@ -64,17 +64,7 @@ function setup() {
 			GUI.exit();
 		}
 
-		Event.server = new RemoteServer(cfg_server, () => {Event.server.join(group)}, 
-		(id) => { console.log("Connected!") }, 
-		() => { 
-			popup.open(
-				"Network Error!", 
-				"Connection with server lost!", 
-				popup.button("Ok", () => GUI.exit())
-			);
-		});
-
-		mode = CLIENT;
+		ServerManager.remote(group);
 
 	}
 

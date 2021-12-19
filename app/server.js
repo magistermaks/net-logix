@@ -12,23 +12,8 @@ class LocalServer {
 		return true;
 	}
 
-}
+	close() {
 
-class ServerState {
-
-	connected;
-
-	static Disconnected = new ServerState("disconnected", false);
-	static Connected = new ServerState("connected", true);
-	static Ready = new ServerState("ready", true);
-
-	constructor(name, connected) {
-		this.name = name;
-		this.connected = connected;
-	}
-
-	connect() {
-		if(this == ServerState.Disconnected) return ServerState.Connected;
 	}
 
 }
@@ -36,41 +21,36 @@ class ServerState {
 class RemoteServer {
 
 	#socket;
-	#state = ServerState.Disconnected;
-	#callback;
+	#ready = false;
+	#creation_callback;
+	#close_callback;
 
 	userid = null;
 
-	constructor(address, callbackOpen, callbackReady, callbackClosed) {
+	constructor(address, group, creation_callback, close_callback) {
 		this.#socket = new WebSocket(address);
 
-		// manage server state
-		this.#socket.onopen = () => {this.#state = this.#state.connect(); callbackOpen();}
-		this.#socket.onclose = () => {this.#state = ServerState.Disconnected; callbackClosed();};
+		// join a group as soon as the connection is open
+		this.#socket.onopen = () => {
+			this.#send( group == null ? "MAKE" : ("JOIN " + group) );
+		}
+	
+		this.#socket.onclose = () => close_callback();
 		this.#socket.onerror = (error) => console.error(error);
 		this.#socket.onmessage = (msg) => this.#process(msg.data);
 
-		this.#callback = callbackReady;
-	}
-
-	join(group) {
-		if(this.#state == ServerState.Ready) {
-			this.#send("CLOSE");
-		}
-
-		this.#send("JOIN " + group);
-	}
-
-	host() {
-		if(this.#state == ServerState.Ready) {
-			this.#send("CLOSE");
-		}
-
-		this.#send("MAKE");
+		this.#creation_callback = creation_callback;
+		this.#close_callback = close_callback;
 	}
 
 	#send(msg) {
-		if(this.#state.connected) this.#socket.send(msg);
+		if(this.open()) {
+			this.#socket.send(msg);
+			
+			if(dbg_show_traffic) {
+				console.log(`Send: ${msg}`);
+			}
+		}
 	}
 
 	event(object, handle) {
@@ -99,17 +79,18 @@ class RemoteServer {
 	
 		// share group creation succeeded
 		if( command == "MAKE" ) {
-			this.#callback(args);
+			this.#creation_callback(args);
 		}
 
 		// server kicked us from the sketch group :(
 		if( command == "CLOSE" ) {
-			this.#state = ServerState.Connected;
+			this.#ready = false;
+			this.#close_callback(args);
 		}
 
 		// we joined a group, now we can transmit
 		if( command == "READY" ) {
-			this.#state = ServerState.Ready;
+			this.#ready = true;
 		}
 
 		// user joined the group
@@ -143,17 +124,76 @@ class RemoteServer {
 		
 	}
 
+	// check if the server is ready to process events
 	ready() {
-		return this.#state == ServerState.Ready;
+		return this.open() && this.#ready;
 	}
 
+	// check if the connection is established
+	open() {
+		return this.#socket.readyState == 1;
+	}
+
+	// close the connection
 	close() {
-		this.#send("CLOSE");
-	}
-
-	disconnect() {
+		this.#socket.onclose = null;
 		this.#socket.close();
 	}
 
 }
+
+class ServerManager {
+
+	// switch to local server
+	static local() {
+		mode = LOCAL;
+		Event.server.close();
+
+		Event.server = new LocalServer();
+	}
+
+	// pass null to start hosting
+	static remote(code) {
+		if( code != null ) mode = CLIENT;
+		Event.server.close();
+
+		Event.server = new RemoteServer(
+			cfg_server, 
+			code,
+			(id) => { // creation callback
+				
+				// this is called only for host (when code was null)
+				popup.open(
+					"Sketch Sharing", 
+					`Sketch access code: <b>${id}</b>, share it so that others can join!`,
+					popup.button("Ok", () => popup.close())
+				);
+
+				group = id;
+				mode = HOST;
+				GUI.notifications.push("Began sketch sharing!");
+
+			},
+			() => { // close callback, not called if the conection is closed with Event.server.close()
+	
+				popup.open(
+					"Network Error!", 
+					"Connection with server lost!", 
+					popup.button("Ok", () => {
+						if(mode == HOST) popup.close();
+						if(mode == CLIENT) GUI.exit();
+					})
+				);
+
+				if( mode == HOST ) {
+					ServerManager.local();
+					GUI.notifications.push("Ended sketch sharing!");
+				}
+
+			}
+		);
+	}
+
+}
+
 
