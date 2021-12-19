@@ -133,7 +133,11 @@ class LogixServer extends WebSocketServer {
 			$user->host = false;
 
 			$this->send($user, "READY");
+
 			$this->send($group->host, "JOIN " . $user->id);
+			foreach( $group->clients as &$client ) {
+				if($client != $user) $this->send($client, "JOIN " . $user->id);
+			}
 
 			$user->write("joind group $sketch");
 			return;
@@ -236,7 +240,12 @@ class LogixServer extends WebSocketServer {
 
 			}else{
 				$user->group->remove($user);
+				
 				$this->send($user->group->host, "LEFT " . $user->id);
+				foreach( $user->group->clients as &$client ) {
+					if($client != $user) $this->send($client, "LEFT " . $user->id);
+				}
+
 				$user->reset();
 			}
 

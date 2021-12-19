@@ -1,6 +1,4 @@
 
-var dbg_show_events = false;
-
 class Event {
 
 	static #throttled = {};

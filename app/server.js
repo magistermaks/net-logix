@@ -1,6 +1,4 @@
 
-var user;
-
 class LocalServer {
 
 	constructor() {
@@ -41,6 +39,8 @@ class RemoteServer {
 	#state = ServerState.Disconnected;
 	#callback;
 
+	userid = null;
+
 	constructor(address, callbackOpen, callbackReady, callbackClosed) {
 		this.#socket = new WebSocket(address);
 
@@ -78,47 +78,64 @@ class RemoteServer {
 	}
 
 	#process(msg) {
-		console.log("Server: " + msg);
 
+		if(dbg_show_traffic) {
+			console.log(`Server: ${msg}`);
+		}
+
+		// split message to command and args
 		const index = msg.indexOf(" ");
 		const command = index == -1 ? msg : msg.substring(0, index);
 		const args = index == -1 ? "" : msg.substring(index + 1);
 
+		// server issued the ERROR command, something is wrong
 		if( command == "ERROR" ) {
-			popup.open("Network Error!", "Server reported an error: " + args[0].toUpperCase() + args.slice(1) + "!",
-				{text: "Ok", event: "GUI.openMenu()"}
+			popup.open(
+				"Network Error!",
+				"Server reported an error: " + args[0].toUpperCase() + args.slice(1) + "!",
+				popup.button("Ok", () => GUI.exit())
 			);
 		}
 	
+		// share group creation succeeded
 		if( command == "MAKE" ) {
 			this.#callback(args);
 		}
 
-		if( command == "CLOSE" ) this.#state = ServerState.Connected;
+		// server kicked us from the sketch group :(
+		if( command == "CLOSE" ) {
+			this.#state = ServerState.Connected;
+		}
 
+		// we joined a group, now we can transmit
 		if( command == "READY" ) {
 			this.#state = ServerState.Ready;
 		}
 
+		// user joined the group
 		if( command == "JOIN" ) {
-			// send sync event, kinda ugly but i will live with this
-			let data = LZString.compressToUTF16(`{"id":${Event.Sync.id},"args":${JSON.stringify(Manager.serialize())}}`);
-			this.#send(`TRANSMIT ${args} ${data}`);
+
+			if( mode == HOST ) {
+				// send sync event, kinda ugly but i will live with this
+				let data = LZString.compressToUTF16(`{"id":${Event.Sync.id},"args":${JSON.stringify(Manager.serialize())}}`);
+				this.#send(`TRANSMIT ${args} ${data}`);
+			}
 
 			GUI.notifications.push("User joined!");
 		}
 
+		// user left group
 		if( command == "LEFT" ) {
-			// user left group, send to host
-
 			GUI.notifications.push("User left!");
 			Pointers.remove(args);
 		}
 
+		// guten tag!
 		if( command == "HELLO" ) {
-			user = args;
+			this.userid = args;
 		}
 
+		// incoming message
 		if( command == "TEXT" ) {
 			const object = JSON.parse(LZString.decompressFromUTF16(args));
 			Event.execute(object.id, object.args, true);
@@ -132,6 +149,10 @@ class RemoteServer {
 
 	close() {
 		this.#send("CLOSE");
+	}
+
+	disconnect() {
+		this.#socket.close();
 	}
 
 }

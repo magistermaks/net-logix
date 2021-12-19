@@ -16,6 +16,8 @@ var popup = new class {
 
 		for( let option of options.reverse() ) {
 
+			if( option == null ) continue;
+
 			const button = document.createElement("div");
 			button.classList.add("button", "compact", "popup-button");
 			button.innerText = option.text;

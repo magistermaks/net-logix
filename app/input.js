@@ -2,7 +2,6 @@
 var last = 0;
 var factor = 1;
 var dragger = null;
-var zox = 0, zoy = 0;
 
 class Mouse {
 	static x = 0;
@@ -158,6 +157,7 @@ function keyPressed(event) {
 
 	if( key == 's' && event.ctrlKey ) {
 		Manager.save(identifier);
+		GUI.notifications.push("Saved!");
 		return false;
 	}
 

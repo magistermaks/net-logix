@@ -65,6 +65,11 @@
 			</div>
 		</div>
 
+		<!-- notifications container -->
+		<div id="notifications">
+			<!-- filled with javascript -->
+		</div>
+
 		<!-- settings container -->
 		<div id="settings" style="display: none">
 
@@ -104,11 +109,6 @@
     			<div></div>
     			<div></div>
 			</div>
-		</div>
-
-
-		<!-- notifications container -->
-		<div id="notifications">
 		</div>
 
 		<!-- noscript banner -->

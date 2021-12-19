@@ -209,7 +209,7 @@ class MoveQueue {
 
 	static add(gate) {
 		// we don't realy need them in offline mode
-		if(online) MoveQueue.#updates.add(gate);
+		if(mode != LOCAL) MoveQueue.#updates.add(gate);
 	}
 
 	static apply(gate, x, y) {

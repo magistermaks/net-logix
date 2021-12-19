@@ -123,9 +123,9 @@ class Manager {
 	}
 
 	static save(id) {
-		// we shouldn't be saving in online mode nor
-		// when the data in `gates` is bogus
-		if( !online && Manager.#valid ) {
+		// we shouldn't be saving in online client mode,
+		// nor when the data in `gates` is bogus
+		if( mode != CLIENT && Manager.#valid ) {
 			Save.set(id, Manager.serialize());
 		}
 	}

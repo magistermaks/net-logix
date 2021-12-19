@@ -1,35 +1,34 @@
 
-var scx = 0, scy = 0, scw = 0, sch = 0;
-var tick = 1;
+var scx = 0, scy = 0, scw = 0, sch = 0, zox = 0, zoy = 0;
+var tick = 0, fps = 0, ms = 0;
 
+const LOCAL = Symbol('local'); // running in non-online mode
+const HOST = Symbol('host'); // running online as host
+const CLIENT = Symbol('client'); // running online as client
+var mode = LOCAL;
+
+// sketch id and group (online mode only)
 var identifier;
-var online = false;
-var group; // used in online mode
-var picker;
-var fps = 0, ms = 0;
+var group;
 
+// debug options
 var dbg_show_updates = false;
+var dbg_show_events = false;
+var dbg_show_traffic = false;
 
 /// inititialize app
 function setup() {
 	const start = Date.now();
-	picker = document.getElementById("picker");
 
 	// prepare canvas
 	canvasOpen(() => screenOffsetUpdate());
-
-	// open component picker
-	main.oncontextmenu = () => {
-		GUI.picker.open();
-		return false;
-	};
 
 	// notify user if app crashes
 	window.onerror = () => {
 		alert("Application error occured!");
 	};
 
-	// set some processing stuff
+	// setup some processing stuff
 	textAlign(LEFT, TOP);
 	textSize(15);
 	imageMode(CENTER);
@@ -41,6 +40,7 @@ function setup() {
 	identifier = window.location.hash.slice(1);
 	if( identifier.startsWith("logix-sketch") ) {
 
+		// try loading the sketch
 		if( !Manager.load(identifier) ) {
 			alert("Failed to load selected sketch, the data is corrupted!");
 			GUI.exit();
@@ -53,6 +53,8 @@ function setup() {
 			}
 		}, 5000 );
 
+		mode = LOCAL;
+
 	}else{
 		
 		group = Number.parseInt(identifier);
@@ -62,9 +64,9 @@ function setup() {
 			GUI.exit();
 		}
 
-		Event.server = new RemoteServer(cfg_server, () => {Event.server.join(group)}, (id) => {
-			console.log("Connected!");
-		}, () => { 
+		Event.server = new RemoteServer(cfg_server, () => {Event.server.join(group)}, 
+		(id) => { console.log("Connected!") }, 
+		() => { 
 			popup.open(
 				"Network Error!", 
 				"Connection with server lost!", 
@@ -72,7 +74,7 @@ function setup() {
 			);
 		});
 
-		online = true;
+		mode = CLIENT;
 
 	}
 

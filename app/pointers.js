@@ -25,9 +25,9 @@ class Pointers {
 		var ly = 0;
 
 		setInterval( () => {
-			if(online && user != null) {
+			if(mode != LOCAL && Event.server.userid != null) {
 				if( Mouse.x != lx && Mouse.y != ly ) {
-					Event.Mouse.trigger({u: user, x: round(Mouse.x - scx), y: round(Mouse.y - scy)});
+					Event.Mouse.trigger({u: Event.server.userid, x: round(Mouse.x - scx), y: round(Mouse.y - scy)});
 
 					lx = Mouse.x;
 					ly = Mouse.y;
@@ -37,7 +37,7 @@ class Pointers {
 	}
 
 	static draw() {
-		if(online && Settings.SHOW_POINTERS.get()) {
+		if(mode != LOCAL && Settings.SHOW_POINTERS.get()) {
 			const now = Date.now();
 
 			Pointers.#map.forEach(update => {

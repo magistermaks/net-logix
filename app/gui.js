@@ -7,10 +7,24 @@ class Gui {
 	}
 
 	static share() {
-		if( online ) {
+		if( mode != LOCAL ) {
 			popup.open(
 				"Sketch Sharing",
-				`Sketch access code: <b> ${group} </b>`,
+				`Sketch access code: <b>${group}</b>`,
+				mode == HOST ? popup.button("Stop", () => {
+					popup.open(
+						"Sketch Sharing",
+						"Are you sure you want to stop sharing this sketch? All users will be disconnected!",
+						popup.button("Yes", () => {
+							Event.server.disconnect();
+							Event.server = new LocalServer();
+							mode = LOCAL;
+							GUI.notifications.push("Ended sketch sharing!");
+							popup.close();
+						}),
+						popup.button("No", () => popup.close())
+					);
+				}) : null,
 				popup.button("Ok", () => popup.close())
 			);
 		}else{
@@ -20,13 +34,15 @@ class Gui {
 				popup.button("Share", () => {
 					popup.close();
 					
-					Event.server = new RemoteServer(cfg_server, () => {Event.server.host(); online = true;}, (id) => {
+					Event.server = new RemoteServer(cfg_server, () => {Event.server.host();}, (id) => {
 							popup.open(
 								"Sketch Sharing", 
 								`Sketch access code: <b>${id}</b>, share it so that others can join!`,
 								popup.button("Ok", () => popup.close())
 							);
 							group = id;
+							mode = HOST;
+							GUI.notifications.push("Began sketch sharing!");
 						}, () => { 
 							popup.open(
 								"Network Error!", 
@@ -70,6 +86,11 @@ class GUI {
 			});
 
 			this.#body.innerHTML = html;
+
+			// open component picker
+			main.oncontextmenu = () => {
+				this.open(); return false;
+			};
 		}
 
 		open() {
