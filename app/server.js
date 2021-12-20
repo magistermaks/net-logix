@@ -122,8 +122,12 @@ class RemoteServer {
 				console.warn("[SERVER] This server disabled QUERY requests!");
 			}else{
 				const stats = args.split(",");
-				const date = new Date(round(stats[0]) * 1000);
-				console.log(`[SERVER] uptime: ${date.getHours()}h ${date.getMinutes()}m ${date.getSeconds()}s, online: ${stats[1]}, groups: ${stats[2]}`);
+				const stamp = Number.parseInt(stats[0]);
+				const secs = stamp % 60;
+				const mins = floor(stamp / 60);
+				const hors = floor(mins / 60);
+
+				console.log(`[SERVER] uptime: ${hors}h ${mins % 60}m ${secs}s, online: ${stats[1]}, groups: ${stats[2]}`);
 			}
 		}	
 
