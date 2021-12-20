@@ -24,8 +24,13 @@ function setup() {
 	canvasOpen(() => screenOffsetUpdate());
 
 	// notify user if app crashes
-	window.onerror = () => {
-		alert("Application error occured!");
+	window.onerror = (error) => {
+		popup.open(
+			"Error Occured!",
+			"Application error occured, the system may be unstable! Error: " + error.toString(),
+			popup.button("Exit", () => GUI.exit(false)),
+			popup.button("Ignore", () => popup.close())
+		);
 	};
 
 	// setup some processing stuff
@@ -109,8 +114,8 @@ function draw() {
 		if(dbg_show_updates) gates.forEach(gate => gate.showUpdates());
 
 		WireEditor.draw();
-		Selected.draw();
 		Pointers.draw();
+		Selected.draw();
 
 	});
 

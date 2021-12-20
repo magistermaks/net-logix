@@ -44,8 +44,12 @@ class Pointers {
 				let f = (now - update.t) / Pointers.#interval;
 				if( f > 1 ) f = 1;
 
-				const x = scx + update.px + (update.x - update.px) * f;
-				const y = scy + update.py + (update.y - update.py) * f;
+				let x = scx + update.px + (update.x - update.px) * f;
+				let y = scy + update.py + (update.y - update.py) * f;
+
+				// make the mouse always show on screen
+				x = max(1, min(x, scw - 1));
+				y = max(1, min(y, sch - 1));
 
 				line(x - 10, y, x + 10, y);
 				line(x, y - 10, x, y + 10);

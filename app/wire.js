@@ -214,6 +214,13 @@ class WireEditor {
 				const point = WireEditor.#input ? target.gate.getLeftPoint(target.index) : target.gate.getRightPoint(target.index);
 
 				wire(int(point.x), int(point.y), Mouse.x, Mouse.y, state);
+
+				// indicate that replace mode is active
+				if( keyCode == CONTROL && isKeyPressed ) {
+					stroke(255, 0, 0);
+					noFill();
+					circle(Mouse.x + 0.5, Mouse.y + 0.5, 20);
+				}
 			}
 		}
 	}

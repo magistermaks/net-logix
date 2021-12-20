@@ -2,8 +2,10 @@
 Logix 1.7.0
 	- Added online mode
 	- Small GUI changes
+	- Accessibility improvement to wire dragging
 	- Fixed issue #5 'Component picker doesn't close'
 	- Fixed issue #3 'Zoom 'jump' when first used'
+	- Fixed issue #6 'Desync when zooming while holding gates or selecting an area'
 
 Logix 1.6.0 <07/12/2021>
 	- Better wire dragging

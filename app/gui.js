@@ -238,8 +238,11 @@ class GUI {
 
 	};
 
-	static exit() {
-		Manager.save(identifier);
+	static exit(save = true) {
+		if(save) {
+			Manager.save(identifier);
+			Event.server.close();
+		}
 		window.location.href = "index.php"
 	}
 

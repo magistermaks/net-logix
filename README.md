@@ -10,6 +10,10 @@ Use a remotely hosted instance here: [Logix](http://darktree.net/projects/logic)
 git clone https://github.com/magistermaks/net-logix
 cd net-logix
 php -S localhost:8080
+
+# optional, run if you want to use online mode
+cd server
+php server.php
 ```
 
 And then open `localhost:8080/index.php` in web browser.

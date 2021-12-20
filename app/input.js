@@ -48,7 +48,7 @@ function mouseDragged(e) {
 	}
 
 	if( dragger !== null ) {
-		dragger(Mouse.ox, Mouse.oy);
+		dragger((mouseX - pmouseX)/factor, (mouseY - pmouseY)/factor);
 	}else{
 
 		let clicked = false;
@@ -164,7 +164,7 @@ function keyPressed(event) {
 }
 
 // 
-// time_wasted_while_trying_to_fucking_make_this_work = 15.5h
+// time_wasted_while_trying_to_fucking_make_this_work = 15.8h
 //
 function mouseWheel(event) {
 	if(GUI.focused()) return;

@@ -116,6 +116,17 @@ class RemoteServer {
 			this.userid = args;
 		}
 
+		// a response to QUERY command
+		if( command == "STATUS" ) {
+			if( args == "unavaible" ) {
+				console.warn("[SERVER] This server disabled QUERY requests!");
+			}else{
+				const stats = args.split(",");
+				const date = new Date(round(stats[0]) * 1000);
+				console.log(`[SERVER] uptime: ${date.getHours()}h ${date.getMinutes()}m ${date.getSeconds()}s, online: ${stats[1]}, groups: ${stats[2]}`);
+			}
+		}	
+
 		// incoming message
 		if( command == "TEXT" ) {
 			const object = JSON.parse(LZString.decompressFromUTF16(args));
@@ -138,6 +149,10 @@ class RemoteServer {
 	close() {
 		this.#socket.onclose = null;
 		this.#socket.close();
+	}
+
+	query() {
+		this.#send("QUERY");
 	}
 
 }
@@ -175,14 +190,11 @@ class ServerManager {
 
 			},
 			() => { // close callback, not called if the conection is closed with Event.server.close()
-	
+
 				popup.open(
 					"Network Error!", 
 					"Connection with server lost!", 
-					popup.button("Ok", () => {
-						if(mode == HOST) popup.close();
-						if(mode == CLIENT) GUI.exit();
-					})
+					popup.button("Ok", (mode == CLIENT) ? () => GUI.exit() : () => popup.close())
 				);
 
 				if( mode == HOST ) {

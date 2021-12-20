@@ -55,24 +55,24 @@ class Selected {
 		if( Selected.#area ) {
 			fill(33, 150, 243, 100);
 			stroke(33, 150, 243, 255);
-			rect(Selected.#x, Selected.#y, Mouse.x - Selected.#x, Mouse.y - Selected.#y, 1);
+			rect(Selected.#x/factor, Selected.#y/factor, (mouseX - Selected.#x)/factor, (mouseY - Selected.#y)/factor, 1);
 		}
 	}
 
 	static dragBegin(x, y) {
 		if( !Selected.#area ) {
-			Selected.#x = x;
-			Selected.#y = y;
+			Selected.#x = mouseX;
+			Selected.#y = mouseY;
 		}
 		Selected.#area = true;
 	}
 
 	static dragEnd() {
 		if( Selected.#area ) {
-			const minx = min(Selected.#x, Mouse.x);
-			const miny = min(Selected.#y, Mouse.y);
-			const maxx = max(Selected.#x, Mouse.x);
-			const maxy = max(Selected.#y, Mouse.y);
+			const minx = min(Selected.#x/factor, Mouse.x);
+			const miny = min(Selected.#y/factor, Mouse.y);
+			const maxx = max(Selected.#x/factor, Mouse.x);
+			const maxy = max(Selected.#y/factor, Mouse.y);
 
 			gates.forEach(gate => {
 				const x = gate.x + scx;
