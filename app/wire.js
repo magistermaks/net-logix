@@ -122,16 +122,12 @@ class OutputWirePoint {
 
 class WireEditor {
 
-	static #targets = [];
+	static #targets = null;
 	static #clicked = false;
 	static #input = false;
 
 	static click() {
-		if( !WireEditor.#clicked ) {
-			WireEditor.#targets = null;
-		}
-	  
-		WireEditor.#clicked = false;
+		WireEditor.#targets = null;
 	}	
 	
 	static isClicked() {
@@ -149,7 +145,10 @@ class WireEditor {
 					target: gate.getId(), 
 					index: index
 				});
-				WireEditor.#targets = null;
+
+				if( keyCode != CONTROL || !isKeyPressed ) {
+					WireEditor.#targets = null;
+				}
 			}else{
 //				WireEditor.#targets = [gate.getInput(index)];
 //				gate.disconnect(index);

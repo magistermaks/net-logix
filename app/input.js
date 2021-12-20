@@ -112,7 +112,6 @@ function mousePressed(e) {
 		for( let i = gates.length - 1; i >= 0; i -- ) {
 			if( gates[i].canClick(Mouse.x, Mouse.y) ) {
 				gates[i].click(Mouse.x, Mouse.y, double);
-				WireEditor.click();
 				return;
 			}
 		}

@@ -51,8 +51,12 @@ class Pointers {
 				x = max(1, min(x, scw - 1));
 				y = max(1, min(y, sch - 1));
 
-				line(x - 10, y, x + 10, y);
-				line(x, y - 10, x, y + 10);
+				let fg = 10 / factor;
+
+				stroke(0);
+				strokeWeight(fg/5);
+				line(x - fg, y, x + fg, y);
+				line(x, y - fg, x, y + fg);
 			});
 		}
 	}

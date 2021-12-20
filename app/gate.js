@@ -152,12 +152,15 @@ class Gate extends Box {
 	click(mx, my, double) {
 		super.click(mx, my, double);
 
+		let wire = false;
+	
 		if( mx < scx + this.x + Box.wiggle ) {
 			for( var i = 0; i < this.left; i ++ ) {
 				let py = this.getLeftPoint(i).y;
 				
 				if( my < py + Box.wiggle && my > py - Box.wiggle ) {
 					WireEditor.left(this, i);
+					wire = true;
 				}
 			}
 		}
@@ -168,8 +171,13 @@ class Gate extends Box {
 				
 				if( my < py + Box.wiggle && my > py - Box.wiggle ) {
 					WireEditor.right(this, i);
+					wire = true;
 				}
 			}
+		}
+
+		if(!wire) {
+			WireEditor.click();
 		}
 	}
 
