@@ -26,11 +26,14 @@ class Pointers {
 
 		setInterval( () => {
 			if(mode != LOCAL && Event.server.userid != null) {
-				if( Mouse.x != lx && Mouse.y != ly ) {
-					Event.Mouse.trigger({u: Event.server.userid, x: round(Mouse.x - scx), y: round(Mouse.y - scy)});
+				const mx = round(Mouse.x - scx);
+				const my = round(Mouse.y - scy);
 
-					lx = Mouse.x;
-					ly = Mouse.y;
+				if( mx != lx && my != ly ) {
+					Event.Mouse.trigger({u: Event.server.userid, x: mx, y: my});
+
+					lx = mx;
+					ly = my;
 				}
 			}
 		}, Pointers.#interval );

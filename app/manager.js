@@ -5,57 +5,31 @@ class Manager {
 
 	static #valid = false;
 
-	static serialize() {
+	static serializeArray(array) {
 		
-		let json = []
-
-		for( var gate of gates ) {
-			
-			let outputs = [];
-			let id = gate.getId();
-
-			for( var output of gate.outputs ) {
- 
-				if( output == null ) {
-					continue;
-				}
-
-				let wires = [];
-
-				for( var target of output.targets ) {
-
-					if( target == null ) {
-						continue;
-					}
-
-					wires.push( target.index + ":" + target.gate.getId() );
-
-				}
-
-				outputs.push(wires);			
-
-			}
-
-			const meta = gate.serialize();
-
-			let obj = {
+		return array.map(gate => {
+	
+			const obj = {
 				"t": gate.constructor.id,
 				"x": round(gate.x),
 				"y": round(gate.y),
-				"i": id,
-				"w": outputs
+				"i": gate.getId(),
+				"w": gate.outputs.map(output => output.targets.map(target => `${target.index}:${target.gate.getId()}`))
 			};
 
-			if( meta != null ) {
-				obj.m = meta;
-			}
+			const meta = gate.serialize();
+			if(meta != null) obj.m = meta;
+			
+			return obj;
 
-			json.push(obj);
+		});
 
-		}
+	}
+
+	static serialize() {
 
 		return {
-			"j": json,
+			"j": Manager.serializeArray(gates),
 			"x": round(zox),
 			"y": round(zoy),
 			"z": factor.toFixed(1),
@@ -65,6 +39,29 @@ class Manager {
 
 	}
 
+	// Warn: this method modifies global state
+	static deserializeArray(array, normalize = true) {	
+
+		const named = new Map();
+
+		// load all gates into logix and index them by id for later use
+		const inserted = array.map(obj => {
+			const gate = Gate.create(obj.t, obj.x, obj.y, normalize ? -1 : obj.i, obj.m)
+			named.set(obj.i, gate);
+			return gate;
+		}); 
+
+		// load wire configuration
+		inserted.forEach((gate, key) => {
+			array[key].w.forEach((output, index) => output.forEach(point => {
+				const parts = point.split(":");
+				gate.connect(index, named.get(int(parts[1])), int(parts[0]));
+			}));
+		})
+
+	}
+
+	// Warn: this method modifies global state
 	static deserialize(obj, normalize = true) {
 		
 		zox = obj.x ?? 0;
@@ -72,30 +69,7 @@ class Manager {
 		factor = Number(obj.z ?? 1);
 		name = obj.n;
 
-		let named = new Map();
-
-		for( var gate of obj.j ) {
-			named.set(gate.i, Gate.create(gate.t, gate.x, gate.y, normalize ? -1 : gate.i, gate.m));
-		}
-
-		for( var i = 0; i < gates.length; i ++ ) {
-
-			let gate = obj.j[i];
-
-			for( var j = 0; j < gate.w.length; j ++ ) {
-
-				for( var point of gate.w[j] ) {
-					
-					if( point != null ) {
-
-						let parts = point.split(":");
-						gates[i].connect(j, named.get(int(parts[1])), int(parts[0]));
-
-					}
-
-				}
-			}
-		}
+		Manager.deserializeArray(obj.j, normalize);
 
 		// update all gates in a sketch
 		UpdateQueue.all();
@@ -114,6 +88,7 @@ class Manager {
 			Manager.deserialize( Save.get(id) );
 			return true;
 		} catch(err) {
+			console.error(err);
 			return false;
 		}
 	}
