@@ -59,6 +59,8 @@ class Manager {
 			}));
 		})
 
+		return inserted;
+
 	}
 
 	// Warn: this method modifies global state

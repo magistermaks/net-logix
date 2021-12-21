@@ -67,6 +67,24 @@ class Event {
 		Pointers.update(obj.u, obj.x, obj.y);
 	});
 
+	// add an array of gates server side
+	static Merge = new Event(true, false, (obj) => {
+		let inserted = Manager.deserializeArray(obj.a);
+		Event.MergeClient.trigger( {a: Manager.serializeArray(inserted)} );
+		Event.Select.trigger( {a: inserted.map(gate => gate.getId())}, obj.u );
+	});
+
+	// add an array of normalized gates client side
+	static MergeClient = new Event(false, false, (obj) => {
+		if(mode == CLIENT) Manager.deserializeArray(obj.a, false);
+	});
+
+	// force the client to select a group of gates
+	static Select = new Event(true, false, (obj) => {
+		Selected.removeAll();
+		obj.a.forEach(id => Selected.add(Gate.get(id)));
+	});
+
 	trigger(args, userid = null, external = false) {
 		if( !Event.server.ready() ) {
 			console.warn("Unable to process event! Event server not inititialized!"); 
@@ -81,6 +99,7 @@ class Event {
 			if(this.local || external) this.event(object.args);
 			if(!external) Event.server.event(object.id, object.args, this, userid);
 		}catch(error) {
+			console.error(error);
 			console.error(`Error "${error.message}" occured while processing event: ${JSON.stringify(object)}`);
 		}
 	}

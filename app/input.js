@@ -53,7 +53,10 @@ function mouseDragged(e) {
 
 		let clicked = false;
 
-		for(let gate of gates) {
+		// iterate backwards to click only the gate "on top"
+		for( let i = gates.length - 1; i >= 0 && !clicked; i -- ) {
+			const gate = gates[i];
+
 			if( !gate.canClick(Mouse.x, Mouse.y) ) continue;
 
 			if( gate.canGrab(Mouse.x, Mouse.y) || (keyCode == SHIFT && keyIsPressed) ) {
@@ -126,6 +129,8 @@ function mousePressed(e) {
 
 }
 
+var clipboard = null;
+
 function keyPressed(event) {
 	if(GUI.focused()) return;
 
@@ -143,6 +148,22 @@ function keyPressed(event) {
 
 	if( key == 'a' && event.ctrlKey ) {
 		Selected.addAll();
+		return false;
+	}
+
+	if( key == 'v' && event.ctrlKey ) {
+		if(clipboard != null) {
+			Event.Merge.trigger( {a: clipboard, u: mode == CLIENT ? Event.server.userid : null} );
+			GUI.notifications.push("Selection pasted!");
+		}
+		return false;
+	}
+
+	if( key == 'c' && event.ctrlKey ) {
+		if(Selected.count() > 0) {
+			clipboard = Manager.serializeArray(Selected.get());
+			GUI.notifications.push("Copied selection!");
+		}
 		return false;
 	}
 
