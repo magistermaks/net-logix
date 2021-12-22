@@ -55,15 +55,19 @@ class GUI {
 		}
 
 		openForContext(gate) {
+			let html = [];
+
 			if(gate != null) {
-				let html = [];
-				html.push(this.#make(() => Action.remove(gate), "Delete", "./assets/purge.png"));
-				html.push(this.#make(() => Action.copy(false, gate), "Copy Layout", "./assets/copy.png"));
 				html.push(this.#make(() => Action.copy(true, gate), "Copy", "./assets/copy.png"));
+				html.push(this.#make(() => Action.copy(false, gate), "Copy Layout", "./assets/copy.png"));
+				html.push(this.#make(() => Action.remove(gate), "Delete", "./assets/purge.png"));
 
 				this.open("Action", html);
 			}else{
-				this.open("Add Component...", this.components);
+				html.push(this.#make(() => Action.paste(), "Paste", "./assets/copy.png"));
+				html.push(...this.components)
+
+				this.open("Add Component...", html);
 			}
 		}
 

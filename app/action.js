@@ -1,15 +1,23 @@
 
 class Action {
 
-	static clipboard = [];
+	static clipboard = null;
 
 	static copy(wires, gate = null) {
 		if(Selected.count() > 0 && (gate == null || gate.selected)) {
-			Action.clipboard = Manager.serializeArray(Selected.get(), wires, Mouse.x - scx, Mouse.y - scy);
+			const selected = Selected.get();
+
+			let mx = Number.MAX_SAFE_INTEGER, my = Number.MAX_SAFE_INTEGER;
+
+			selected.forEach(gate => {
+				if(gate.x < mx) {mx = gate.x; my = gate.y;}
+			})
+
+			Action.clipboard = Manager.serializeArray(selected, wires, mx, my);
 			GUI.notifications.push("Copied selection!");
 		}else{
 			if(gate != null) {
-				Action.clipboard = Manager.serializeArray([gate], wires, Mouse.x - scx, Mouse.y - scy);
+				Action.clipboard = Manager.serializeArray([gate], wires, gate.x, gate.y);
 				GUI.notifications.push("Copied selection!");
 			}
 		}
@@ -28,6 +36,8 @@ class Action {
 	static paste() {
 		if(Action.clipboard != null) {
 			Event.Merge.trigger( {a: Action.clipboard, u: mode == CLIENT ? Event.server.userid : null, x: Mouse.x - scx, y: Mouse.y - scy} );
+		}else{
+			GUI.notifications.push("Nothing to paste!");
 		}
 	}
 	
