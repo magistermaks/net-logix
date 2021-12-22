@@ -16,6 +16,7 @@
 		<script src="app/event.js"></script>
 		<script src="app/pointers.js"></script>
 		<script src="app/action.js"></script>
+		<script src="app/profiler.js"></script>
 		<script src="app/common/popup.js"></script>
 		<script src="app/common/save.js"></script>
 		<script src="app/common/settings.js"></script>

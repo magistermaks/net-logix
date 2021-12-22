@@ -15,6 +15,7 @@ var group;
 var dbg_show_updates = false;
 var dbg_show_events = false;
 var dbg_show_traffic = false;
+var dbg_show_profiler = true;
 
 /// inititialize app
 function setup() {
@@ -90,9 +91,9 @@ function setup() {
 
 /// main render loop
 function draw() {
+
 	Mouse.update();
 
-	const t = Date.now();
 	sch = height / factor;
 	scw = width / factor;
 	
@@ -101,26 +102,36 @@ function draw() {
 		scale(factor);
 		background(200);
 
+		profiler.markReset();
+
 		if( Settings.GRID.get() ) grid(180, scx, scy, factor);
+
+		profiler.mark("grid", 155, 0, 0);
 
 		// update ticking components
 		Scheduler.tick();
 		UpdateQueue.execute();
 		MoveQueue.interpolate();
 
+		profiler.mark("compute", 155, 155, 0, "compute");
+
 		// render sketch
-		gates.forEach(gate => gate.draw());
-		gates.forEach(gate => gate.drawWires());
+		gates.forEach(gate => gate.draw()); profiler.mark("gates", 0, 155, 0);
+		gates.forEach(gate => gate.drawWires()); profiler.mark("wires", 0, 155, 155);
 		if(dbg_show_updates) gates.forEach(gate => gate.showUpdates());
 
 		WireEditor.draw();
 		Pointers.draw();
 		Selected.draw();
 
+		profiler.mark("finishing", 0, 0, 155);
+
 	});
 
+	const d = profiler.frame();
+
 	tick ++;
-	overlay(Date.now() - t);
+	overlay(d);
 }
 
 /// matrix stack helper
@@ -148,6 +159,8 @@ function overlay(t) {
 		overlay += 
 			"\nFPS: " + fps + " (" + ms + "ms) q: " + UpdateQueue.size() + 
 			"\nx: " + scx.toFixed(0) + " y: " + scy.toFixed(0) + " (" + factor.toFixed(2) + "x)";
+
+		profiler.draw(t);
 	}
 
 	const selected = Selected.count();
