@@ -1,47 +1,4 @@
 
-// TODO: THIS NEADS TO DIE, ASAP
-class Gui {
-	
-	static fileExport() {
-		Filesystem.download(localStorage.getItem(identifier), identifier.substring("logix-sketch-".length) + ".lxs");
-	}
-
-	static share() {
-		if( mode != LOCAL ) {
-			popup.open(
-				"Sketch Sharing",
-				`Sketch access code: <b>${group}</b>`,
-				mode == HOST ? popup.button("Stop", () => {
-					popup.open(
-						"Sketch Sharing",
-						"Are you sure you want to stop sharing this sketch? All users will be disconnected!",
-						popup.button("Yes", () => {
-							Event.server.close();
-							Event.server = new LocalServer();
-							mode = LOCAL;
-							GUI.notifications.push("Ended sketch sharing!");
-							popup.close();
-						}),
-						popup.button("No", () => popup.close())
-					);
-				}) : null,
-				popup.button("Ok", () => popup.close())
-			);
-		}else{
-			popup.open(
-				"Sketch Sharing", 
-				"Are you sure you want to share this sketch? Anyone with an access code will be able to modify and copy it!",
-				popup.button("Share", () => {
-					popup.close();
-					ServerManager.remote(null);
-				}),
-				popup.button("Cancel", () => popup.close())
-			);
-		}
-	}
-
-}
-
 class GUI {
 
 	static focused() {
@@ -54,35 +11,72 @@ class GUI {
 		#body = null;
 		#open = false;
 
+		components = [];
+
 		focused() {
 			return this.#open;
+		}
+
+		#make(event, text, link) {
+			const div = document.createElement('div');
+			div.addEventListener("click", () => {event(); GUI.picker.close()} ); 
+
+			const img = document.createElement('img');
+			img.src = link;
+
+			const txt = document.createTextNode(text);
+
+			div.appendChild(txt);
+			div.appendChild(img);
+
+			return div;
 		}
 
 		init() {
 			this.#container = document.getElementById("picker");
 			this.#body = document.getElementById("picker-list");
 
-			let html = "";
-
+			// cache the commonly used html
 			Registry.forEach((clazz) => {
-				html += `<div onclick="GUI.picker.add(${clazz.name})">${clazz.title}<img src="./assets/${clazz.icon}.png"></div>`;
+				this.components.push(this.#make(() => GUI.picker.add(clazz), clazz.title, `./assets/${clazz.icon}.png`));
 			});
 
-			this.#body.innerHTML = html;
-
-			// open component picker
 			main.oncontextmenu = () => {
-				this.open(); return false;
+				for( let i = gates.length - 1; i >= 0; i -- ) {
+					if( gates[i].canClick(Mouse.x, Mouse.y) && (gates[i].canGrab(Mouse.x, Mouse.y) || (keyCode == SHIFT && keyIsPressed)) ) {
+						this.openForContext(gates[i]);
+						return false;
+					}
+				}
+
+				this.openForContext(null);
+				return false;
 			};
 		}
 
-		open() {
+		openForContext(gate) {
+			if(gate != null) {
+				let html = [];
+				html.push(this.#make(() => Action.remove(gate), "Delete", "./assets/purge.png"));
+				html.push(this.#make(() => Action.copy(false, gate), "Copy Layout", "./assets/copy.png"));
+				html.push(this.#make(() => Action.copy(true, gate), "Copy", "./assets/copy.png"));
+
+				this.open("Action", html);
+			}else{
+				this.open("Add Component...", this.components);
+			}
+		}
+
+		open(title, html) {
 			this.#container.style.display = "block";
 			this.#container.style.left = mouseX + 4;
 			this.#container.style.top = mouseY + 4;
 			this.#container.dataset.x = Mouse.x;
 			this.#container.dataset.y = Mouse.y;
+			this.#body.innerHTML = "";
 			this.#open = true;
+			document.getElementById("picker-top").innerText = title;
+			html.forEach(dom => this.#body.appendChild(dom));
 		}
 
 		close() {
@@ -96,7 +90,6 @@ class GUI {
 
 		add(clazz) {
 			Event.Add.trigger({type: clazz.id, x: round(picker.dataset.x - scx), y: round(picker.dataset.y - scy)});
-			GUI.picker.close();
 		}
 
 		getCancelButton(text = "Cancel") {

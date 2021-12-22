@@ -5,16 +5,16 @@ class Manager {
 
 	static #valid = false;
 
-	static serializeArray(array) {
+	static serializeArray(array, wires = true, ox = 0, oy = 0) {
 		
 		return array.map(gate => {
 	
 			const obj = {
 				"t": gate.constructor.id,
-				"x": round(gate.x),
-				"y": round(gate.y),
+				"x": round(gate.x - ox),
+				"y": round(gate.y - oy),
 				"i": gate.getId(),
-				"w": gate.outputs.map(output => output.targets.map(target => `${target.index}:${target.gate.getId()}`))
+				"w": wires ? gate.outputs.map(output => output.targets.map(target => `${target.index}:${target.gate.getId()}`)) : []
 			};
 
 			const meta = gate.serialize();
@@ -40,13 +40,13 @@ class Manager {
 	}
 
 	// Warn: this method modifies global state
-	static deserializeArray(array, normalize = true) {	
+	static deserializeArray(array, normalize = true, ox = 0, oy = 0) {
 
 		const named = new Map();
 
 		// load all gates into logix and index them by id for later use
 		const inserted = array.map(obj => {
-			const gate = Gate.create(obj.t, obj.x, obj.y, normalize ? -1 : obj.i, obj.m)
+			const gate = Gate.create(obj.t, obj.x + ox, obj.y + oy, normalize ? -1 : obj.i, obj.m)
 			named.set(obj.i, gate);
 			return gate;
 		}); 
@@ -55,7 +55,13 @@ class Manager {
 		inserted.forEach((gate, key) => {
 			array[key].w.forEach((output, index) => output.forEach(point => {
 				const parts = point.split(":");
-				gate.connect(index, named.get(int(parts[1])), int(parts[0]));
+				const uid = int(parts[1]);
+
+				if(named.has(uid)) {
+					gate.connect(index, named.get(uid), int(parts[0]));
+				}else{
+					console.warn(`Unable to connect gate #${gate.getId()} with gate #${uid}, as that UID was not in the loaded array!`)
+				}
 			}));
 		})
 

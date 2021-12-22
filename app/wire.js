@@ -90,32 +90,20 @@ class OutputWirePoint {
 	}
 
 	remove(gate, index) {
-		for( var key in this.targets ) {
-			if( this.targets[key].index == index && this.targets[key].gate == gate ) {
-				delete this.targets[key];
-				break;
-			}
-		}
+		this.targets = this.targets.filter(target => !(target.index == index && target.gate == gate));
 	}
 
 	removeAll() {
-		for( var target of this.targets ) {
-			if( target != null ) {
-				target.gate.disconnect(target.index);
-			}
-		}
-
+		this.targets.forEach(target => target.gate.disconnect(target.index));
 		this.targets = [];
 	}
 
 	draw() {
-		for(var key in this.targets) this.self.draw( this.targets[key], this.state );
+		this.targets.forEach(target => this.self.draw(target, this.state));
 	}
 
 	notify() {
-		for(let point of this.targets) {
-			point?.gate.notify();
-		}
+		this.targets.forEach(target => target.gate.notify());
 	}
 
 }

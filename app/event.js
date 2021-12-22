@@ -69,7 +69,7 @@ class Event {
 
 	// add an array of gates server side
 	static Merge = new Event(true, false, (obj) => {
-		let inserted = Manager.deserializeArray(obj.a);
+		let inserted = Manager.deserializeArray(obj.a, true, obj.x, obj.y);
 		Event.MergeClient.trigger( {a: Manager.serializeArray(inserted)} );
 		Event.Select.trigger( {a: inserted.map(gate => gate.getId())}, obj.u );
 	});

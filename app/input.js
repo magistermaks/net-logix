@@ -129,8 +129,6 @@ function mousePressed(e) {
 
 }
 
-var clipboard = null;
-
 function keyPressed(event) {
 	if(GUI.focused()) return;
 
@@ -140,9 +138,7 @@ function keyPressed(event) {
 	}
 
 	if( keyCode == DELETE || keyCode == BACKSPACE ) {
-		Selected.get().forEach(gate => {
-			Event.Rem.trigger({uid: gate.getId()});
-		});
+		Action.remove();
 		return false;
 	}
 
@@ -152,18 +148,12 @@ function keyPressed(event) {
 	}
 
 	if( key == 'v' && event.ctrlKey ) {
-		if(clipboard != null) {
-			Event.Merge.trigger( {a: clipboard, u: mode == CLIENT ? Event.server.userid : null} );
-			GUI.notifications.push("Selection pasted!");
-		}
+		Action.paste();
 		return false;
 	}
 
 	if( key == 'c' && event.ctrlKey ) {
-		if(Selected.count() > 0) {
-			clipboard = Manager.serializeArray(Selected.get());
-			GUI.notifications.push("Copied selection!");
-		}
+		Action.copy(!event.altKey);
 		return false;
 	}
 
