@@ -163,6 +163,8 @@ class GUI {
 
 		#container = null;
 		#body = null;
+		#buttons = null;
+		#title = null;
 		#open = false;
 
 		focused() {
@@ -177,26 +179,38 @@ class GUI {
 		init() {
 			this.#container = document.getElementById("settings");
 			this.#body = document.getElementById("menu-list");
+			this.#buttons = document.getElementById("menu-buttons");
+			this.#title = document.getElementById("menu-title");
+		}
 
-			const list = this.#body;
-			list.innerHTML = "";
+		open() {
+			this.#title.innerText = "Settings";
+			this.#buttons.innerHTML = "<div class=\"button\" onclick=\"GUI.settings.close()\">Close</div> <div class=\"button\" onclick=\"GUI.settings.help()\">Help</div>";
+			this.#body.innerHTML = "";
 		
-			this.#entry(list, Settings.GRID, "Show background grid");
-			this.#entry(list, Settings.OVERLAY, "Show debug overlay");
-			this.#entry(list, Settings.AUTOSAVE, "Enable sketch autosave");
-			this.#entry(list, Settings.TRANSISTORS, "Show transistor count");
-			this.#entry(list, Settings.SNAP, "Snap gates to grid");
-			this.#entry(list, Settings.SMOOTH_WIRES, "Use smooth wires");
-			this.#entry(list, Settings.SHOW_POINTERS, "Show cursors when sharing");
+			this.#entry(this.#body, Settings.GRID, "Show background grid");
+			this.#entry(this.#body, Settings.OVERLAY, "Show debug overlay");
+			this.#entry(this.#body, Settings.AUTOSAVE, "Enable sketch autosave");
+			this.#entry(this.#body, Settings.TRANSISTORS, "Show transistor count");
+			this.#entry(this.#body, Settings.SNAP, "Snap gates to grid");
+			this.#entry(this.#body, Settings.SMOOTH_WIRES, "Use smooth wires");
+			this.#entry(this.#body, Settings.SHOW_POINTERS, "Show cursors when sharing");
+
+			this.#container.style.display = "block";
+			this.#open = true;
+		}
+
+		help() {
+			this.#title.innerText = "Quick Guide";
+			this.#buttons.innerHTML = "<div class=\"button\" onclick=\"GUI.settings.close()\">Close</div>";
+			this.#body.innerHTML = "<iframe src=\"help.html\"></iframe>";
+
+			this.#container.style.display = "block";
+			this.#open = true;
 		}
 
 		update(elem) {
 			Settings.access(elem.parentElement.dataset.id).set(elem.checked);
-		}
-
-		open() {
-			this.#container.style.display = "block";
-			this.#open = true;
 		}
 
 		close() {

@@ -82,16 +82,16 @@
 
 				<div>
 
-					<div id="top">
-						<span> Settings </span>
+					<div id="menu-top">
+						<span id="menu-title"></span>
 					</div>
 
 					<div id="menu-list">
 						<!-- filled with javascript -->
 					</div>
 
-					<div id="new">
-						<div class="button" onclick="GUI.settings.close()"> Exit </div>
+					<div id="menu-buttons">
+						<div class="button" onclick="GUI.settings.close()"> Close </div>
 					</div>
 	
 				</div>

@@ -1,6 +1,12 @@
 
+var cull_wires = true;
+
 /// draws wire between two points
 function wire(x1, y1, x2, y2, state) {
+
+	// discard out-of-view wires
+	if( max(x1, x2) < 0 || max(y1, y2) < 0 || min(x1, x2) > scw || min(y1, y2) > sch) return;
+
 	const c = state ? color(9, 98, 218) : 0;
 	const a = (x2 - x1) / 4;
 	
@@ -12,11 +18,12 @@ function wire(x1, y1, x2, y2, state) {
 	circle(x1 + 0.5, y1 + 0.5, 10);
 	circle(x2 + 0.5, y2 + 0.5, 10);
 
+	// needed for smooth wires
 	noFill();
 
 	// background
 	stroke(255);
-	strokeWeight(6);
+	strokeWeight(5);
 
 	if( Settings.SMOOTH_WIRES.get() ) {
 		bezier(x1, y1, x1 + a, y1, x2-a, y2, x2, y2);

@@ -1,0 +1,23 @@
+<html>
+
+	<head lang="en-US">
+
+		<script src="libs/md.min.js"></script>
+
+		<link rel="stylesheet" type="text/css" href="assets/help.css">
+
+		<script>
+			fetch('data/help.md')
+  				.then(response => response.text())
+  				.then(data => {
+					document.body.innerHTML = marked.parse(data);
+				});
+		</script>
+
+	</head>
+
+	<body>
+		<center> Loading... </center>
+	</body>
+
+</html>

@@ -28,7 +28,7 @@
 
 			<div>
 
-				<div id="top">
+				<div id="menu-top">
 					<span> Select Sketch </span>
 				</div>
 
@@ -36,7 +36,7 @@
 					<!-- filled with javascript -->
 				</div>
 
-				<div id="new">
+				<div id="menu-buttons">
 					<div class="button" onclick="create()"> New </div>
 					<div class="button" onclick="fileImport()"> Import </div>
 					<?php if($config['online']): ?><div class="button" onclick="joinShared()"> Join </div><?php endif; ?>
