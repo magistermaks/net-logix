@@ -26,6 +26,9 @@ var profiler = new class {
 	draw(diff) {
 		if(!dbg_show_profiler) return;
 
+		stroke(0, 0, 0, 200);
+		line(0, height - 1 - 16.6*5, 100, height - 1 - 16.6*5);
+
 		stroke(255, 0, 0, 200);
 		for(let i = 0; i < 100; i ++) {
 			line(i, height - 1, i, height - 1 - this.frames[i] * 5);

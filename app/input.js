@@ -24,12 +24,12 @@ class Mouse {
 	}
 }
 
-function mouseReleased() {
+function mouseReleased(e) {
 	if( dragger != null ) {
 		dragger = null;
 
 		Selected.dragEnd();
-		mousePressed();
+		mousePressed(e);
 	}
 }
 
@@ -42,7 +42,7 @@ function mouseDragged(e) {
 
 	Mouse.dragged();
 
-	if( WireEditor.isClicked() ) {
+	if( WireEditor.isClicked() && !( mouseIsPressed && mouseButton == CENTER) ) {
 		dragger = () => {};
 		return;
 	}
@@ -103,7 +103,7 @@ function mousePressed(e) {
 		GUI.picker.close();
 	}
 
-	if(GUI.focused()) return;
+	if(GUI.focused() || e.which == 2) return;
 
 	const now = Date.now();
 	const double = (now - last) < 200;
