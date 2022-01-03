@@ -86,6 +86,13 @@ function setup() {
 	// manage and render mouse pointers
 	Pointers.init();
 
+	if( !Settings.SEEN_GUIDE.get() ) {
+		setTimeout( () => {
+			Settings.SEEN_GUIDE.set(true);
+			GUI.settings.help();
+		}, 500 );
+	}
+
 	console.log(`System ready! Took: ${Date.now() - start}ms`);
 }
 

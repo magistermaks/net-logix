@@ -91,7 +91,6 @@
 					</div>
 
 					<div id="menu-buttons">
-						<div class="button" onclick="GUI.settings.close()"> Close </div>
 					</div>
 	
 				</div>

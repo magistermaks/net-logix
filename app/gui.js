@@ -203,7 +203,7 @@ class GUI {
 		help() {
 			this.#title.innerText = "Quick Guide";
 			this.#buttons.innerHTML = "<div class=\"button\" onclick=\"GUI.settings.close()\">Close</div>";
-			this.#body.innerHTML = "<iframe src=\"help.html\"></iframe>";
+			this.#body.innerHTML = "<center style=\"padding: 1em;\" id=\"help-loading\">Loading...</center><iframe onload=\"document.getElementById('help-loading').remove()\" src=\"help.html\"></iframe>";
 
 			this.#container.style.display = "block";
 			this.#open = true;

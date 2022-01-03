@@ -1,6 +1,4 @@
 
-var cull_wires = true;
-
 /// draws wire between two points
 function wire(x1, y1, x2, y2, state) {
 
