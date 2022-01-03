@@ -1,4 +1,12 @@
 
+Logix 1.8.0 <03/01/2022>
+	- Added copy & paste support
+	- Added buffer gate
+	- Revamped component picker
+	- Added panning while editing wires (closes issue #7)
+	- Network stack update
+	- Added Quick Guide
+
 Logix 1.7.0 <20/12/2021>
 	- Added online mode
 	- Small GUI changes
