@@ -130,6 +130,18 @@ class OrGate extends SingleStateGate {
   
 }
 
+class BufferGate extends SingleStateGate {
+	
+	constructor(x, y) {
+	   super(x, y, "Buffer", 1, 1, 0, Resource.get("buf"));
+	}
+	
+	update() {
+		this.setOutputState(0, this.getInputState(0));
+	}
+  
+}
+
 class NorGate extends SingleStateGate {
 	
 	constructor(x, y) {
@@ -198,6 +210,7 @@ class Registry {
 		Registry.add(5, NorGate, "NOR Gate", "nor");
 		Registry.add(6, NotGate, "NOT Gate", "not");
 		Registry.add(7, OutputGate, "Indicator", "out");
+		Registry.add(8, BufferGate, "Buffer", "buf");
 	}
 
 	static get(id) {

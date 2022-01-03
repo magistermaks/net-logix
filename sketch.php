@@ -15,6 +15,8 @@
 		<script src="app/server.js"></script>
 		<script src="app/event.js"></script>
 		<script src="app/pointers.js"></script>
+		<script src="app/action.js"></script>
+		<script src="app/profiler.js"></script>
 		<script src="app/common/popup.js"></script>
 		<script src="app/common/save.js"></script>
 		<script src="app/common/settings.js"></script>
@@ -51,14 +53,14 @@
 		<!-- control buttons -->
 		<div id="topbar">
 			<div class="button compact" onclick="GUI.settings.open()">Settings</div>
-			<div class="button compact" onclick="Gui.fileExport()" id="export-button">Export</div>
-			<?php if($config['online']): ?><div class="button compact" onclick="Gui.share()">Share</div><?php endif; ?>
+			<div class="button compact" onclick="Action.fileExport()" id="export-button">Export</div>
+			<?php if($config['online']): ?><div class="button compact" onclick="Action.share()">Share</div><?php endif; ?>
 			<div class="button compact" onclick="GUI.exit()">Exit</div>
 		</div>
 
 		<!-- component picker -->
 		<div id="picker" style="display:none;">
-			<div id="picker-top"> Add Component... </div>
+			<div id="picker-top"></div>
 			<div id="picker-list">
 				<!-- filled with javascript -->
 			</div>
@@ -80,16 +82,15 @@
 
 				<div>
 
-					<div id="top">
-						<span> Settings </span>
+					<div id="menu-top">
+						<span id="menu-title"></span>
 					</div>
 
 					<div id="menu-list">
 						<!-- filled with javascript -->
 					</div>
 
-					<div id="new">
-						<div class="button" onclick="GUI.settings.close()"> Exit </div>
+					<div id="menu-buttons">
 					</div>
 	
 				</div>

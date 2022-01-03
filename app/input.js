@@ -24,12 +24,12 @@ class Mouse {
 	}
 }
 
-function mouseReleased() {
+function mouseReleased(e) {
 	if( dragger != null ) {
 		dragger = null;
 
 		Selected.dragEnd();
-		mousePressed();
+		mousePressed(e);
 	}
 }
 
@@ -42,7 +42,7 @@ function mouseDragged(e) {
 
 	Mouse.dragged();
 
-	if( WireEditor.isClicked() ) {
+	if( WireEditor.isClicked() && !( mouseIsPressed && mouseButton == CENTER) ) {
 		dragger = () => {};
 		return;
 	}
@@ -53,7 +53,10 @@ function mouseDragged(e) {
 
 		let clicked = false;
 
-		for(let gate of gates) {
+		// iterate backwards to click only the gate "on top"
+		for( let i = gates.length - 1; i >= 0 && !clicked; i -- ) {
+			const gate = gates[i];
+
 			if( !gate.canClick(Mouse.x, Mouse.y) ) continue;
 
 			if( gate.canGrab(Mouse.x, Mouse.y) || (keyCode == SHIFT && keyIsPressed) ) {
@@ -100,7 +103,7 @@ function mousePressed(e) {
 		GUI.picker.close();
 	}
 
-	if(GUI.focused()) return;
+	if(GUI.focused() || e.which == 2) return;
 
 	const now = Date.now();
 	const double = (now - last) < 200;
@@ -135,14 +138,22 @@ function keyPressed(event) {
 	}
 
 	if( keyCode == DELETE || keyCode == BACKSPACE ) {
-		Selected.get().forEach(gate => {
-			Event.Rem.trigger({uid: gate.getId()});
-		});
+		Action.remove();
 		return false;
 	}
 
 	if( key == 'a' && event.ctrlKey ) {
 		Selected.addAll();
+		return false;
+	}
+
+	if( key == 'v' && event.ctrlKey ) {
+		Action.paste();
+		return false;
+	}
+
+	if( key == 'c' && event.ctrlKey ) {
+		Action.copy(!event.altKey);
 		return false;
 	}
 

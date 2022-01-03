@@ -27,7 +27,7 @@ class Event {
 
 	// add get client side
 	static Put = new Event(false, false, (obj) => {
-		if( Gate.get(obj.uid) == null ) Gate.create(obj.type, obj.x, obj.y, obj.uid);
+		if(Gate.get(obj.uid) == null) Gate.create(obj.type, obj.x, obj.y, obj.uid);
 	});
 	
 	// remove gate
@@ -59,6 +59,7 @@ class Event {
 	static Sync = new Event(true, false, (obj) => {
 		Manager.reset();
 		Manager.deserialize(obj, false);
+		screenOffsetUpdate();
 	});
 
 	// broadcast cursor position
@@ -66,7 +67,25 @@ class Event {
 		Pointers.update(obj.u, obj.x, obj.y);
 	});
 
-	trigger(args, external = false) {
+	// add an array of gates server side
+	static Merge = new Event(true, false, (obj) => {
+		let inserted = Manager.deserializeArray(obj.a, true, obj.x, obj.y);
+		Event.MergeClient.trigger( {a: Manager.serializeArray(inserted)} );
+		Event.Select.trigger( {a: inserted.map(gate => gate.getId())}, obj.u );
+	});
+
+	// add an array of normalized gates client side
+	static MergeClient = new Event(false, false, (obj) => {
+		if(mode == CLIENT) Manager.deserializeArray(obj.a, false);
+	});
+
+	// force the client to select a group of gates
+	static Select = new Event(true, false, (obj) => {
+		Selected.removeAll();
+		obj.a.forEach(id => Selected.add(Gate.get(id)));
+	});
+
+	trigger(args, userid = null, external = false) {
 		if( !Event.server.ready() ) {
 			console.warn("Unable to process event! Event server not inititialized!"); 
 			return;
@@ -78,14 +97,24 @@ class Event {
 
 		try{
 			if(this.local || external) this.event(object.args);
-			if(!external) Event.server.event(object, this);
+			if(!external) Event.server.event(object.id, object.args, this, userid);
 		}catch(error) {
+			console.error(error);
 			console.error(`Error "${error.message}" occured while processing event: ${JSON.stringify(object)}`);
 		}
 	}
 
-	static execute(id, args, external = false) {
-		Event.#registry[id].trigger(args, external);
+	static execute(id, args, userid = null, external = false) {
+		Event.#registry[id].trigger(args, userid, external);
+	}
+
+	static encode(id, args) {
+		return LZString.compressToUTF16(`${id};${JSON.stringify(args)}`);
+	}
+
+	static decode(string) {
+		const prt = LZString.decompressFromUTF16(string).split(/;(.+)/);
+		return {id: Number.parseInt(prt[0]), args: JSON.parse(prt[1])};
 	}
 
 }

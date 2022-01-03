@@ -4,8 +4,8 @@ class LocalServer {
 	constructor() {
 	}
 
-	event(object, handle) {
-		handle.event(object.args);
+	event(id, args, handle, userid) {
+		if(userid == null) handle.event(args);
 	}
 
 	ready() {
@@ -15,7 +15,6 @@ class LocalServer {
 	close() {
 
 	}
-
 }
 
 class RemoteServer {
@@ -53,8 +52,12 @@ class RemoteServer {
 		}
 	}
 
-	event(object, handle) {
-		this.#send((handle.direct ? "SEND " : "BROADCAST ") + LZString.compressToUTF16(JSON.stringify(object)));
+	event(id, args, handle, userid) {
+		if(userid == null) {
+			this.#send((handle.direct ? "SEND " : "BROADCAST ") + Event.encode(id, args));
+		}else{
+			this.#send(`TRANSMIT ${userid} ${Event.encode(id, args)}`);
+		}
 	}
 
 	#process(msg) {
@@ -97,9 +100,7 @@ class RemoteServer {
 		if( command == "JOIN" ) {
 
 			if( mode == HOST ) {
-				// send sync event, kinda ugly but i will live with this
-				let data = LZString.compressToUTF16(`{"id":${Event.Sync.id},"args":${JSON.stringify(Manager.serialize())}}`);
-				this.#send(`TRANSMIT ${args} ${data}`);
+				Event.Sync.trigger(Manager.serialize(), args);
 			}
 
 			GUI.notifications.push("User joined!");
@@ -133,8 +134,8 @@ class RemoteServer {
 
 		// incoming message
 		if( command == "TEXT" ) {
-			const object = JSON.parse(LZString.decompressFromUTF16(args));
-			Event.execute(object.id, object.args, true);
+			const object = Event.decode(args);
+			Event.execute(object.id, object.args, null, true);
 		}
 		
 	}
