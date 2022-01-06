@@ -3,7 +3,7 @@
 <img src="./assets/icon.png" align="right" alt="Logo" title="Logix Logo" width="100" height="100" />
 
 Online Open-Source Logic Circuit Simulator  
-Use a remotely hosted instance here: [Logix](http://darktree.net/projects/logic)
+Use a remotely hosted instance here: [Logix](http://darktree.net/projects/logix)
 
 ### To start locally
 ```bash
