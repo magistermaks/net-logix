@@ -4,10 +4,10 @@
 
 		<script src="libs/md.min.js"></script>
 
-		<link rel="stylesheet" type="text/css" href="assets/help.css">
+		<link rel="stylesheet" type="text/css" href="assets/stylesheets/help.css">
 
 		<script>
-			fetch('data/help.md')
+			fetch('assets/help.md')
   				.then(response => response.text())
   				.then(data => {
 					document.body.innerHTML = marked.parse(data);

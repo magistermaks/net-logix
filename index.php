@@ -10,7 +10,7 @@
 		<script src="app/common/files.js"></script>
 		<script src="app/common/canvas.js"></script>
 
-		<?php include "header.html" ?>
+		<?php include "assets/header.html" ?>
 
 		<?php
 			$config = parse_ini_file("logix.ini");

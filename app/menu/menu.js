@@ -8,7 +8,7 @@ class Manager {
 
 		if( !Settings.EXAMPLE.get(false) ) {
 
-			fetch("data/example.json")
+			fetch("assets/data/example.json")
 				.then(response => response.text())
 				.then(response => {
 					Settings.EXAMPLE.set(true);
@@ -17,19 +17,26 @@ class Manager {
 					Manager.#set("example", response);
 				} );
 		}
+	}
 
-		fetch("data/default.json")
-			.then(response => response.text())
-			.then(response => {
-				console.log("Downloaded empty sketch template");
-				Manager.#empty = response;
-			} );
+	static fetchEmpty(callback) {
+		if(Manager.#empty != null) {
+			callback(Manager.#empty);
+		}else{
+			fetch("assets/data/default.json")
+				.then(response => response.text())
+				.then(response => {
+					console.log("Downloaded empty sketch template");
+					Manager.#empty = response;
+					callback(response);
+				} );
+		}
 	}
 
 	static #entry(list, key) {
 		const name = Manager.getName(key);
 		const time = Manager.getDate(key);
-		list.innerHTML += `<div title="${time}" data-id="${key}"><span onclick="redirect(this)">${name}</span><img title="Delete this sketch" onclick="removeSketch(this)" src="assets/purge.png"></div>`;
+		list.innerHTML += `<div title="${time}" data-id="${key}"><span onclick="redirect(this)">${name}</span><img title="Delete this sketch" onclick="removeSketch(this)" src="assets/icons/purge.png"></div>`;
 	}
 
 	static print() {
@@ -86,14 +93,9 @@ class Manager {
 	}
 
 	static add(name) {
-		if( Manager.#empty == null ) {
-			alert("Template not ready! Try again in a second!");
-			return;
-		}
-
-		let json = Manager.#empty.replace("$NAME", name);
-
-		Manager.insert(name, json);
+		Manager.fetchEmpty( (json) => {
+			Manager.insert(name, json.replace("$NAME", name));
+		} )
 	}
 
 	static insert(name, json) {

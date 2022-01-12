@@ -23,7 +23,7 @@
 		<script src="app/common/files.js"></script>
 		<script src="app/common/canvas.js"></script>
 
-		<?php include "header.html" ?>
+		<?php include "assets/header.html" ?>
 
 		<script id="config">
 		<?php

@@ -38,7 +38,7 @@ class GUI {
 
 			// cache the commonly used html
 			Registry.forEach((clazz) => {
-				this.components.push(this.#make(() => GUI.picker.add(clazz), clazz.title, `./assets/${clazz.icon}.png`));
+				this.components.push(this.#make(() => GUI.picker.add(clazz), clazz.title, `assets/icons/${clazz.icon}.png`));
 			});
 
 			main.oncontextmenu = () => {
@@ -58,13 +58,13 @@ class GUI {
 			let html = [];
 
 			if(gate != null) {
-				html.push(this.#make(() => Action.copy(true, gate), "Copy", "./assets/copy.png"));
-				html.push(this.#make(() => Action.copy(false, gate), "Copy Layout", "./assets/copy.png"));
-				html.push(this.#make(() => Action.remove(gate), "Delete", "./assets/purge.png"));
+				html.push(this.#make(() => Action.copy(true, gate), "Copy", "assets/icons/copy.png"));
+				html.push(this.#make(() => Action.copy(false, gate), "Copy Layout", "assets/icons/copy.png"));
+				html.push(this.#make(() => Action.remove(gate), "Delete", "assets/icons/purge.png"));
 
 				this.open("Action", html);
 			}else{
-				html.push(this.#make(() => Action.paste(), "Paste", "./assets/copy.png"));
+				html.push(this.#make(() => Action.paste(), "Paste", "assets/icons/copy.png"));
 				html.push(...this.components)
 
 				this.open("Add Component...", html);
@@ -122,7 +122,7 @@ class GUI {
 			let html = "";
 
 			Registry.forEach((clazz) => {
-				html += `<div class="tooltip"><img class="icon" src="./assets/${clazz.icon}.png" onclick="GUI.toolbar.add(${clazz.name})"><span>${clazz.title}</span></div>&nbsp;`;
+				html += `<div class="tooltip"><img class="icon" src="assets/icons/${clazz.icon}.png" onclick="GUI.toolbar.add(${clazz.name})"><span>${clazz.title}</span></div>&nbsp;`;
 			});
 
 			this.#body.innerHTML = html;

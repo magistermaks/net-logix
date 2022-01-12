@@ -1,4 +1,7 @@
 
+Logix 1.9.0
+	TODO
+
 Logix 1.8.0 <03/01/2022>
 	- Added copy & paste support
 	- Added buffer gate

@@ -10,7 +10,7 @@ class Resource {
 
 		}else{
 
-			let img = loadImage("assets/" + name + ".png");
+			let img = loadImage("assets/icons/" + name + ".png");
 
 			Resource.#cache.set(name, img);
 
