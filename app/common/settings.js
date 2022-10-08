@@ -5,7 +5,7 @@ class Settings {
 	static #data = null;
 
 	static #load() {
-		if( Settings.#data == null ) {
+		if (Settings.#data == null) {
 			Settings.#data = JSON.parse(localStorage.getItem(Settings.#location)) ?? {};
 		}
 	}

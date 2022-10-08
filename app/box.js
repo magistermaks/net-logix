@@ -4,13 +4,10 @@ class Box {
 	x = 0;
 	y = 0;
 	#title;
-
 	left;
 	right;
-
 	bx = 0;
 	by = 0;
-
 	selected = false;
 
 	static w = 100;
@@ -34,9 +31,7 @@ class Box {
 	}
 
 	drag(mx, my) {
-
 		if (Settings.SNAP.get()) {
-
 			this.bx += mx;
 			this.by += my;
 
@@ -63,14 +58,11 @@ class Box {
 			}
 
 		} else {
-
 			this.x += mx;
 			this.y += my;
-
 		}
 
 		MoveQueue.add(this);
-
 	}
 
 	move(x, y) {
@@ -90,12 +82,12 @@ class Box {
 	}
 
 	getLeftPoint(index) {
-		let space = float(Box.h - Box.top) / (this.left + 1);
+		const space = float(Box.h - Box.top) / (this.left + 1);
 		return {x: scx + this.x, y: scy + this.y + Box.top + space * (index + 1) };
 	}
 
 	getRightPoint(index) {
-		let space = float(Box.h - Box.top) / (this.right + 1);
+		const space = float(Box.h - Box.top) / (this.right + 1);
 		return {x: scx + this.x + Box.w, y: scy + this.y + Box.top + space * (index + 1) };
 	}
 
@@ -141,15 +133,14 @@ class Box {
 		const rightSpace = float(Box.h - Box.top) / (this.right + 1);
 
 		// left connectors
-		for(let i = 0; i < this.left; i ++) {
+		for (let i = 0; i < this.left; i ++) {
 			circle(sbx, sby + Box.top + leftSpace * (i + 1), Box.con);
 		}
 
 		// right connectors
-		for(let i = 0; i < this.right; i ++) {
+		for (let i = 0; i < this.right; i ++) {
 			circle(sbx + Box.w, sby + Box.top + rightSpace * (i + 1), Box.con);
 		}
-
 	}
 
 	content(x, y) {

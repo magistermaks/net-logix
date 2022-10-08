@@ -20,9 +20,9 @@ class Manager {
 	}
 
 	static fetchEmpty(callback) {
-		if(Manager.#empty != null) {
+		if (Manager.#empty != null) {
 			callback(Manager.#empty);
-		}else{
+		} else {
 			fetch("assets/data/default.json")
 				.then(response => response.text())
 				.then(response => {
@@ -47,17 +47,17 @@ class Manager {
 
 		var keys = [];
 
-		for( var i = 0; i < localStorage.length; i ++ ) {
+		for (let i = 0; i < localStorage.length; i ++) {
 			const key = localStorage.key(i);
 
-			if( key.startsWith("logix-sketch") ) {
+			if (key.startsWith("logix-sketch")) {
 				keys.push(key);
 			}
 		}
 
 		keys.sort();
-		
-		for( var key of keys ) {
+
+		for (let key of keys) {
 			Manager.#entry(list, key);
 		}
 
@@ -70,22 +70,22 @@ class Manager {
 	}
 
 	static getName(key) {
-		try{
+		try {
 			return Save.get(key).n;
-		}catch(err) {
+		} catch(err) {
 			return key;
 		}
 	}
 
 	static getDate(key) {
-		try{
+		try {
 			let timestamp = Save.get(key).u;
 
-			if( timestamp != null ) {
+			if (timestamp != null) {
 				const d = new Date( Save.get(key).u );
 				return "Last edited on: " + d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear();
 			}
-		}catch(err) {
+		} catch(err) {
 			return "";
 		}
 
@@ -93,15 +93,15 @@ class Manager {
 	}
 
 	static add(name) {
-		Manager.fetchEmpty( (json) => {
+		Manager.fetchEmpty((json) => {
 			Manager.insert(name, json.replace("$NAME", name));
-		} )
+		});
 	}
 
 	static insert(name, json) {
 		let id = name.toLowerCase().replace(/\W+/g, "-");
 
-		while( localStorage.getItem("logix-sketch-" + id) != null ) {
+		while (localStorage.getItem("logix-sketch-" + id) != null) {
 			id += "-";
 		}
 

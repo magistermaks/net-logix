@@ -29,7 +29,7 @@ class Event {
 	static Put = new Event(false, false, (obj) => {
 		if(Gate.get(obj.uid) == null) Gate.create(obj.type, obj.x, obj.y, obj.uid);
 	});
-	
+
 	// remove gate
 	static Rem = new Event(false, true, (obj) => {
 		Gate.get(obj.uid)?.remove();
@@ -37,9 +37,9 @@ class Event {
 
 	// move gate
 	static Mov = new Event(false, false, (obj) => {
-		for(let entry of obj) MoveQueue.apply(Gate.get(entry.uid), entry.x, entry.y);
+		for (let entry of obj) MoveQueue.apply(Gate.get(entry.uid), entry.x, entry.y);
 	});
-	
+
 	// disconnect wire
 	static Dwire = new Event(false, true, (obj) => {
 		Gate.get(obj.uid).disconnect(obj.index);
@@ -70,13 +70,13 @@ class Event {
 	// add an array of gates server side
 	static Merge = new Event(true, false, (obj) => {
 		let inserted = Manager.deserializeArray(obj.a, true, obj.x, obj.y);
-		Event.MergeClient.trigger( {a: Manager.serializeArray(inserted)} );
-		Event.Select.trigger( {a: inserted.map(gate => gate.getId())}, obj.u );
+		Event.MergeClient.trigger({a: Manager.serializeArray(inserted)});
+		Event.Select.trigger({a: inserted.map(gate => gate.getId())}, obj.u);
 	});
 
 	// add an array of normalized gates client side
 	static MergeClient = new Event(false, false, (obj) => {
-		if(mode == CLIENT) Manager.deserializeArray(obj.a, false);
+		if (mode == CLIENT) Manager.deserializeArray(obj.a, false);
 	});
 
 	// force the client to select a group of gates
@@ -86,8 +86,8 @@ class Event {
 	});
 
 	trigger(args, userid = null, external = false) {
-		if( !Event.server.ready() ) {
-			console.warn("Unable to process event! Event server not inititialized!"); 
+		if (!Event.server.ready()) {
+			console.warn("Unable to process event! Event server not inititialized!");
 			return;
 		}
 
@@ -95,10 +95,10 @@ class Event {
 
 		const object = {id: this.id, args: args};
 
-		try{
-			if(this.local || external) this.event(object.args);
-			if(!external) Event.server.event(object.id, object.args, this, userid);
-		}catch(error) {
+		try {
+			if (this.local || external) this.event(object.args);
+			if (!external) Event.server.event(object.id, object.args, this, userid);
+		} catch(error) {
 			console.error(error);
 			console.error(`Error "${error.message}" occured while processing event: ${JSON.stringify(object)}`);
 		}

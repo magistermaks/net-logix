@@ -42,8 +42,8 @@ class GUI {
 			});
 
 			main.oncontextmenu = () => {
-				for( let i = gates.length - 1; i >= 0; i -- ) {
-					if( gates[i].canClick(Mouse.x, Mouse.y) && (gates[i].canGrab(Mouse.x, Mouse.y) || (keyCode == SHIFT && keyIsPressed)) ) {
+				for (let i = gates.length - 1; i >= 0; i --) {
+					if (gates[i].canClick(Mouse.x, Mouse.y) && (gates[i].canGrab(Mouse.x, Mouse.y) || (keyCode == SHIFT && keyIsPressed))) {
 						this.openForContext(gates[i]);
 						return false;
 					}
@@ -57,13 +57,13 @@ class GUI {
 		openForContext(gate) {
 			let html = [];
 
-			if(gate != null) {
+			if (gate != null) {
 				html.push(this.#make(() => Action.copy(true, gate), "Copy", "assets/icons/copy.png"));
 				html.push(this.#make(() => Action.copy(false, gate), "Copy Layout", "assets/icons/copy.png"));
 				html.push(this.#make(() => Action.remove(gate), "Delete", "assets/icons/purge.png"));
 
 				this.open("Action", html);
-			}else{
+			} else {
 				html.push(this.#make(() => Action.paste(), "Paste", "assets/icons/copy.png"));
 				html.push(...this.components)
 
@@ -79,6 +79,7 @@ class GUI {
 			this.#container.dataset.y = Mouse.y;
 			this.#body.innerHTML = "";
 			this.#open = true;
+
 			document.getElementById("picker-top").innerText = title;
 			html.forEach(dom => this.#body.appendChild(dom));
 		}
@@ -144,7 +145,7 @@ class GUI {
 			this.#x += step;
 			this.#y += step;
 
-			if( this.#x + Box.w + step > main.offsetWidth || this.#y + Box.h + step > main.offsetHeight ) {
+			if (this.#x + Box.w + step > main.offsetWidth || this.#y + Box.h + step > main.offsetHeight) {
 				this.#x = step;
 				this.#y = step;
 			}
@@ -251,10 +252,11 @@ class GUI {
 	};
 
 	static exit(save = true) {
-		if(save) {
+		if (save) {
 			Manager.save(identifier);
 			Event.server.close();
 		}
+
 		window.location.href = "index.php"
 	}
 

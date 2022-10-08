@@ -25,7 +25,7 @@ class Mouse {
 }
 
 function mouseReleased(e) {
-	if( dragger != null ) {
+	if (dragger != null) {
 		dragger = null;
 
 		Selected.dragEnd();
@@ -34,38 +34,38 @@ function mouseReleased(e) {
 }
 
 function mouseDragged(e) {
-	if( GUI.picker.shouldClose(e) ) {
+	if (GUI.picker.shouldClose(e)) {
 		GUI.picker.close();
-	}else return;
+	} else return;
 
-	if(GUI.focused()) return;
+	if (GUI.focused()) return;
 
 	Mouse.dragged();
 
-	if( WireEditor.isClicked() && !( mouseIsPressed && mouseButton == CENTER) ) {
+	if (WireEditor.isClicked() && !( mouseIsPressed && mouseButton == CENTER)) {
 		dragger = () => {};
 		return;
 	}
 
-	if( dragger !== null ) {
+	if (dragger !== null) {
 		dragger((mouseX - pmouseX)/factor, (mouseY - pmouseY)/factor);
-	}else{
+	} else {
 
 		let clicked = false;
 
 		// iterate backwards to click only the gate "on top"
-		for( let i = gates.length - 1; i >= 0 && !clicked; i -- ) {
+		for (let i = gates.length - 1; i >= 0 && !clicked; i --) {
 			const gate = gates[i];
 
-			if( !gate.canClick(Mouse.x, Mouse.y) ) continue;
+			if (!gate.canClick(Mouse.x, Mouse.y)) continue;
 
-			if( gate.canGrab(Mouse.x, Mouse.y) || (keyCode == SHIFT && keyIsPressed) ) {
+			if (gate.canGrab(Mouse.x, Mouse.y) || (keyCode == SHIFT && keyIsPressed)) {
 
-				if( gate.selected ) {
+				if (gate.selected) {
 					dragger = (mx, my) => {
 						Selected.get().forEach(gate => gate.drag(mx, my));
 					}
-				}else{
+				} else {
 					dragger = (mx, my) => gate.drag(mx, my);
 				}
 
@@ -76,13 +76,13 @@ function mouseDragged(e) {
 		}
 
 		// grab the screen if nothing else was clicked
-		if( !clicked ) {
+		if (!clicked) {
 
 			// select area if shift is pressed
-			if( keyCode == SHIFT && keyIsPressed ) {
+			if (keyCode == SHIFT && keyIsPressed) {
 				Selected.dragBegin(Mouse.x, Mouse.y);
 				dragger = (mx, my) => {};
-			}else{
+			} else {
 				dragger = (mx, my) => {
 					scx += mx;
 					scy += my;
@@ -92,18 +92,16 @@ function mouseDragged(e) {
 					GUI.moved();
 				};
 			}
-
 		}
-
 	}
 }
 
 function mousePressed(e) {
-	if( GUI.picker.shouldClose(e) ) {
+	if (GUI.picker.shouldClose(e)) {
 		GUI.picker.close();
 	}
 
-	if(GUI.focused() || e.which == 2) return;
+	if (GUI.focused() || e.which == 2) return;
 
 	const now = Date.now();
 	const double = (now - last) < 200;
@@ -111,9 +109,9 @@ function mousePressed(e) {
 	last = now;
 
 	// iterate backwards to click only the gate "on top"
-	if( keyCode != SHIFT || !keyIsPressed ) {
-		for( let i = gates.length - 1; i >= 0; i -- ) {
-			if( gates[i].canClick(Mouse.x, Mouse.y) ) {
+	if (keyCode != SHIFT || !keyIsPressed) {
+		for (let i = gates.length - 1; i >= 0; i --) {
+			if (gates[i].canClick(Mouse.x, Mouse.y)) {
 				gates[i].click(Mouse.x, Mouse.y, double);
 				return;
 			}
@@ -121,43 +119,43 @@ function mousePressed(e) {
 	}
 
 	WireEditor.click();
-	
+
 	// if we got here it means that user double clicked on background
-	if(double) {
+	if (double) {
 		Selected.removeAll();
 	}
 
 }
 
 function keyPressed(event) {
-	if(GUI.focused()) return;
+	if (GUI.focused()) return;
 
-	if( keyCode == ESCAPE ) {
+	if (keyCode == ESCAPE) {
 		Selected.removeAll();
 		return false;
 	}
 
-	if( keyCode == DELETE || keyCode == BACKSPACE ) {
+	if (keyCode == DELETE || keyCode == BACKSPACE) {
 		Action.remove();
 		return false;
 	}
 
-	if( key == 'a' && event.ctrlKey ) {
+	if (key == 'a' && event.ctrlKey) {
 		Selected.addAll();
 		return false;
 	}
 
-	if( key == 'v' && event.ctrlKey ) {
+	if (key == 'v' && event.ctrlKey) {
 		Action.paste();
 		return false;
 	}
 
-	if( key == 'c' && event.ctrlKey ) {
+	if (key == 'c' && event.ctrlKey) {
 		Action.copy(!event.altKey);
 		return false;
 	}
 
-	if( key == " " ) {
+	if (key == " ") {
 		factor = 1;
 		zox = 0;
 		zoy = 0;
@@ -165,7 +163,7 @@ function keyPressed(event) {
 		return false;
 	}
 
-	if( key == 's' && event.ctrlKey ) {
+	if (key == 's' && event.ctrlKey) {
 		Manager.save(identifier);
 		GUI.notifications.push("Saved!");
 		return false;
@@ -173,7 +171,7 @@ function keyPressed(event) {
 
 }
 
-// 
+//
 // time_wasted_while_trying_to_fucking_make_this_work = 15.8h
 //
 function mouseWheel(event) {
@@ -181,10 +179,10 @@ function mouseWheel(event) {
 
 	let old = factor;
 
-	factor += ( event.delta < 0 ) ? 0.1 : -0.1;
+	factor += (event.delta < 0) ? 0.1 : -0.1;
 
-	if( factor < 0.1 ) factor = 0.1;
-	if( factor > 2.0 ) factor = 2.0;
+	if (factor < 0.1) factor = 0.1;
+	if (factor > 2.0) factor = 2.0;
 
 	// TODO make it point to mouse
 

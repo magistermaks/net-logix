@@ -24,29 +24,29 @@ var profiler = new class {
 	}
 
 	draw(diff) {
-		if(!dbg_show_profiler) return;
+		if (!dbg_show_profiler) return;
 
 		stroke(0, 0, 0, 200);
 		line(0, height - 1 - 16.6*5, 100, height - 1 - 16.6*5);
 
 		stroke(255, 0, 0, 200);
-		for(let i = 0; i < 100; i ++) {
+		for (let i = 0; i < 100; i ++) {
 			line(i, height - 1, i, height - 1 - this.frames[i] * 5);
 		}
-	
+
 		stroke(0, 0, 255, 200);
-		for(let i = 0; i < 100; i ++) {
+		for (let i = 0; i < 100; i ++) {
 			line(i + 100, height - 1, i + 100, height - 1 - this.updates[i] * 5);
 		}
 
-		fill(0); 
+		fill(0);
 		noStroke();
 		textAlign(RIGHT, TOP);
 
-		for(let i = 0; i < 5; i ++) {
+		for (let i = 0; i < 5; i ++) {
 			fill(this.marks[i].c);
-			text(`${this.marks[i].t}ms`, width - 120, height - 25 - i * 20); 
-			text(`${this.marks[i].n}: `, width - 180, height - 25 - i * 20); 
+			text(`${this.marks[i].t}ms`, width - 120, height - 25 - i * 20);
+			text(`${this.marks[i].n}: `, width - 180, height - 25 - i * 20);
 		}
 
 		textAlign(LEFT, TOP);
@@ -81,7 +81,7 @@ var profiler = new class {
 		});
 
 		this.mtime = now;
-	} 
+	}
 
 }
 

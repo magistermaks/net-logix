@@ -13,13 +13,13 @@ class Gate extends Box {
 
 	#id;
 
-	constructor( x, y, title, inputs, outputs, complexity = 0 ) {
+	constructor(x, y, title, inputs, outputs, complexity = 0) {
 		super(x, y, title);
 
 		this.inputs = Array(inputs);
 		this.outputs = Array(outputs);
 
-		for( var i = 0; i < outputs; i ++ ) {
+		for (var i = 0; i < outputs; i ++) {
 			this.outputs[i] = new OutputWirePoint(this, i);
 		}
 
@@ -36,7 +36,7 @@ class Gate extends Box {
 
 	static create(type, x, y, uid = -1, meta = "") {
 		let gate = new (Number.isInteger(type) ? Registry.get(type) : Registry.getByName(type + "Gate"))(x, y, meta);
-		if( uid != -1 ) gate.#id = uid;
+		if (uid != -1) gate.#id = uid;
 		return gate;
 	}
 
@@ -48,7 +48,7 @@ class Gate extends Box {
 		return this.#id;
 	}
 
-	connect( output, target, input ) {
+	connect(output, target, input) {
 		target.disconnect(input);
 
 		target.inputs[input] = new InputWirePoint(this, output);
@@ -56,8 +56,8 @@ class Gate extends Box {
 		target.notify();
 	}
 
-	disconnect( input ) {
-		if( this.inputs[input] != null ) {
+	disconnect(input) {
+		if (this.inputs[input] != null) {
 			let point = this.inputs[input];
 
 			point.gate.outputs[point.index].remove(this, input);
@@ -85,7 +85,7 @@ class Gate extends Box {
 	setOutputState(index, value) {
 		const out = this.outputs[index];
 
-		if( out.state != value ) {
+		if (out.state != value) {
 			out.state = value;
 			this.#modified = true;
 		}
@@ -95,7 +95,7 @@ class Gate extends Box {
 		this.#updated = tick;
 		this.update();
 
-		if( this.#modified ) {
+		if (this.#modified) {
 			this.#modified = false;
 
 			this.outputs.forEach(out => {
@@ -111,30 +111,30 @@ class Gate extends Box {
 	}
 
 	remove() {
-		for( var i = 0; i < this.inputs.length; i ++ ) {
+		for (let i = 0; i < this.inputs.length; i ++) {
 			this.disconnect(i);
 		}
 
-		for( var output of this.outputs ) {
+		for (let output of this.outputs) {
 			output.removeAll();
 		}
 
 		Selected.remove(this);
 		Scheduler.remove(this);
-		gates.splice( gates.indexOf(this), 1 );
+		gates.splice(gates.indexOf(this), 1);
 	}
 
 	top() {
 		const index = gates.indexOf(this);
 
-		if( index != gates.length - 1 ) {
+		if (index != gates.length - 1) {
 			gates.splice(index, 1);
 			gates.push(this);
 		}
 	}
 
 	showUpdates() {
-		if( this.#updated >= tick ) {
+		if (this.#updated >= tick) {
 			fill(0, 200, 0, 100);
 			stroke(0, 200, 0, 0);
 			rect(scx + this.x, scy + this.y, Box.w, Box.h);
@@ -154,29 +154,29 @@ class Gate extends Box {
 
 		let wire = false;
 
-		if( mx < scx + this.x + Box.wiggle ) {
-			for( var i = 0; i < this.left; i ++ ) {
-				let py = this.getLeftPoint(i).y;
+		if (mx < scx + this.x + Box.wiggle) {
+			for (let i = 0; i < this.left; i ++) {
+				const py = this.getLeftPoint(i).y;
 
-				if( my < py + Box.wiggle && my > py - Box.wiggle ) {
+				if (my < py + Box.wiggle && my > py - Box.wiggle) {
 					WireEditor.left(this, i);
 					wire = true;
 				}
 			}
 		}
 
-		if( mx > scx + this.x + Box.w - Box.wiggle ) {
-			for( var i = 0; i < this.right; i ++ ) {
-				let py = this.getRightPoint(i).y;
+		if (mx > scx + this.x + Box.w - Box.wiggle) {
+			for(var i = 0; i < this.right; i ++) {
+				const py = this.getRightPoint(i).y;
 
-				if( my < py + Box.wiggle && my > py - Box.wiggle ) {
+				if (my < py + Box.wiggle && my > py - Box.wiggle) {
 					WireEditor.right(this, i);
 					wire = true;
 				}
 			}
 		}
 
-		if(!wire) {
+		if (!wire) {
 			WireEditor.click();
 		}
 	}
@@ -217,7 +217,7 @@ class MoveQueue {
 
 	static add(gate) {
 		// we don't realy need them in offline mode
-		if(mode != LOCAL) MoveQueue.#updates.add(gate);
+		if (mode != LOCAL) MoveQueue.#updates.add(gate);
 	}
 
 	static apply(gate, x, y) {
@@ -238,7 +238,7 @@ class MoveQueue {
 				uid: gate.getId(), x: round(gate.x), y: round(gate.y)
 			}));
 
-			if( updates.length > 0 ) {
+			if (updates.length > 0) {
 				Event.Mov.trigger(updates);
 			}
 
@@ -250,8 +250,8 @@ class MoveQueue {
 		const now = Date.now();
 
 		MoveQueue.#inbound.forEach((update, gate) => {
-			let f = (now - update.t) / MoveQueue.#interval;
-			if( f > 1 ) {
+			const f = (now - update.t) / MoveQueue.#interval;
+			if (f > 1) {
 				MoveQueue.#inbound.delete(gate);
 				gate.move(update.px, update.py);
 				return;
@@ -300,7 +300,7 @@ class Scheduler {
 	}
 
 	static remove(gate) {
-		if( Scheduler.#ticking.includes(gate) ) {
+		if (Scheduler.#ticking.includes(gate)) {
 			Scheduler.#ticking.splice(Scheduler.#ticking.indexOf(gate), 1);
 		}
 	}

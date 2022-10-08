@@ -4,13 +4,13 @@ class Pointers {
 	static #interval = 100;
 	static #map = new Map();
 
-	static update(user, x, y) {	
-		if( Pointers.#map.size < 512 ) {
+	static update(user, x, y) {
+		if (Pointers.#map.size < 512) {
 			const old = Pointers.#map.get(user);
 
 			Pointers.#map.set(user, {
-				px: old?.x ?? x, 
-				py: old?.y ?? y, 
+				px: old?.x ?? x,
+				py: old?.y ?? y,
 				x: x, y: y, t: Date.now()
 			});
 		}
@@ -24,28 +24,28 @@ class Pointers {
 		var lx = 0;
 		var ly = 0;
 
-		setInterval( () => {
+		setInterval(() => {
 			if(mode != LOCAL && Event.server.userid != null) {
 				const mx = round(Mouse.x - scx);
 				const my = round(Mouse.y - scy);
 
-				if( mx != lx && my != ly ) {
+				if (mx != lx && my != ly) {
 					Event.Mouse.trigger({u: Event.server.userid, x: mx, y: my});
 
 					lx = mx;
 					ly = my;
 				}
 			}
-		}, Pointers.#interval );
+		}, Pointers.#interval);
 	}
 
 	static draw() {
-		if(mode != LOCAL && Settings.SHOW_POINTERS.get()) {
+		if (mode != LOCAL && Settings.SHOW_POINTERS.get()) {
 			const now = Date.now();
 
 			Pointers.#map.forEach(update => {
 				let f = (now - update.t) / Pointers.#interval;
-				if( f > 1 ) f = 1;
+				if (f > 1) f = 1;
 
 				let x = scx + update.px + (update.x - update.px) * f;
 				let y = scy + update.py + (update.y - update.py) * f;

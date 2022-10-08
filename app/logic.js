@@ -50,10 +50,10 @@ class InputGate extends TwoStateGate {
 	click(mx, my, double) {
 		super.click(mx, my, double);
 
-		if( mx > scx + this.x + Box.wiggle
+		if (mx > scx + this.x + Box.wiggle
 			&& mx < scx + this.x + Box.w - Box.wiggle
 			&& my > scy + this.y + Box.top + Box.wiggle
-			&& my < scy + this.y + Box.h - Box.wiggle ) {
+			&& my < scy + this.y + Box.h - Box.wiggle) {
 
 			Event.Switch.trigger({uid: this.getId(), state: !this.state});
 		}
@@ -82,7 +82,7 @@ class ClockGate extends SingleStateGate {
 	tick() {
 		super.tick();
 
-		if( tick % ClockGate.period == 0 ) {
+		if (tick % ClockGate.period == 0) {
 			this.state = !this.state;
 			this.notify();
 		}
@@ -218,7 +218,7 @@ class Registry {
 	}
 
 	static forEach(callback) {
-		for(let clazz of this.#ids.values()) {
+		for (let clazz of this.#ids.values()) {
 			callback(clazz);
 		}
 	}

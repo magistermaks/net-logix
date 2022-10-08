@@ -6,9 +6,9 @@ class Manager {
 	static #valid = false;
 
 	static serializeArray(array, wires = true, ox = 0, oy = 0) {
-		
+
 		return array.map(gate => {
-	
+
 			const obj = {
 				"t": gate.constructor.id,
 				"x": round(gate.x - ox),
@@ -19,7 +19,7 @@ class Manager {
 
 			const meta = gate.serialize();
 			if(meta != null) obj.m = meta;
-			
+
 			return obj;
 
 		});
@@ -49,7 +49,7 @@ class Manager {
 			const gate = Gate.create(obj.t, obj.x + ox, obj.y + oy, normalize ? -1 : obj.i, obj.m)
 			named.set(obj.i, gate);
 			return gate;
-		}); 
+		});
 
 		// load wire configuration
 		inserted.forEach((gate, key) => {
@@ -71,7 +71,6 @@ class Manager {
 
 	// Warn: this method modifies global state
 	static deserialize(obj, normalize = true) {
-		
 		zox = obj.x ?? 0;
 		zoy = obj.y ?? 0;
 		factor = Number(obj.z ?? 1);
@@ -82,7 +81,6 @@ class Manager {
 		// update all gates in a sketch
 		UpdateQueue.all();
 		Manager.#valid = true;
-
 	}
 
 	static reset() {
@@ -92,7 +90,7 @@ class Manager {
 	static load(id) {
 		Manager.reset();
 
-		try { 
+		try {
 			Manager.deserialize( Save.get(id) );
 			return true;
 		} catch(err) {
@@ -108,11 +106,10 @@ class Manager {
 	static save(id) {
 		// we shouldn't be saving in online client mode,
 		// nor when the data in `gates` is bogus
-		if( mode != CLIENT && Manager.#valid ) {
+		if (mode != CLIENT && Manager.#valid) {
 			Save.set(id, Manager.serialize());
 		}
 	}
 
 }
-
 

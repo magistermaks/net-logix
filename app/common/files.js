@@ -14,14 +14,14 @@ class Filesystem {
 
 		setTimeout(() => {
 			document.body.removeChild(link);
-			window.URL.revokeObjectURL(url);  
-		}, 0); 
+			window.URL.revokeObjectURL(url);
+		}, 0);
 	}
 
 	static upload( callback ) {
 		let input = document.getElementById("upload");
-		
-		if( input == null ) {
+
+		if (input == null) {
 			input = document.createElement("input");
 
 			input.type = "file";
