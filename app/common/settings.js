@@ -22,7 +22,7 @@ class Settings {
 
 	static access(name, value) {
 		Settings.#load();
-		
+
 		return {
 			key: name,
 			get: () => Settings.#get(name, value),
@@ -45,6 +45,7 @@ class Settings {
 	static SMOOTH_WIRES = Settings.access("swire", false);
 	static SHOW_POINTERS = Settings.access("pointrs", true);
 	static SEEN_GUIDE = Settings.access("guide", false);
+	static GATE_SHADOW = Settings.access("shadow", true);
 
 }
 

@@ -38,6 +38,7 @@ function setup() {
 	textAlign(LEFT, TOP);
 	textSize(15);
 	imageMode(CENTER);
+	Resource.blur = Resource.get("blur");
 
 	// setup gate registry
 	Registry.init();
@@ -62,7 +63,7 @@ function setup() {
 		mode = LOCAL;
 
 	}else{
-		
+
 		group = Number.parseInt(identifier);
 
 		if( isNaN(group) ) {
@@ -103,7 +104,7 @@ function draw() {
 
 	sch = height / factor;
 	scw = width / factor;
-	
+
 	matrix(() => {
 
 		scale(factor);
@@ -163,8 +164,8 @@ function overlay(t) {
 			fps = round(getFrameRate());
 		}
 
-		overlay += 
-			"\nFPS: " + fps + " (" + ms + "ms) q: " + UpdateQueue.size() + 
+		overlay +=
+			"\nFPS: " + fps + " (" + ms + "ms) q: " + UpdateQueue.size() +
 			"\nx: " + scx.toFixed(0) + " y: " + scy.toFixed(0) + " (" + factor.toFixed(2) + "x)";
 
 		profiler.draw(t);

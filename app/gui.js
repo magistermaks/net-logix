@@ -19,7 +19,7 @@ class GUI {
 
 		#make(event, text, link) {
 			const div = document.createElement('div');
-			div.addEventListener("click", () => {event(); GUI.picker.close()} ); 
+			div.addEventListener("click", () => {event(); GUI.picker.close()} );
 
 			const img = document.createElement('img');
 			img.src = link;
@@ -118,7 +118,7 @@ class GUI {
 		init() {
 			this.#container = document.getElementById("toolbar");
 			this.#body = document.getElementById("toolbar-list");
-			
+
 			let html = "";
 
 			Registry.forEach((clazz) => {
@@ -143,7 +143,7 @@ class GUI {
 
 			this.#x += step;
 			this.#y += step;
-	
+
 			if( this.#x + Box.w + step > main.offsetWidth || this.#y + Box.h + step > main.offsetHeight ) {
 				this.#x = step;
 				this.#y = step;
@@ -187,7 +187,7 @@ class GUI {
 			this.#title.innerText = "Settings";
 			this.#buttons.innerHTML = "<div class=\"button\" onclick=\"GUI.settings.close()\">Close</div> <div class=\"button\" onclick=\"GUI.settings.help()\">Help</div>";
 			this.#body.innerHTML = "";
-		
+
 			this.#entry(this.#body, Settings.GRID, "Show background grid");
 			this.#entry(this.#body, Settings.OVERLAY, "Show debug overlay");
 			this.#entry(this.#body, Settings.AUTOSAVE, "Enable sketch autosave");
@@ -195,6 +195,7 @@ class GUI {
 			this.#entry(this.#body, Settings.SNAP, "Snap gates to grid");
 			this.#entry(this.#body, Settings.SMOOTH_WIRES, "Use smooth wires");
 			this.#entry(this.#body, Settings.SHOW_POINTERS, "Show cursors when sharing");
+			this.#entry(this.#body, Settings.GATE_SHADOW, "Draw a shadow behind gates");
 
 			this.#container.style.display = "block";
 			this.#open = true;
@@ -221,7 +222,7 @@ class GUI {
 	};
 
 	static notifications = new class {
-		
+
 		#body = null;
 
 		focused() {
@@ -269,5 +270,4 @@ class GUI {
 	}
 
 }
-
 
