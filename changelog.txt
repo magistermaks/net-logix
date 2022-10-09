@@ -1,5 +1,5 @@
 
-Logix 1.9.0
+Logix 1.9.0 <09/10/2022>
 	- Added gate shadows
 	- Minor code improvements and cleanup
 
