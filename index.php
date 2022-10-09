@@ -65,14 +65,14 @@
 		</div>
 
 		<div id="footer">
-			Version 1.8.0 <br>
-			Source avaible at <a href="https://github.com/magistermaks/net-logix">Github</a> 
+			Version 1.9.0 <br>
+			Source avaible at <a href="https://github.com/magistermaks/net-logix">Github</a>
 		</div>
 
 		<!-- noscript banner -->
 		<noscript>
 			<div>
-				<img src="assets/javascript.png">
+				<img src="assets/icons/javascript.png">
 				<span> Sorry, but JavaScript is required to run this app. </span>
 			</div>
 		</noscript>
