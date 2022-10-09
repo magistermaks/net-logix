@@ -14,9 +14,8 @@ var popup = new class {
 		body.children[1].innerHTML = message;
 		body.children[2].innerHTML = "";
 
-		for( let option of options.reverse() ) {
-
-			if( option == null ) continue;
+		for (let option of options.reverse()) {
+			if (option == null) continue;
 
 			const button = document.createElement("div");
 			button.classList.add("button", "compact", "popup-button");

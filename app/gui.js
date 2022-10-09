@@ -19,7 +19,7 @@ class GUI {
 
 		#make(event, text, link) {
 			const div = document.createElement('div');
-			div.addEventListener("click", () => {event(); GUI.picker.close()} ); 
+			div.addEventListener("click", () => {event(); GUI.picker.close()} );
 
 			const img = document.createElement('img');
 			img.src = link;
@@ -38,12 +38,12 @@ class GUI {
 
 			// cache the commonly used html
 			Registry.forEach((clazz) => {
-				this.components.push(this.#make(() => GUI.picker.add(clazz), clazz.title, `./assets/${clazz.icon}.png`));
+				this.components.push(this.#make(() => GUI.picker.add(clazz), clazz.title, `assets/icons/${clazz.icon}.png`));
 			});
 
 			main.oncontextmenu = () => {
-				for( let i = gates.length - 1; i >= 0; i -- ) {
-					if( gates[i].canClick(Mouse.x, Mouse.y) && (gates[i].canGrab(Mouse.x, Mouse.y) || (keyCode == SHIFT && keyIsPressed)) ) {
+				for (let i = gates.length - 1; i >= 0; i --) {
+					if (gates[i].canClick(Mouse.x, Mouse.y) && (gates[i].canGrab(Mouse.x, Mouse.y) || (keyCode == SHIFT && keyIsPressed))) {
 						this.openForContext(gates[i]);
 						return false;
 					}
@@ -57,14 +57,14 @@ class GUI {
 		openForContext(gate) {
 			let html = [];
 
-			if(gate != null) {
-				html.push(this.#make(() => Action.copy(true, gate), "Copy", "./assets/copy.png"));
-				html.push(this.#make(() => Action.copy(false, gate), "Copy Layout", "./assets/copy.png"));
-				html.push(this.#make(() => Action.remove(gate), "Delete", "./assets/purge.png"));
+			if (gate != null) {
+				html.push(this.#make(() => Action.copy(true, gate), "Copy", "assets/icons/copy.png"));
+				html.push(this.#make(() => Action.copy(false, gate), "Copy Layout", "assets/icons/copy.png"));
+				html.push(this.#make(() => Action.remove(gate), "Delete", "assets/icons/purge.png"));
 
 				this.open("Action", html);
-			}else{
-				html.push(this.#make(() => Action.paste(), "Paste", "./assets/copy.png"));
+			} else {
+				html.push(this.#make(() => Action.paste(), "Paste", "assets/icons/copy.png"));
 				html.push(...this.components)
 
 				this.open("Add Component...", html);
@@ -79,6 +79,7 @@ class GUI {
 			this.#container.dataset.y = Mouse.y;
 			this.#body.innerHTML = "";
 			this.#open = true;
+
 			document.getElementById("picker-top").innerText = title;
 			html.forEach(dom => this.#body.appendChild(dom));
 		}
@@ -118,11 +119,11 @@ class GUI {
 		init() {
 			this.#container = document.getElementById("toolbar");
 			this.#body = document.getElementById("toolbar-list");
-			
+
 			let html = "";
 
 			Registry.forEach((clazz) => {
-				html += `<div class="tooltip"><img class="icon" src="./assets/${clazz.icon}.png" onclick="GUI.toolbar.add(${clazz.name})"><span>${clazz.title}</span></div>&nbsp;`;
+				html += `<div class="tooltip"><img class="icon" src="assets/icons/${clazz.icon}.png" onclick="GUI.toolbar.add(${clazz.name})"><span>${clazz.title}</span></div>&nbsp;`;
 			});
 
 			this.#body.innerHTML = html;
@@ -143,8 +144,8 @@ class GUI {
 
 			this.#x += step;
 			this.#y += step;
-	
-			if( this.#x + Box.w + step > main.offsetWidth || this.#y + Box.h + step > main.offsetHeight ) {
+
+			if (this.#x + Box.w + step > main.offsetWidth || this.#y + Box.h + step > main.offsetHeight) {
 				this.#x = step;
 				this.#y = step;
 			}
@@ -187,7 +188,7 @@ class GUI {
 			this.#title.innerText = "Settings";
 			this.#buttons.innerHTML = "<div class=\"button\" onclick=\"GUI.settings.close()\">Close</div> <div class=\"button\" onclick=\"GUI.settings.help()\">Help</div>";
 			this.#body.innerHTML = "";
-		
+
 			this.#entry(this.#body, Settings.GRID, "Show background grid");
 			this.#entry(this.#body, Settings.OVERLAY, "Show debug overlay");
 			this.#entry(this.#body, Settings.AUTOSAVE, "Enable sketch autosave");
@@ -195,6 +196,7 @@ class GUI {
 			this.#entry(this.#body, Settings.SNAP, "Snap gates to grid");
 			this.#entry(this.#body, Settings.SMOOTH_WIRES, "Use smooth wires");
 			this.#entry(this.#body, Settings.SHOW_POINTERS, "Show cursors when sharing");
+			this.#entry(this.#body, Settings.GATE_SHADOW, "Draw a shadow behind gates");
 
 			this.#container.style.display = "block";
 			this.#open = true;
@@ -221,7 +223,7 @@ class GUI {
 	};
 
 	static notifications = new class {
-		
+
 		#body = null;
 
 		focused() {
@@ -250,10 +252,11 @@ class GUI {
 	};
 
 	static exit(save = true) {
-		if(save) {
+		if (save) {
 			Manager.save(identifier);
 			Event.server.close();
 		}
+
 		window.location.href = "index.php"
 	}
 
@@ -269,5 +272,4 @@ class GUI {
 	}
 
 }
-
 

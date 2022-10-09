@@ -23,7 +23,7 @@
 		<script src="app/common/files.js"></script>
 		<script src="app/common/canvas.js"></script>
 
-		<?php include "header.html" ?>
+		<?php include "assets/header.html" ?>
 
 		<script id="config">
 		<?php
@@ -92,7 +92,7 @@
 
 					<div id="menu-buttons">
 					</div>
-	
+
 				</div>
 
 			</div>
@@ -114,7 +114,7 @@
 		<!-- noscript banner -->
 		<noscript>
 			<div>
-				<img src="assets/javascript.png">
+				<img src="assets/icons/javascript.png">
 				<span> Sorry, but JavaScript is required to run this app. </span>
 			</div>
 		</noscript>

@@ -3,11 +3,11 @@
 function wire(x1, y1, x2, y2, state) {
 
 	// discard out-of-view wires
-	if( max(x1, x2) < 0 || max(y1, y2) < 0 || min(x1, x2) > scw || min(y1, y2) > sch) return;
+	if (max(x1, x2) < 0 || max(y1, y2) < 0 || min(x1, x2) > scw || min(y1, y2) > sch) return;
 
 	const c = state ? color(9, 98, 218) : 0;
 	const a = (x2 - x1) / 4;
-	
+
 	fill(c);
 
 	// start & end
@@ -23,9 +23,9 @@ function wire(x1, y1, x2, y2, state) {
 	stroke(255);
 	strokeWeight(5);
 
-	if( Settings.SMOOTH_WIRES.get() ) {
-		bezier(x1, y1, x1 + a, y1, x2-a, y2, x2, y2);
-	}else{
+	if (Settings.SMOOTH_WIRES.get()) {
+		bezier(x1, y1, x1 + a, y1, x2 - a, y2, x2, y2);
+	} else {
 		line(x1, y1, x1 + a, y1);
 		line(x1 + a, y1, x2 - a, y2);
 		line(x2, y2, x2 - a, y2);
@@ -35,14 +35,13 @@ function wire(x1, y1, x2, y2, state) {
 	stroke(c);
 	strokeWeight(2);
 
-	if( Settings.SMOOTH_WIRES.get() ) {
-		bezier(x1, y1, x1 + a, y1, x2-a, y2, x2, y2);
-	}else{
+	if (Settings.SMOOTH_WIRES.get()) {
+		bezier(x1, y1, x1 + a, y1, x2 - a, y2, x2, y2);
+	} else {
 		line(x1, y1, x1 + a, y1);
 		line(x1 + a, y1, x2 - a, y2);
 		line(x2, y2, x2 - a, y2);
 	}
-
 }
 
 class WirePoint {
@@ -56,9 +55,9 @@ class WirePoint {
 	}
 
 	draw( target, state = false ) {
-		let from = this.gate.getRightPoint(this.index);
-		let to = target.gate.getLeftPoint(target.index);
-	  
+		const from = this.gate.getRightPoint(this.index);
+		const to = target.gate.getLeftPoint(target.index);
+
 		wire(int(from.x), int(from.y), int(to.x), int(to.y), state ? color(9, 98, 218) : 0);
 	}
 
@@ -85,7 +84,7 @@ class OutputWirePoint {
 	state;
 
 	constructor(gate, index) {
-		this.self = new WirePoint(gate, index); 
+		this.self = new WirePoint(gate, index);
 		this.targets = [];
 		this.state = false;
 	}
@@ -121,44 +120,44 @@ class WireEditor {
 
 	static click() {
 		WireEditor.#targets = null;
-	}	
-	
+	}
+
 	static isClicked() {
 		return WireEditor.#targets != null;
 	}
 
 	static left(gate, index) {
 
-		if( WireEditor.isClicked() && !WireEditor.#input ) {
+		if (WireEditor.isClicked() && !WireEditor.#input) {
 
-			if( WireEditor.#targets != null ) {
+			if (WireEditor.#targets != null) {
 				Event.Cwire.trigger({
-					uid: WireEditor.#targets[0].gate.getId(), 
-					output: WireEditor.#targets[0].index, 
-					target: gate.getId(), 
+					uid: WireEditor.#targets[0].gate.getId(),
+					output: WireEditor.#targets[0].index,
+					target: gate.getId(),
 					index: index
 				});
 
-				if( keyCode != CONTROL || !isKeyPressed ) {
+				if (keyCode != CONTROL || !isKeyPressed) {
 					WireEditor.#targets = null;
 				}
-			}else{
+			} else {
 //				WireEditor.#targets = [gate.getInput(index)];
 //				gate.disconnect(index);
 			}
-			return;
 
+			return;
 		}
 
 		// TODO: this was a little confusing to use (input => output drawing)
 		// but i'm not ruling out the option of adding it in some form in the future
 
-		// if( keyCode == CONTROL && isKeyPressed ) {	
+		// if( keyCode == CONTROL && isKeyPressed ) {
 		// 	WireEditor.#targets = [new WirePoint(gate, index)];
 		// 	WireEditor.#input = true;
 		// } else
 
-		if( gate.getInput(index) != null ) {
+		if (gate.getInput(index) != null) {
 			WireEditor.#targets = [gate.getInput(index)];
 			Event.Dwire.trigger({uid: gate.getId(), index: index});
 			WireEditor.#clicked = true;
@@ -168,16 +167,16 @@ class WireEditor {
 
 	static right(gate, index) {
 
-		if( WireEditor.isClicked() && WireEditor.#input ) {
+		if (WireEditor.isClicked() && WireEditor.#input) {
 
 			// use control to replace, not merge connections
-			if( keyCode == CONTROL && isKeyPressed ) gate.getOutput(index).removeAll();
+			if (keyCode == CONTROL && isKeyPressed) gate.getOutput(index).removeAll();
 
-			for( let target of WireEditor.#targets ) {
+			for (let target of WireEditor.#targets) {
 				Event.Cwire.trigger({
-					uid: gate.getId(), 
-					output: index, 
-					target: target.gate.getId(), 
+					uid: gate.getId(),
+					output: index,
+					target: target.gate.getId(),
 					index: target.index
 				});
 			}
@@ -188,27 +187,27 @@ class WireEditor {
 
 		WireEditor.#clicked = true;
 
-		if( keyCode == CONTROL && isKeyPressed ) {
+		if (keyCode == CONTROL && isKeyPressed) {
 			WireEditor.#targets = gate.getOutput(index).targets.filter(() => true); // copy array without <empty slots> ehh
 			gate.getOutput(index).removeAll();
 			WireEditor.#input = true;
-		}else{
+		} else {
 			WireEditor.#targets = [new WirePoint(gate, index)];
 			WireEditor.#input = false;
 		}
 	}
 
 	static draw() {
-		if( WireEditor.#targets != null && WireEditor.#targets.length > 0 ) {
+		if (WireEditor.#targets != null && WireEditor.#targets.length > 0) {
 			const state = !WireEditor.#input ? WireEditor.#targets[0].gate.getOutputState(WireEditor.#targets[0].index) : 0;
 
-			for( let target of WireEditor.#targets ) {
+			for (let target of WireEditor.#targets) {
 				const point = WireEditor.#input ? target.gate.getLeftPoint(target.index) : target.gate.getRightPoint(target.index);
 
 				wire(int(point.x), int(point.y), Mouse.x, Mouse.y, state);
 
 				// indicate that replace mode is active
-				if( keyCode == CONTROL && isKeyPressed ) {
+				if (keyCode == CONTROL && isKeyPressed) {
 					stroke(255, 0, 0);
 					noFill();
 					circle(Mouse.x + 0.5, Mouse.y + 0.5, 20);
