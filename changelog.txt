@@ -1,6 +1,7 @@
 
 Logix 1.9.0
-	TODO
+	- Added gate shadows
+	- Minor code improvements and cleanup
 
 Logix 1.8.0 <03/01/2022>
 	- Added copy & paste support
@@ -66,5 +67,4 @@ Logix 1.1.0 <15/10/2021>
 
 Logix 1.0.0 <08/10/2021>
 	 Initial release
-
 
